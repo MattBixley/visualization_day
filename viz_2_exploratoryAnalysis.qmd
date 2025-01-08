@@ -8,3 +8,5 @@ Visualization is most often thought of as something we do for other people, to s
 In this section we will perform some quick data transformations and create some simple visualizations. The output of this section does not need to be overly attractive, but it does need to be clear and should 'standalone' (i.e., should speak for itself, without the need of accompanying notes).
 
 Exploratory analysis is itself a highly useful skill, but it is also important to get some experience with data transformation - we will only rarely be lucky enough to get data in a format for visualization.
+
+Note: The aims for this section are to give you the opportunity to practice some of the most important code used in visualizations, and to force you to think about what types of visualizations work well, how to display the information you want to convey.

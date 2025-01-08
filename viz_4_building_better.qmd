@@ -1,0 +1,212 @@
+---
+title: Building Better Plots
+toc: true
+---
+
+## Overview
+
+In this section we will work with real eDNA data and build a visualization. First, we will look at the basic boxplot, and work from there to improve it. 
+
+This section is built around the excellent tutorial "The evolution of a ggplot", by Cedric Scherer (https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/)
+
+```{r}
+records <- read.csv("~/Desktop/intoTheTidyverse2/records.csv")
+
+records |> group_by(Group) |> summarize(avg = median(Count), .groups = "drop") |> arrange(desc(avg)) |> print(n = 54)
+```
+
+
+Could now show the counts (not Count) as a boxplot for each Group. 
+
+```{r}
+library(tidyverse)
+
+records |> group_by(Group) |> summarize(avg = median(Count), .groups = "drop") |> arrange(desc(avg)) |> print(n = 54)
+
+
+# For simplicity, we will filter the dataset and retain rows that relate to our top 10 most abundant groups:
+top_groups <- records |> 
+  group_by(Group) |> 
+  summarize(observations = n(), .groups = "drop") |> 
+  arrange(desc(observations)) |> 
+  slice_head(n = 10) |> 
+  pull(Group)
+
+top_group_counts <- records |> filter(Group %in% top_groups)
+
+# Now we will sample 250 observations from each group. We could sample randomly (taking 500 random samples) with the slice_sample(n = 250) function. 
+# Here we will use a more refined technique called stratified sampling, which will retain the overall distribution of the data. 
+
+set.seed(0982) # Set a seed for reproducibility. You can select any number.
+top_group_counts <- top_group_counts |> 
+  group_by(Group) |> 
+  mutate(quantile_group = ntile(Count, 10)) |> 
+  slice_sample(n = 25, by = quantile_group) |> 
+  ungroup()
+
+# Verify that all groups have 250 observations
+top_group_counts |> group_by(Group) |> summarize(observations = n(), .groups = "drop") |> arrange(desc(observations)) |> head()
+```
+
+#### Random sampling method
+```{r}
+# We will then sample, randomly, 500 Count observations from each group. 
+set.seed(0982) # Set a seed for reproducibility. You can select any number.
+top_group_counts_random <- top_group_counts |> 
+  group_by(Group) |> 
+  slice_sample(n = 500) |> 
+  ungroup()
+# Here we are taking 500 samples, rather than 250, to increase random coverage.
+```
+
+
+
+Initial plot of the data:
+
+```{r}
+ggplot(data = top_group_counts,
+mapping = aes(x = Group, y = Count)) +
+geom_boxplot()
+```
+
+
+Taking the log of Count data makes this clearer:
+```{r}
+ggplot(data = top_group_counts,
+mapping = aes(x = Group, y = log(Count))) +
+geom_boxplot()
+```
+
+It's often worth representing boxplots on a horizontal, rather than vertical, distribution. Let's switch our axes assignments:
+```{r}
+ggplot(data = top_group_counts,
+mapping = aes(x = log(Count), y = Group)) +
+geom_boxplot()
+```
+ Generally we will find that sometimes switching the layout like this can provide us with clearer visualization, sometimes due to labels, sometimes for aesthetics. 
+
+### Sort the data 
+
+Sorted data will be easier to interpret, with a lower cognitive load. Note: we should **only** sort data if there is *no inherent structure* - I don't believe Mammals are inherently 'higher' than Fish, so I can sort these groups. Sometimes we will have internal structure, either some kind of hierarchy or grouping (e.g., case vs control) and it is not appropriate to apply sorting.
+
+This is where we need to bring in some of our data transformation skills. This is *not* the focus of today's workshop, so we won't go into this, but we are using a function, fct_reorder(), to re-order the Group variable based on data from the Count variable, where Count is ordered based on median. Easy enough to interpret from the code, I actually didn't know how to do this myself and used chatGPT to guide me through the process.
+```{r}
+top_group_counts_sorted <- top_group_counts |> 
+  mutate(Group = fct_reorder(Group, Count, .fun = median))
+```
+
+Now plot the sorted data:
+```{r}
+ggplot(data = top_group_counts_sorted,
+mapping = aes(x = log(Count), y = Group)) +
+geom_boxplot()
+```
+
+This is immediately clearer, with a considerably lower cognitive load. Easily observe that not only does the Fish group have a higher set of Counts, but it seems to break with the trend of the other Groups. 
+
+#### Outliers
+
+In boxplots, outliers are identified as values that are more than 1.5 times the interquartile range **above** or **below** the third and first quartile, respectively. In our data these outliers are reasonably numerous. Could be due to inherently variable data, due either to biological or technical reasons, site differences etc., etc.,. Without wanting to make assumptions about the data, we can experiment with visualizations and choose how we want to present this data. 
+
+## Better visualization
+
+We can now start to focus on the visualization aspects: control plot themes such as labels, titles, spacing. We can explore geoms, and variations on geoms, to determine the best way to present the data. Finally, we can add additional geoms or mappings to display more data. 
+
+### Theme
+
+Theme is a separate function that controls almost all visual elements of a ggplot. We can fine tune text elements (font size, shape, angle for axis text, create custom labels and titles), the legend (changing the position, setting a background, control the title and content), the 'panel' (panel is the background of the plot, in the above cases we have a grid), and many other features.
+
+A useful tip for working with ggplot is to save a set of basic features, such as the data, mapping, and theme to an object which can then be used for plotting with different geoms later. Notice below we use a slightly different format for writing our ggplot function - we omit "data = " and "mapping =", since those calls are always required and used.
+
+For simplicity we will also reduce our total dataset down to just 
+```{r}
+groupCounts <- ggplot(top_group_counts_sorted, aes(x = log(Count), y = Group, colour = Group)) +
+  labs(title = "eDNA counts vary across species groups",
+       x = "log(Count)", 
+       y = "Group") +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 10),
+    panel.grid = element_blank()
+  ) 
+
+# Note, no plot is created yet. We will now use the groupCounts object in combination with geom functions to create plots.
+```
+
+We can now trial different geoms to determine which type suits our visualization needs.
+
+```{r}
+groupCounts + 
+  geom_boxplot() 
+```
+
+
+```{r}
+groupCounts + 
+  geom_violin() 
+```
+
+```{r}
+groupCounts + geom_line()
+```
+
+```{r}
+groupCounts + geom_point()
+```
+
+The geom_point() plot shows us just how small the sample size for Decapod crustaceans is, which wasn't entirely obvious from the previous three (although, the violin plot showed the data was bimodal). 
+
+A particularly useful argument with the geom_point() function is alpha, which controls the opacity/transparency of the points. With reduced opacity we can see more clearly when points are placed on top of one another. It is less clear in this example because there are so many data points in a small space, but it's usefulness will become more apparent shortly.
+
+```{r}
+groupCounts + geom_point(size = 3, alpha = 0.2)
+```
+
+### Combining geoms
+
+Geoms can be combined to create more complex plots by layering one set of information over another. 
+
+```{r}
+groupCounts + 
+  geom_boxplot(colour = "gray", outlier.alpha = 0) +
+  geom_point(size = 3, alpha = 0.2)
+```
+Note that we've included a new argument in geom_boxplot(): "outlier.alpha = 0". The boxplot geom normally adds points that are considered outliers (greater than 1.5 times the interquartile range above or below the 1st or 3rd quartile). Since these points are going to be represented by the geom_point() function, we need to set outlier.alpha to 0 so that they are functionally invisible (and are therefore not printed twice). 
+
+While the above demonstrates the concept of combining geoms, it's not very functional. The high density of our points on a straight line is creating a strong effect that is over-powering other visualizations. We can change the points from being on a single line to spaced apart with the geom_jitter() function.
+
+```{r}
+groupCounts + geom_jitter(size = 2, alpha = 0.2, width = 0.2)
+```
+
+```{r}
+groupCounts + 
+  geom_boxplot(colour = "gray40", outlier.alpha = 0) +
+  geom_jitter(size = 2, alpha = 0.2, width = 0.2)
+# gray40 is a darker gray that is not quite black. I had to test multiple colours to find one that was clearly visible but not overwhelming.
+```
+
+
+
+```{r}
+
+ggsave("boxplot.png", height = 10, width = 8)
+
+
+options(repr.plot.height = 12, repr.plot.width = 6)
+groupCounts + 
+  geom_boxplot() 
+```
+
+```{r}
+
+```
+
+
+In cases where you will be creating multiple visualizations, it can be useful to use the theme_set() function to specify a default theme, text size and font type. 
+
+
+#### Can I add some viz of the total number of samples in each group
+e.g., There are 273,199 plants, 87713 Fish : while more plants were detected, they had lower median count than Fish. In some cases, Group count and Count are correlated, in some cases not. 
