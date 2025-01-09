@@ -14,6 +14,12 @@ website:
     left:
       - text: Visualization with ggplot2
         href: viz_1_ggplot.qmd  
+      - text: Transforming data for visualization
+        href: viz_2_exploratoryAnalysis.qmd
+      - text: Exemplar visualizations
+        href: viz_3_exemplarVisualizations.qmd
+      - text: Building better
+        href: viz_4_building_better.qmd    
     tools: 
       - icon: github
         href: https://github.com/tylermcinnes/visualization_day  
