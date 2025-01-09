@@ -8,35 +8,15 @@ toc: true
 ```{r}
 library(tidyverse)
 
-records <- read.csv("~/Library/CloudStorage/OneDrive-UniversityofOtago/Documents/Training Coordinator 2022/GitHub/visualization_day/data/records.csv")
+top_group_counts <- read.csv("~/Library/CloudStorage/OneDrive-UniversityofOtago/Documents/Training Coordinator 2022/GitHub/visualization_day/data/eDNA_group_counts.csv")
 
-records |> group_by(Group) |> summarize(avg = median(Count), .groups = "drop") |> arrange(desc(avg)) |> print(n = 54)
+
 ```
 
 Working from https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/ : 
 Could now show the counts (not Count) as a boxplot for each Group. 
 
 ```{r}
-records |> group_by(Group) |> summarize(avg = median(Count), .groups = "drop") |> arrange(desc(avg)) |> print(n = 54)
-
-
-# For simplicity, we will filter the dataset and retain rows that relate to our top 10 most abundant groups:
-top_groups <- records |> 
-  group_by(Group) |> 
-  summarize(observations = n(), .groups = "drop") |> 
-  arrange(desc(observations)) |> 
-  slice_head(n = 10) |> 
-  pull(Group)
-
-top_group_counts <- records |> filter(Group %in% top_groups)
-
-# We will then sample, randomly, 500 Count observations from each group. 
-set.seed(0982) # Set a seed for reproducibility. You can select any number.
-top_group_counts <- top_group_counts |> 
-  group_by(Group) |> 
-  slice_sample(n = 500) |> 
-  ungroup()
-
 # Verify that all groups have 500 observations
 top_group_counts |> group_by(Group) |> summarize(observations = n(), .groups = "drop") |> arrange(desc(observations)) |> head()
 ```
