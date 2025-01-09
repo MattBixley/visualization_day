@@ -214,12 +214,5 @@ This isn't necessarily something you would do in many types of plots, but is use
 ggsave("boxplot.png", height = 10, width = 8)
 
 
-options(repr.plot.height = 12, repr.plot.width = 6)
-groupCounts + 
-  geom_boxplot() 
 ```
 
-
-
-#### Can I add some viz of the total number of samples in each group
-e.g., There are 273,199 plants, 87713 Fish : while more plants were detected, they had lower median count than Fish. In some cases, Group count and Count are correlated, in some cases not. 
