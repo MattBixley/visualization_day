@@ -13,8 +13,12 @@ top_group_counts <- read.csv("~/Library/CloudStorage/OneDrive-UniversityofOtago/
 
 ```
 
-Working from https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/ : 
-Could now show the counts (not Count) as a boxplot for each Group. 
+This section follows the outline produced by the very skilled data visualizer Cédric Scherer, modified to work with some example data and updated with my own thoughts and opinions. Cédric's original tutorial is available here:
+
+https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/ 
+
+
+
 
 ```{r}
 # Verify that all groups have 500 observations
