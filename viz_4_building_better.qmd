@@ -3,11 +3,6 @@ title: Building Better Plots
 toc: true
 ---
 
-## Overview
-
-In this section we will work with real eDNA data and build a visualization. First, we will look at the basic boxplot, and work from there to improve it. 
-
-This section is built around the excellent tutorial "The evolution of a ggplot", by Cedric Scherer (https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/)
 
 ```{r}
 records <- read.csv("~/Desktop/intoTheTidyverse2/records.csv")
@@ -15,7 +10,7 @@ records <- read.csv("~/Desktop/intoTheTidyverse2/records.csv")
 records |> group_by(Group) |> summarize(avg = median(Count), .groups = "drop") |> arrange(desc(avg)) |> print(n = 54)
 ```
 
-
+Working from https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/ : 
 Could now show the counts (not Count) as a boxplot for each Group. 
 
 ```{r}
@@ -34,31 +29,16 @@ top_groups <- records |>
 
 top_group_counts <- records |> filter(Group %in% top_groups)
 
-# Now we will sample 250 observations from each group. We could sample randomly (taking 500 random samples) with the slice_sample(n = 250) function. 
-# Here we will use a more refined technique called stratified sampling, which will retain the overall distribution of the data. 
-
+# We will then sample, randomly, 500 Count observations from each group. 
 set.seed(0982) # Set a seed for reproducibility. You can select any number.
 top_group_counts <- top_group_counts |> 
   group_by(Group) |> 
-  mutate(quantile_group = ntile(Count, 10)) |> 
-  slice_sample(n = 25, by = quantile_group) |> 
-  ungroup()
-
-# Verify that all groups have 250 observations
-top_group_counts |> group_by(Group) |> summarize(observations = n(), .groups = "drop") |> arrange(desc(observations)) |> head()
-```
-
-#### Random sampling method
-```{r}
-# We will then sample, randomly, 500 Count observations from each group. 
-set.seed(0982) # Set a seed for reproducibility. You can select any number.
-top_group_counts_random <- top_group_counts |> 
-  group_by(Group) |> 
   slice_sample(n = 500) |> 
   ungroup()
-# Here we are taking 500 samples, rather than 250, to increase random coverage.
-```
 
+# Verify that all groups have 500 observations
+top_group_counts |> group_by(Group) |> summarize(observations = n(), .groups = "drop") |> arrange(desc(observations)) |> head()
+```
 
 
 Initial plot of the data:
@@ -156,8 +136,6 @@ groupCounts + geom_line()
 groupCounts + geom_point()
 ```
 
-The geom_point() plot shows us just how small the sample size for Decapod crustaceans is, which wasn't entirely obvious from the previous three (although, the violin plot showed the data was bimodal). 
-
 A particularly useful argument with the geom_point() function is alpha, which controls the opacity/transparency of the points. With reduced opacity we can see more clearly when points are placed on top of one another. It is less clear in this example because there are so many data points in a small space, but it's usefulness will become more apparent shortly.
 
 ```{r}
@@ -188,6 +166,66 @@ groupCounts +
 # gray40 is a darker gray that is not quite black. I had to test multiple colours to find one that was clearly visible but not overwhelming.
 ```
 
+### (Even) more geoms
+
+There are some really cool things we can do by combining geoms, and here your imagination and creativity is (probably) the limiting factor rather than ggplot. 
+
+Let's look at how each of our Groups compares to the average (and in this case, we will use mean instead of the median we have been using with our box plots). 
+
+First, we will visualize the Group means with the stat_summary function. 
+
+```{r}
+groupCounts +
+  geom_jitter(size = 2, alpha = 0.2, width = 0.2) +
+  stat_summary(fun = mean, geom = "point", size = 5, colour = "gray40")
+```
+Note: here we have selected the size of the stat_summary point as 5, but we could also provide a set of values (e.g., if we had different numbers of observations per group). 
+
+
+Next, we can add the overall mean for these groups as a vertical line: 
+```{r}
+# Calculate the average number of Counts across all samples. 
+top10_group_avg <- top_group_counts_sorted |> 
+  summarize(t10_avg = mean(log(Count))) |> 
+  pull(t10_avg)
+
+groupCounts +
+  geom_vline(aes(xintercept = top10_group_avg), colour = "gray50", size = 0.6) +
+  stat_summary(colour = "gray40",fun = mean, geom = "point", size = 5) +
+  geom_jitter(size = 2, alpha = 0.2, width = 0.2)
+```
+
+Geom order matters! Note how the summary points (black) are obscured by the coloured points produced by geom_jitter()? We can switch the order so that the jitter points are drawn first, and the summary points placed on top. 
+
+```{r}
+groupCounts +
+  geom_jitter(size = 2, alpha = 0.2, width = 0.2) +
+  geom_vline(aes(xintercept = top10_group_avg), colour = "gray50", size = 0.6, alpha = 0.8) +
+  stat_summary(colour = "gray50",fun = mean, geom = "point", size = 5, alpha = 0.75)
+```
+
+If we are trying to highlight the difference between a Group mean and the global mean, this can be amplified by adding text to our image. 
+
+```{r}
+groupMeans <- top_group_counts_sorted |> group_by(Group) |> summarise(groupMean = log(mean(Count))) |> pull(groupMean)
+
+groupCounts +
+  geom_jitter(size = 2, alpha = 0.2, width = 0.2) +
+  geom_vline(aes(xintercept = top10_group_avg), colour = "gray50", size = 0.6, alpha = 0.8) +
+  stat_summary(colour = "gray60",fun = mean, geom = "point", size = 5, alpha = 0.8) +
+  annotate(
+    "text", x = 7.8, y = 10, size = 2.8, color = "gray20", lineheight = .9,
+    label = glue::glue("Counts for fish are significantly higher\nthan other groups (7.6)")
+  ) +
+    annotate(
+    "text", x = 5.25, y = 1, size = 2.8, color = "gray20",
+    label = "Total group average (4.2)"
+  )
+```
+
+This isn't necessarily something you would do in many types of plots, but is useful to draw attention to key points (often, e.g., a single gene of interest in a scatter plot). 
+
+
 
 
 ```{r}
@@ -200,12 +238,6 @@ groupCounts +
   geom_boxplot() 
 ```
 
-```{r}
-
-```
-
-
-In cases where you will be creating multiple visualizations, it can be useful to use the theme_set() function to specify a default theme, text size and font type. 
 
 
 #### Can I add some viz of the total number of samples in each group
