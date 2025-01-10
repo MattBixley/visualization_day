@@ -15,7 +15,7 @@ about: # https://quarto.org/docs/websites/website-about.html
 
 Good visualization is about more than just writing the correct code. Visualization is communication, and good communication requires thinking about how we as the scientist/data analyst/creator convey our message to the reader. This one-day workshop will provide you with a toolbox of skills and code examples to help you create clear, visually interesting visualizations which accurately communicate a message. 
 
-**This workshop has four components: **
+## This workshop has four components
 
 The basic code template for ggplot.
 
@@ -28,10 +28,6 @@ Visualizing your own data.
 
 
 
-## Education
+## Why are we doing this? 
 
-University of XYZ, City \| Location \| Sept 20XX - June 20XX
-
-## Experience
-
-Workplace \| Job title \| April 20XX - present
+Because some plots look like this: https://docs.google.com/presentation/d/1PyuGRbqPpjMoswuTMbgOqHfe6Uc-wji7uEJkxyxI9Jw/edit#slide=id.g813ba93ce8_0_21 (Credit to Dr. Joseph Guhlin for this presentation)

@@ -1,0 +1,252 @@
+---
+title: "Start to Finish Visualizing your Data"
+author: "Tyler McInnes"
+date: "2025-01-10"
+output: html_document
+---
+
+*Note self:* this section should be preceeded by an introduction and explanation to tidytuesday (in the exemplar episode), so that readers have context about where this data came from, why we are using it. This section then actively demonstrates the importance of the community effort of tidytuesday (and contributes to their 2024 aim of being involved in 10+ courses (they achieved 30+)).
+
+## Overview
+
+Together, we are going to go from start to finish and create a visualization. Start to finish means we will need to explore the data, make decisions involving modifications and transformations, and finally, visualize the data in a meaningful way.
+
+### Aims
+
+To demonstrate the full process of exploratory analysis, data transformation, and visualization.
+
+Generate discussion, via questions and exercises, about the data and the validity of our modifications and decisions.
+
+To generate a figure that is clear, conveys a message, and is visually appealing.
+
+### How this will work
+
+I will work through all the code required to create the end product visualization. You can follow along exactly, or you can opt to deviate from my example (e.g., during data transformation step you might choose to keep 25 samples while I keep 20, you might choose to use the median while I use the mean). If you are newer to ggplot2, then I recommend you follow exactly. If you are more confident, then modify the code as you see fit.
+
+You will be provided with a full and complete copy of all this code, to use as a template for your own work.
+
+## Getting started
+
+### Packages
+
+For this section we are going to need dplyr, readr, and ggplot. We can load them separately, or we can load the whole tidyverse package.
+
+```{r}
+library(tidyverse)
+```
+
+### Importing the data
+
+All tidytuesday data is available for easy download and importing. The data is generally very well organised (it has already gone through cleaning and is 'tidy').
+
+```{r}
+parfumo_data_clean <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-12-10/parfumo_data_clean.csv')
+```
+
+## Exploratory analysis
+
+The first step in exploratory analysis is to understand our data. I liken this to the equivalent of picking up a wrapped present, feeling the weight, how solid it is, maybe giving it a little bit of a shake, and trying to figure out what's inside.
+
+Useful functions here include dim(), colnames(), head(), summary(), str(), class(), and many others. You will develop a set of favourites and defaults.
+
+```{r}
+parfumo_data_clean |> head()
+parfumo_data_clean |> summary()
+parfumo_data_clean |> colnames()
+```
+
+**Exercise:** Note down your initial conclusions and impressions.
+
+-   What are five things you notice about the data?
+
+-   What is one question you have about the data? (*note:* looking for a small, simple question about the dataset, not a hypothesis to test)
+
+-   What is something that jumps out at you, which you might like to investigate, visualize, or learn about?
+
+### Brand Rating
+
+Looking at the data I was interested in Brand, Rating_Value, and Rating_Count. My aim is to generate a visualization which will show which brands consistently have high ratings for their different products, with the intention that a person with little to no knowledge about perfume (like myself) can get an idea of reliable brands.
+
+**Exercise:** Mentally visualize what this figure might look like. What are the key components we will need to convey?
+
+#### Assessing the means
+
+A useful place to start will be to look at the average (and here I'll be using mean) rating value for a brand. To do this we will use the dplyr verbs (functions) to group rows based on which Brand they are from, generate a single summary value (a mean of the Rating_Value) for each Brand, arrange the means from highest to lowest, and then use the head() function to view the output.
+
+```{r}
+parfumo_data_clean |> # Remember that |> is the 'pipe', which passes data to the next function.
+  group_by(Brand) |> # All rows which share the same Brand are now grouped.
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE)) |> # Calculate Brand means
+  arrange(desc(avg_Rating)) |> # Arrange Brands from highest to lowest
+  head()
+```
+
+**Exercise:** Discuss these results.
+
+::: {.callout-tip collapse="true"}
+## Interpreting these results
+
+Natura and Sarahs Creations share the top score of 10. No need for further analysis, we can all go home and talk about our favourite new perfume brands which are obviously very reliable!
+:::
+
+Since we use base 10, many surveys and tests tend to be out of 10. To see two brands with what I assume are perfect scores makes me very suspicious, especially given it's a mean - this would require every single person to have rated every single one of their perfumes as a 10. Either they truly are perfect, or, more likely, this is due to a very small number of ratings on a single type of perfume. :::
+
+If you are confident in these results, I recommend you re-run summary() and look at the data. Does it change your opinion?
+
+```{r}
+parfumo_data_clean |> summary()
+```
+
+The summary() function is very useful here. Looking at the column for Rating_Value, I can see that the mean and median values are around 7.3-7.4, and the range is 0 - 10. At this time I'm also looking at the Rating_Count variable, and seeing that the range there is 2 - 2,732. That tells me that some perfumes were only rated twice. I'm very suspicious that the brands Natura and Sarahs Creations have only a single perfume which was rated only two or three times, which allows them to get perfect scores. Similarly, any other brand with a score that seems too good to be true could be the result of this low-sampling bias.
+
+**Exercise:** Is this true? What type of visualization would help us to test this? In the space below, create a quick plot to ask whether there is a low-sampling bias present.
+
+If you'd like a reminder, here's a ggplot template from earlier: ggplot(data = penData, mapping = aes(x = species, y = bill_length_mm)) + geom_boxplot()
+
+```{r}
+
+```
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+I am assuming there is a negative relationship between avg_Rating and Rating_count (fewer ratings allow for a higher avg score). A scatter plot, made with geom_point() and Rating_Count and Rating_Value, is a quick and easy way to visualize a relationship like this.
+
+```{r}
+ggplot(data = parfumo_data_clean, mapping = aes(x = Rating_Count, y = Rating_Value)) +
+  geom_point()
+```
+:::
+
+It seems there is a relationship between Rating_Value and Rating_Count - one we can probably conceptualize quite well! Scents with fewer ratings exhibit the highest and lowest values, while scents with more ratings are gravitating towards a point just below 7.5. The mean and median Rating_Value is 7.35 and 7.40 respectively. It makes sense that as the number of ratings increases, the average rating converges on a middle-ground. I think this is reasonable grounds to filter our data based on a Rating_Count threshold.
+
+I need to set a filter threshold, and I'll use the median value of Rating_Count (19).
+
+#### An aside
+
+I'll also take a guess that there will be relationship between Rating_Count and Release_Year. I imagine that newer perfumes will have more ratings due to the internet, marketing, and population. This is important because if we are filtering based on a Rating_Count threshold, we need to be aware this is reducing the likelihood of older Brands appearing.
+
+```{r}
+ggplot(data = parfumo_data_clean, mapping = aes(x = Release_Year, y = Rating_Count)) +
+  geom_point()
+```
+
+#### Decisions
+
+**Exercise:** Discuss with others - do you agree with the decision to filter like this? Can you propose an alternative method? Is our threshold of 19 reasonable?
+
+## Transformations
+
+Transforming data is a term that includes grouping data (as we did above, for Brands), arranging (sorting), moving or renaming columns, *etc.,*. It also applies to filtering, which we are about to perform. I think there is a distinction between sorting rows or renaming columns and filtering, which is the removal of data from further analysis, so I'm giving it a separate subsection.
+
+Removing data, setting thresholds, removing outliers, defining groups, choosing methods - all of these decisions can have significant impacts on your final results. We must keep this in mind and always be ready to question our decisions. In bioinformatics it is usually plausible to repeat analyses with different decisions, and if we find that our decisions are having a big impact on our results, we need to be mindful of this.
+
+### Filtering for low rating counts
+
+The summary() function reveals that the median number of Rating_Counts is 19, so I'm choosing to keep only rows which have 19 or more ratings. You may decide to change this number or keep it as is.
+
+The code below will use filter() to discard all rows which *do not* meet the threshold (equal to or greater than 19), and will then repeat the steps we did earlier - grouping perfume by Brand, calculating the average rating for those brands, and returning the highest scores.
+
+```{r}
+parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE)) |> 
+  arrange(desc(avg_Rating)) |> 
+  head()
+```
+
+The new average ratings are much more plausible. They are also higher than the mean and median (from the summary() function), which is a good sanity-check. If my highest scoring brands were lower than the mean or median, I would know I have made a critical error. This might seem obvious, but it's important to constantly perform these mental checks.
+
+::: {.callout-tip collapse="true"}
+## Sanity Checks
+
+Sanity checks are a term used in bioinformatics and data science. What are they? Why are they important?
+
+Compare what we are doing today with a task like cooking a dinner. When cooking we have a constant stream of information from our five senses - we would smell that dairy products had gone too far past their use by date or if something was burning, we can hear the pot boiling over on the stove, feel that the carrot is too woody. In contrast, we have almost no feedback about our data! What's more, our data is often too large and complex for us to interpret easily - I can't eyeball a thousand data points and be confident they are normally distributed, for example (well, I could be confident, but that wouldn't mean I'm correct).
+
+Sanity checks are a way to engage with your data and make sure your results make logical sense. Examples include, but are in no way limited to: confirming data types (dates in date columns) and plausible ranges (human age should be between 0 - 120), checking distributions (especially if a statistical method assumes normality, but also for the presence of outliers), validate relationships (longer genes should probably have more mutations than shorter genes, on average), data volume (rows and columns should remain the same between steps - unless you are filtering, treatment vs control groups should be the same).
+
+Sanity checks are an entire arm of bioinformatics and data science, much the same way good visualization is. It's a skill that takes time and effort to build.
+:::
+
+### Transformations cont
+
+We've taken the step of removing perfumes that had too few ratings to be accurate. Since we are investigating *Brands*, rather than individual perfumes, it's logical to ask whether any Brands are scoring highly because they have only one or two perfumes that perform well (a "one-hit-wonder" brand). 
+
+To test this hypothesis, we can take advantage of the fact that the summarize() function can simultaneously calculate multiple summaries. We will re-run the code from above, but this time include an additional line so that we can see both the average rating *and* the number of perfumes contributing to the rating. 
+
+```{r}
+parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE),
+            number_Perfumes = n()) |> # The "n()" counts the number of rows in the group. 
+  arrange(desc(avg_Rating)) |> 
+  head(n = 10)
+```
+
+I can see an issue here - some of these brands have only one or two perfumes. Conceivably, it would be difficult for brands with e.g., 100 perfumes to consistently receive such high ratings, and they will therefore not show up in this list. This is essentially the same issue dealt with above - having fewer ratings, or fewer products, means an average score can be skewed.
+
+To deal with this, I've added an arbitrary filtering threshold for a brand to have 20 or more perfumes in order to be considered.
+
+```{r}
+parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = round(mean(Rating_Value, na.rm = TRUE), 1),
+            number_Perfumes = n()) |> 
+  filter(number_Perfumes >= 20) |> 
+  arrange(desc(avg_Rating)) |> 
+  head(n = 10)
+```
+
+**Exercise:** Discuss the legitimacy of this filtering threshold of 20. How does this compare to our previous filtering? What would you do differently?
+
+(add callout - I think this is a fine approach, because we are thinking about the practical nature of our question - 20 perfumes is a) a reasonable number for a mean and is b) plenty to choose from if a person was in a store - and that's the goal of this viz).
+
+### Brand Rating Data
+
+An important thing to remember is that the analyses above didn't actually modify the data - they were **only** performing the filtering, calculating the summaries, and printing the result to the screen. No data was modified (permanently). 
+
+Here we will generate a new object to store the data after applying our filtering steps. 
+
+```{r}
+brandRatingData <- parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE),
+            number_Perfumes = n()) |> 
+  filter(number_Perfumes >= 20) |> 
+  arrange(desc(avg_Rating)) |> 
+  head(n = 20)
+```
+
+Before you run this next line of code - what data do you expect to see? 
+
+```{r}
+brandRatingData |> head()
+```
+
+
+## Visualization I
+
+Make basic boxplot of scores - does this work? Yes. Am I proud of it? No.
+
+Ok, how do we improve? (Discussion)
+
+## Visualization II
+
+Up to the end of my initial tidytuesday visualization
+
+### Getting inspiration from the community
+
+Adding skills from Cedric's Evolution of a boxplot (mean line, text, arrows).
+
+## Conclusion
+
+Recap: here's the initial plot. Does it display the data? Yes.
+
+Here's the finished product, does it convey the data? Heck yes it does!
+
+The goal isn't *just* to show the data. It's to excite the audience, to capture and retain attention in an **extremely** noisy world. This is a visualization I'm proud of.

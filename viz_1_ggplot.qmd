@@ -85,6 +85,21 @@ ggplot(data = penData,
 
 What exactly can we produce with ggplot2?
 
+### Galleries, books, workshops
+
+https://r-graph-gallery.com/ggplot2-package.html
+
+The R graph gallery has a section on ggplot and it highlights some of the exciting features: custom fonts, pre-built themes, *interactive* plots - there's a lot going on. 
+
+
+### From the community 
+
 https://www.cedricscherer.com/top/dataviz/#SciAm
 
 When looking through this gallery, note that while some plots are very complex, they are built from basic elements. Each visualization is carefully designed: colour palettes are interesting but not overwhelming. There is adequate spacing between plot space and titles, axes, and text. Paler text (grey instead of black) makes overall images gentler. Cédric is a master of design as well as code, and all these visualizations demonstrate careful thought and planning. 
+
+
+https://towardsdatascience.com/explaining-my-favourite-tidytuesday-projects-e44bfe988813
+
+Isaac Arrayo gives us a breakdown of four plots from #tidytuesday (a community effort where people are invited to create visualizations of a provided dataset). We see four diverse plot types, the rationale for each plot, and how these plots might be applied to a more 'standard' dataset (i.e., an in-real-life example).
+
