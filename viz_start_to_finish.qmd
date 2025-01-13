@@ -87,9 +87,9 @@ parfumo_data_clean |> # Remember that |> is the 'pipe', which passes data to the
 ## Interpreting these results
 
 Natura and Sarahs Creations share the top score of 10. No need for further analysis, we can all go home and talk about our favourite new perfume brands which are obviously very reliable!
-:::
 
-Since we use base 10, many surveys and tests tend to be out of 10. To see two brands with what I assume are perfect scores makes me very suspicious, especially given it's a mean - this would require every single person to have rated every single one of their perfumes as a 10. Either they truly are perfect, or, more likely, this is due to a very small number of ratings on a single type of perfume. :::
+Since we use base 10, many surveys and tests tend to be out of 10. To see two brands with what I assume are perfect scores makes me very suspicious, especially given it's a mean - this would require every single person to have rated every single one of their perfumes as a 10. Either they truly are perfect, or, more likely, this is due to a very small number of ratings on a single type of perfume.
+:::
 
 If you are confident in these results, I recommend you re-run summary() and look at the data. Does it change your opinion?
 
@@ -110,12 +110,16 @@ If you'd like a reminder, here's a ggplot template from earlier: ggplot(data = p
 ::: {.callout-tip collapse="true"}
 ## Solution
 
-I am assuming there is a negative relationship between avg_Rating and Rating_count (fewer ratings allow for a higher avg score). A scatter plot, made with geom_point() and Rating_Count and Rating_Value, is a quick and easy way to visualize a relationship like this.
+I am assuming there is a negative relationship between avg_Rating and Rating_count (fewer ratings allow for a higher avg score). A scatter plot, made with geom_point(), with Rating_Count and Rating_Value on the x and y, is a quick and easy way to visualize a relationship like this.
 
 ```{r}
 ggplot(data = parfumo_data_clean, mapping = aes(x = Rating_Count, y = Rating_Value)) +
   geom_point()
 ```
+
+Warning: 29279 rows removed. Missing values or values outside the scale range - in this case we know the range of values is 0 - 10, and from the summary() function know that both the Rating variables have 29,279 missing rows. During our initial look at summary(), noted approx 30,000 missing rows, leaving approx 30,000 rows of data. If our initial data set didn't have missing values, this warning would be concerning.
+
+Warnings can be suppressed, but since we won't be keeping them in the final plot it's not critical and I prefer to leave them showing while working through exploratory analysis plots.
 :::
 
 It seems there is a relationship between Rating_Value and Rating_Count - one we can probably conceptualize quite well! Scents with fewer ratings exhibit the highest and lowest values, while scents with more ratings are gravitating towards a point just below 7.5. The mean and median Rating_Value is 7.35 and 7.40 respectively. It makes sense that as the number of ratings increases, the average rating converges on a middle-ground. I think this is reasonable grounds to filter our data based on a Rating_Count threshold.
@@ -163,18 +167,18 @@ The new average ratings are much more plausible. They are also higher than the m
 
 Sanity checks are a term used in bioinformatics and data science. What are they? Why are they important?
 
-Compare what we are doing today with a task like cooking a dinner. When cooking we have a constant stream of information from our five senses - we would smell that dairy products had gone too far past their use by date or if something was burning, we can hear the pot boiling over on the stove, feel that the carrot is too woody. In contrast, we have almost no feedback about our data! What's more, our data is often too large and complex for us to interpret easily - I can't eyeball a thousand data points and be confident they are normally distributed, for example (well, I could be confident, but that wouldn't mean I'm correct).
+Compare what we are doing today with a task like cooking a dinner. When cooking we have a constant stream of information from our five senses - we would smell that dairy products had gone too far past their use by date or if something was burning, we can hear the pot boiling over on the stove, feel that the carrot is too woody. In contrast, we have almost no feedback about our data! What's more, our data is often too large and complex for us to interpret easily - I can't eyeball a thousand data points and be confident they are normally distributed, for example (well, I could be *confident*, but that wouldn't mean I'm *correct*).
 
-Sanity checks are a way to engage with your data and make sure your results make logical sense. Examples include, but are in no way limited to: confirming data types (dates in date columns) and plausible ranges (human age should be between 0 - 120), checking distributions (especially if a statistical method assumes normality, but also for the presence of outliers), validate relationships (longer genes should probably have more mutations than shorter genes, on average), data volume (rows and columns should remain the same between steps - unless you are filtering, treatment vs control groups should be the same).
+Sanity checks are a way to engage with your data and make sure your results make logical sense. Examples include, but are in no way limited to: confirming data types (dates in date columns) and plausible ranges (human age should be between 0 - 120), checking distributions (especially if a statistical method assumes normality, but also for the presence of outliers), validate relationships (longer genes should probably have more mutations than shorter genes, larger genomes should have larger filesizes), data volume (rows and columns should remain the same between steps - unless you are filtering, treatment vs control groups should have equal numbers).
 
 Sanity checks are an entire arm of bioinformatics and data science, much the same way good visualization is. It's a skill that takes time and effort to build.
 :::
 
 ### Transformations cont
 
-We've taken the step of removing perfumes that had too few ratings to be accurate. Since we are investigating *Brands*, rather than individual perfumes, it's logical to ask whether any Brands are scoring highly because they have only one or two perfumes that perform well (a "one-hit-wonder" brand). 
+We've taken the step of removing perfumes that had too few ratings to be accurate. Since we are investigating *Brands*, rather than individual perfumes, it's logical to ask whether any Brands are scoring highly because they have only one or two perfumes that perform well (a "one-hit-wonder" brand).
 
-To test this hypothesis, we can take advantage of the fact that the summarize() function can simultaneously calculate multiple summaries. We will re-run the code from above, but this time include an additional line so that we can see both the average rating *and* the number of perfumes contributing to the rating. 
+To test this hypothesis, we can take advantage of the fact that the summarize() function can simultaneously calculate multiple summaries. We will re-run the code from above, but this time include an additional line so that we can see both the average rating *and* the number of perfumes contributing to the rating.
 
 ```{r}
 parfumo_data_clean |> 
@@ -203,13 +207,37 @@ parfumo_data_clean |>
 
 **Exercise:** Discuss the legitimacy of this filtering threshold of 20. How does this compare to our previous filtering? What would you do differently?
 
-(add callout - I think this is a fine approach, because we are thinking about the practical nature of our question - 20 perfumes is a) a reasonable number for a mean and is b) plenty to choose from if a person was in a store - and that's the goal of this viz).
+::: {.callout-tip collapse="true"}
+## A 'practical' threshold
+
+It might feel like 20 is an arbitrary number for a threshold (and it is). However, I think this is a fine approach, because we are thinking about the *practical* or *translational* nature of our question - 20 perfumes is a) not an unreasonable number for a mean and is b) plenty to choose from if a person was in a store - and that's the goal of this viz.
+:::
 
 ### Brand Rating Data
 
-An important thing to remember is that the analyses above didn't actually modify the data - they were **only** performing the filtering, calculating the summaries, and printing the result to the screen. No data was modified (permanently). 
+An important thing to remember is that the analyses above didn't actually modify the data - they were **only** performing the filtering, calculating the summaries, and printing the result to the screen. No data was modified (permanently).
 
-Here we will generate a new object to store the data after applying our filtering steps. 
+Here we will generate a new object to store the data after applying our filtering steps.
+
+```{r}
+keep_brands <- parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = round(mean(Rating_Value, na.rm = TRUE), 1),
+            number_Perfumes = n()) |> 
+  filter(number_Perfumes >= 20) |> 
+  arrange(desc(avg_Rating)) |> 
+  head(n = 10)
+
+perfume_brand_data <- parfumo_data_clean |> 
+  filter(Brand %in% keep_brands$Brand)
+
+keep_brands |> rm()
+
+perfume_brand_data |> summary()
+```
+
+And now we will create a second object which includes our data in an alternative format:
 
 ```{r}
 brandRatingData <- parfumo_data_clean |> 
@@ -222,22 +250,195 @@ brandRatingData <- parfumo_data_clean |>
   head(n = 20)
 ```
 
-Before you run this next line of code - what data do you expect to see? 
+Before you run this next line of code - what data do you expect to see?
+
+Reading through the code above describe, as accurately as you can, what is and is not included in the brandRatingData object.
 
 ```{r}
 brandRatingData |> head()
 ```
 
+Is anything different between what you expected and/or described and what the object looks like?
+
+::: {.callout-tip collapse="TRUE"}
+## Variables in tidyverse
+
+If you are new to the tidyverse, you have expected to see more columns, but group_by() and summarize() are determining what columns are generated and saved in the new object. The two filter() calls and the arrange() call control which rows are kept and the order we see them in.
+:::
+
+With the brandRatingData object stored, we can now proceed to visualization.
 
 ## Visualization I
 
-Make basic boxplot of scores - does this work? Yes. Am I proud of it? No.
+In this example we will create a visualization of the top 20 perfume brands based on the average rating. The *aim* is to provide a novice with information about perfume brands so that they could pick a perfume with some confidence (*e.g.,* if doing online shopping).
 
-Ok, how do we improve? (Discussion)
+It is critically important to identify exactly what you are aiming to represent with your visualization. Biological data is often complex and, at least when publishing, space is often at a premium and figures tend to be information dense. You must consider the tension between including more information and readability.
+
+In this workshop we are also aiming to create a figure that is visually appealing. We want to use elements of design such as line and colour theory *etc.,* to capture and hold attention, whether this is during a live presentation or in a static format such as a journal.
+
+```{r}
+brandRatingData |> print(n = 20)
+```
+
+### Building a visualization - sketch I
+
+To start a visualization I will 'sketch' a figure to determine different ways to display the data. A boxplot is a great place to start since I know we are showing average ratings (even though we have so far calculated based on the mean and a boxplot uses medians).
+
+```{r}
+ggplot(data = perfume_brand_data,
+       mapping = aes(x = Rating_Value, y = Brand)) +
+  geom_boxplot()
+```
+
+**Exercise:** Why is this a poor visualization, and what can be done to improve it?
+
+::: {.callout-Solution collapse="TRUE"}
+Lack of title, axis labels are ugly with underscore, no colour.
+
+Unsorted data is mentally tiring.
+
+One-dimensional: does not show anything other than the median and summary.
+
+**How could this be improved?**
+
+Additional arguments in ggplot control title, set text size, *etc.,*.
+
+Sort data and include other data to provide the reader with additional, useful information.
+
+Select a clear, visually appealing colour scheme. Make sure colours are accessible, will work on other devices, text will be clear whether online or printed.
+:::
+
+Fundamentally, I don't think the boxplot works. While it does show the median and summary values, I don't see a way to clearly show information like the number of perfumes (and, since that was a filtering criteria, I think it's worth showing) or to make it visually interesting.
+
+### Building a visualization - sketch II
+
+*Note:* In reality you might sketch out a handful of different plots to find one that suits. Here we will jump ahead to something I think works.
+
+First, we will switch to using brandRatingData, where we have calculated the Brand average rating, and we will show the average with a geom_point function. You will see that while we lose some information switching from a boxplot to a geom_point() plot, this will allow us to include other information which may be more informative.
+
+brandRatingData is already formated to have Brands arranged by avg_Rating, but in case that wasn't true, the code includes reorder() to sort by avg_Rating.
+
+The labs() function is used to add a title, and clearer x and y axis labels.
+
+```{r}
+ggplot(brandRatingData, 
+       aes(x = avg_Rating, y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(size = number_Perfumes, color = avg_Rating)) +
+  labs(
+    x = "Brand rating",
+    y = "Brand",
+    title = "Mean perfume rating by brand"
+  ) 
+```
+
+By mapping average rating and the number of perfumes to colour and size (within the geom_point() function), we make the figure more visually interesting and more informative. For example, we can see that Ensar Oud/Oriscent has plenty of perfumes to choose from, while Nabeel has fewer. The plot overall looks 'cleaner' and less cluttered, yet actually includes more information.
+
+This is the basis for a good visualization.
+
+### Refining geom_point()
+
+Here we will bring in a handful of new arguments and functions. Remember that the main goal for you is *not* to memorise all of this information - this is a template for you to have available. Let's look at some of the arguments below, and discuss the impact:
+
+```{r}
+ggplot(brandRatingData, 
+       aes(x = avg_Rating, y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(size = number_Perfumes, color = avg_Rating)) +
+  scale_color_gradient(low = "lightblue", high = "darkblue", name = "Brand rating") +
+  scale_size(range = c(1, 10), name = "Number of perfumes") +
+  labs(
+    x = "Brand rating",
+    y = "Brand",
+    title = "Mean perfume rating by brand"
+  ) +
+  theme_light() +
+  theme(
+    axis.text.y = element_text(size = 10),
+    axis.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5)
+  ) +
+  guides(color = "none")
+```
+
+-   scale_color_gradient() is a function to set colours through a given gradient. Useful if you have an overall brand or theme colour (e.g., University of Otago tends to use blue and gold, so I've chosen blue).
+
+-   scale_size() provides control over the size of the geom_point data points. We can set the upper/lower limits, and the 'granularity' (*i.e.,* a difference between a large and a small value by having a greater range). Larger point sizes here (compared to our first plot) make the figure look less empty. Having points that overlap (Guerlain) may not be appropriate in all settings, but visually it makes the plot less 'rigid' and is more interesting. Note this function also sets the name to "Number of perfumes".
+
+-   By controlling both size and colour, the new plot focuses our attention, starting at the darker top right and letting our eyes move down and to the left (which is loosely our order of preference for brands). You can switch dark and light blue and re-build the plot, notice how much it impacts where our attention is drawn!
+
+-   theme_light() sets the background space of the plot to white rather than a darker gray. Test this by changing it to theme_dark(). There are a set of available pre-made themes, and we can also control our own themes.
+
+-   theme() is used to control almost everything else within the plot. Here we are setting three different sizes: the *plot title*, the axis *names*, and the axis *text*. Title and names are further differentiated by setting typeface to bold. This highlights *an important feature of design:* we naturally look for patterns and similarities, therefore we can use a point of difference to make something **stand out**.
+
+- guides() is being used here to remove colour from the legend (color = "none"). Use size = "none" to remove the size legend. We have done this because while colour is being used to add visual interest, it isn't really providing us with novel information (it is repeating the same information we get from looking at where the point sits on the x axis). 
+
+Using this information as a guide, you could make many fine scale tweaks to your plot, changing it to suit your specific data and situation.
+
+### Refining our use of the data
+
+Looking at this plot, what can I do to enhance the visuals to be cleaner, more dynamic, more eye-catching, more aesthetic? Is there any other data I can include to improve the plot?
+
+Currently, colour is not being fully utilised - it is mapped to the Brand average rating, which is already shown via the x axis. Thinking back to earlier themes on number of ratings and number of perfumes per brand, we could use colour to represent some of our data around the rating_Count variable.
+
+To do this, we will re-build the brandRatingData object with an additional variable calculated by the summarize() function, calling it avg_rating_count and then map it to colour.  
+
+```{r}
+# Add a new summarize output: the average rating count.
+brandRatingData <- parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE),
+            number_Perfumes = n(),
+            avg_rating_count = mean(Rating_Count)) |> 
+  filter(number_Perfumes >= 20) |> 
+  arrange(desc(avg_Rating)) |> 
+  head(n = 20)
+```
+
+Before we map avg_rating_count to colour we will consider *accessibility*. A colour palette, or visualization in general, is accessible if it is something that everyone can see. The most regularly discussed examples of accessibility include text size, a colour palette that can be seen by colour-blind individuals, and more recently whether the image is gentle or overwhelming. 
+
+::: {.callout-tip}
+For an example of 'gentle vs overwhelming', go to Tools, Global Options, Appearance, and in the Editor theme box, check "Gob". I personally would not enjoy spending time looking at my RStudio console if the editor was stuck in "Gob", and I prefer the much more gentle Idle Fingers theme. 
+:::
+
+The viridis R package is one example of a package that claims* to have colour-blind friendly colour palettes (* I'm not colour-blind and cannot confirm). In addition to mapping avg_rating_count to colour and using the scale_color_viridis() function with the "magma" argument, I've also tweaked some of the arguments in theme() to make the overall text package look cleaner and softer. 
+
+```{r}
+library(viridis)
+library(ggtext)
+
+ggplot(brandRatingData, 
+       aes(x = avg_Rating, y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(size = number_Perfumes, color = avg_rating_count)) +
+  scale_color_viridis(option = "magma", direction = -1, name = "Mean number of ratings") +
+  scale_size(range = c(1, 10), name = "Number of perfumes") +
+  labs(
+    x = "Brand rating",
+    y = "Brand",
+    title = "Top 20 Perfume Brands Ranked by Mean Rating"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 10, color = "gray40"),
+    axis.title = element_text(size = 12, face = "bold", color = "gray50"),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5, color = "gray50"),
+    legend.title = element_text(size = 12, face = "bold", color = "gray50"), 
+    legend.text = element_text(size = 10, color = "gray40")
+  ) 
+```
+
+This version of the visualization is:
+
+a) more visually interesting, with eye catching colours.
+
+b) simultaneously softer and more gentle, more accessible. 
+
+c) displays more data: importantly, we can now see that Ensar Oud/Oriscent has a low average number of ratings. With this in mind, I'd be more inclined to look at Roja Parfums or Chanel over Ensar Oud. 
+
+
 
 ## Visualization II
 
-Up to the end of my initial tidytuesday visualization
+
 
 ### Getting inspiration from the community
 
@@ -250,3 +451,5 @@ Recap: here's the initial plot. Does it display the data? Yes.
 Here's the finished product, does it convey the data? Heck yes it does!
 
 The goal isn't *just* to show the data. It's to excite the audience, to capture and retain attention in an **extremely** noisy world. This is a visualization I'm proud of.
+
+Could I improve this further? e.g., exercise: what does this look like as a violin plot?
