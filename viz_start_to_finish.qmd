@@ -297,7 +297,8 @@ ggplot(data = perfume_brand_data,
 
 **Exercise:** Why is this a poor visualization, and what can be done to improve it?
 
-::: {.callout-Solution collapse="TRUE"}
+::: {.callout-Solution collapse="true"}
+## Criticizing the boxplot
 Lack of title, axis labels are ugly with underscore, no colour.
 
 Unsorted data is mentally tiring.
