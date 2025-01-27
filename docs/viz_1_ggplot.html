@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,10 +69,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-232e481ed8e7f3c863621abf59ad5457.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -104,6 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <meta property="og:title" content="Visualization with ggplot2 – Home">
 <meta property="og:description" content="">
+<meta property="og:image" content="viz_1_ggplot_files/figure-html/unnamed-chunk-3-1.png">
 <meta property="og:site_name" content="Home">
 </head>
 
@@ -138,7 +139,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./viz_4_building_better.html"> 
-<span class="menu-text">Building better</span></a>
+<span class="menu-text">Improving existing plots</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./viz_start_to_finish.html"> 
+<span class="menu-text">Visualization start to finish</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -165,7 +170,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#the-ggplot-format" id="toc-the-ggplot-format" class="nav-link active" data-scroll-target="#the-ggplot-format">The ggplot format</a></li>
   <li><a href="#extending-the-ggplot-format" id="toc-extending-the-ggplot-format" class="nav-link" data-scroll-target="#extending-the-ggplot-format">Extending the ggplot format</a></li>
-  <li><a href="#showcase" id="toc-showcase" class="nav-link" data-scroll-target="#showcase">Showcase</a></li>
+  <li><a href="#showcase" id="toc-showcase" class="nav-link" data-scroll-target="#showcase">Showcase</a>
+  <ul class="collapse">
+  <li><a href="#galleries-books-workshops" id="toc-galleries-books-workshops" class="nav-link" data-scroll-target="#galleries-books-workshops">Galleries, books, workshops</a></li>
+  <li><a href="#from-the-community" id="toc-from-the-community" class="nav-link" data-scroll-target="#from-the-community">From the community</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -300,10 +309,20 @@ Attaching package: 'dplyr'</code></pre>
 <section id="showcase" class="level2">
 <h2 class="anchored" data-anchor-id="showcase">Showcase</h2>
 <p>What exactly can we produce with ggplot2?</p>
+<section id="galleries-books-workshops" class="level3">
+<h3 class="anchored" data-anchor-id="galleries-books-workshops">Galleries, books, workshops</h3>
+<p>https://r-graph-gallery.com/ggplot2-package.html</p>
+<p>The R graph gallery has a section on ggplot and it highlights some of the exciting features: custom fonts, pre-built themes, <em>interactive</em> plots - there’s a lot going on.</p>
+</section>
+<section id="from-the-community" class="level3">
+<h3 class="anchored" data-anchor-id="from-the-community">From the community</h3>
 <p>https://www.cedricscherer.com/top/dataviz/#SciAm</p>
 <p>When looking through this gallery, note that while some plots are very complex, they are built from basic elements. Each visualization is carefully designed: colour palettes are interesting but not overwhelming. There is adequate spacing between plot space and titles, axes, and text. Paler text (grey instead of black) makes overall images gentler. Cédric is a master of design as well as code, and all these visualizations demonstrate careful thought and planning.</p>
+<p>https://towardsdatascience.com/explaining-my-favourite-tidytuesday-projects-e44bfe988813</p>
+<p>Isaac Arrayo gives us a breakdown of four plots from #tidytuesday (a community effort where people are invited to create visualizations of a provided dataset). We see four diverse plot types, the rationale for each plot, and how these plots might be applied to a more ‘standard’ dataset (i.e., an in-real-life example).</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -389,8 +408,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -501,7 +518,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

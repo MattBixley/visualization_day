@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,10 +69,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-232e481ed8e7f3c863621abf59ad5457.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -104,6 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <meta property="og:title" content="Building Better Plots – Home">
 <meta property="og:description" content="">
+<meta property="og:image" content="viz_4_building_better_files/figure-html/unnamed-chunk-3-1.png">
 <meta property="og:site_name" content="Home">
 </head>
 
@@ -138,7 +139,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./viz_4_building_better.html" aria-current="page"> 
-<span class="menu-text">Building better</span></a>
+<span class="menu-text">Improving existing plots</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./viz_start_to_finish.html"> 
+<span class="menu-text">Visualization start to finish</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -211,7 +216,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"~/Library/CloudStorage/OneDrive-UniversityofOtago/Documents/Training Coordinator 2022/GitHub/visualization_day/data/eDNA_group_counts.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Working from https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/ : Could now show the counts (not Count) as a boxplot for each Group.</p>
+<p>This section follows the outline produced by the very skilled data visualizer Cédric Scherer, modified to work with some example data and updated with my own thoughts and opinions. Cédric’s original tutorial is available here:</p>
+<p>https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify that all groups have 500 observations</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Group) <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">observations =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(observations)) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -494,26 +500,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>This isn’t necessarily something you would do in many types of plots, but is useful to draw attention to key points (often, e.g., a single gene of interest in a scatter plot).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"boxplot.png"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">8</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.height =</span> <span class="dv">12</span>, <span class="at">repr.plot.width =</span> <span class="dv">6</span>)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> </span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"boxplot.png"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div>
-<section id="can-i-add-some-viz-of-the-total-number-of-samples-in-each-group" class="level4">
-<h4 class="anchored" data-anchor-id="can-i-add-some-viz-of-the-total-number-of-samples-in-each-group">Can I add some viz of the total number of samples in each group</h4>
-<p>e.g., There are 273,199 plants, 87713 Fish : while more plants were detected, they had lower median count than Fish. In some cases, Group count and Count are correlated, in some cases not.</p>
 
 
-</section>
 </section>
 </section>
 
@@ -600,8 +590,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -712,7 +700,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

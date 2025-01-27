@@ -18,8 +18,10 @@ website:
         href: viz_2_exploratoryAnalysis.qmd
       - text: Exemplar visualizations
         href: viz_3_exemplarVisualizations.qmd
-      - text: Building better
+      - text: Improving existing plots
         href: viz_4_building_better.qmd    
+      - text: Visualization start to finish
+        href: viz_start_to_finish.qmd  
     tools: 
       - icon: github
         href: https://github.com/tylermcinnes/visualization_day  

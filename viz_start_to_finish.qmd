@@ -101,7 +101,10 @@ The summary() function is very useful here. Looking at the column for Rating_Val
 
 **Exercise:** Is this true? What type of visualization would help us to test this? In the space below, create a quick plot to ask whether there is a low-sampling bias present.
 
-If you'd like a reminder, here's a ggplot template from earlier: ggplot(data = penData, mapping = aes(x = species, y = bill_length_mm)) + geom_boxplot()
+If you'd like a reminder, here's a ggplot template from earlier (though, geom_boxplot() might not be what you are after...): 
+
+ggplot(data = penData, mapping = aes(x = species, y = bill_length_mm)) + 
+geom_boxplot()
 
 ```{r}
 
@@ -124,7 +127,7 @@ Warnings can be suppressed, but since we won't be keeping them in the final plot
 
 It seems there is a relationship between Rating_Value and Rating_Count - one we can probably conceptualize quite well! Scents with fewer ratings exhibit the highest and lowest values, while scents with more ratings are gravitating towards a point just below 7.5. The mean and median Rating_Value is 7.35 and 7.40 respectively. It makes sense that as the number of ratings increases, the average rating converges on a middle-ground. I think this is reasonable grounds to filter our data based on a Rating_Count threshold.
 
-I need to set a filter threshold, and I'll use the median value of Rating_Count (19).
+I need to set a filter threshold, and I'll use the median value of Rating_Count (19). Rows (perfumes) will only be kept if they have been rated 19 times or more. 
 
 #### An aside
 
@@ -136,6 +139,8 @@ ggplot(data = parfumo_data_clean, mapping = aes(x = Release_Year, y = Rating_Cou
 ```
 
 #### Decisions
+
+I have decided to filter perfumes/rows based on a criteria of having been rated 19 or more times (based on the median rating_Count of 19). Perfumes rated fewer than 19 times will be excluded from the analysis.
 
 **Exercise:** Discuss with others - do you agree with the decision to filter like this? Can you propose an alternative method? Is our threshold of 19 reasonable?
 
@@ -160,7 +165,7 @@ parfumo_data_clean |>
   head()
 ```
 
-The new average ratings are much more plausible. They are also higher than the mean and median (from the summary() function), which is a good sanity-check. If my highest scoring brands were lower than the mean or median, I would know I have made a critical error. This might seem obvious, but it's important to constantly perform these mental checks.
+The new average ratings are much more plausible. They are also higher than the mean and median (from the summary() function), which is a good *sanity check*. If my highest scoring brands were lower than the mean or median, I would know I have made a critical error. This might seem obvious, but it's important to constantly perform these mental checks.
 
 ::: {.callout-tip collapse="true"}
 ## Sanity Checks
@@ -440,8 +445,6 @@ c) displays more data: importantly, we can now see that Ensar Oud/Oriscent has a
 
 
 
-### Getting inspiration from the community
-
 Adding skills from Cedric's Evolution of a boxplot (mean line, text, arrows).
 
 ## Conclusion
@@ -452,4 +455,6 @@ Here's the finished product, does it convey the data? Heck yes it does!
 
 The goal isn't *just* to show the data. It's to excite the audience, to capture and retain attention in an **extremely** noisy world. This is a visualization I'm proud of.
 
-Could I improve this further? e.g., exercise: what does this look like as a violin plot?
+## Final exercise
+
+Use the information we have discussed, and the 

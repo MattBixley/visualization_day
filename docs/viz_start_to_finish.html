@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tyler McInnes">
+<meta name="dcterms.date" content="2025-01-10">
+
+<title>Start to Finish Visualizing your Data – Home</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-232e481ed8e7f3c863621abf59ad5457.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Start to Finish Visualizing your Data – Home">
+<meta property="og:description" content="">
+<meta property="og:image" content="viz_start_to_finish_files/figure-html/unnamed-chunk-7-1.png">
+<meta property="og:site_name" content="Home">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Visualization Day</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./viz_1_ggplot.html"> 
+<span class="menu-text">Visualization with ggplot2</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./viz_2_exploratoryAnalysis.html"> 
+<span class="menu-text">Transforming data for visualization</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./viz_3_exemplarVisualizations.html"> 
+<span class="menu-text">Exemplar visualizations</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./viz_4_building_better.html"> 
+<span class="menu-text">Improving existing plots</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./viz_start_to_finish.html" aria-current="page"> 
+<span class="menu-text">Visualization start to finish</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://github.com/tylermcinnes/visualization_day" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Start to Finish Visualizing your Data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Tyler McInnes </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 10, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><em>Note self:</em> this section should be preceeded by an introduction and explanation to tidytuesday (in the exemplar episode), so that readers have context about where this data came from, why we are using it. This section then actively demonstrates the importance of the community effort of tidytuesday (and contributes to their 2024 aim of being involved in 10+ courses (they achieved 30+)).</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>Together, we are going to go from start to finish and create a visualization. Start to finish means we will need to explore the data, make decisions involving modifications and transformations, and finally, visualize the data in a meaningful way.</p>
+<section id="aims" class="level3">
+<h3 class="anchored" data-anchor-id="aims">Aims</h3>
+<p>To demonstrate the full process of exploratory analysis, data transformation, and visualization.</p>
+<p>Generate discussion, via questions and exercises, about the data and the validity of our modifications and decisions.</p>
+<p>To generate a figure that is clear, conveys a message, and is visually appealing.</p>
+</section>
+<section id="how-this-will-work" class="level3">
+<h3 class="anchored" data-anchor-id="how-this-will-work">How this will work</h3>
+<p>I will work through all the code required to create the end product visualization. You can follow along exactly, or you can opt to deviate from my example (e.g., during data transformation step you might choose to keep 25 samples while I keep 20, you might choose to use the median while I use the mean). If you are newer to ggplot2, then I recommend you follow exactly. If you are more confident, then modify the code as you see fit.</p>
+<p>You will be provided with a full and complete copy of all this code, to use as a template for your own work.</p>
+</section>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
+<section id="packages" class="level3">
+<h3 class="anchored" data-anchor-id="packages">Packages</h3>
+<p>For this section we are going to need dplyr, readr, and ggplot. We can load them separately, or we can load the whole tidyverse package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+</section>
+<section id="importing-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="importing-the-data">Importing the data</h3>
+<p>All tidytuesday data is available for easy download and importing. The data is generally very well organised (it has already gone through cleaning and is ‘tidy’).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>parfumo_data_clean <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-12-10/parfumo_data_clean.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 59325 Columns: 13
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (10): Number, Name, Brand, Concentration, Main_Accords, Top_Notes, Middl...
+dbl  (3): Release_Year, Rating_Value, Rating_Count
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="exploratory-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-analysis">Exploratory analysis</h2>
+<p>The first step in exploratory analysis is to understand our data. I liken this to the equivalent of picking up a wrapped present, feeling the weight, how solid it is, maybe giving it a little bit of a shake, and trying to figure out what’s inside.</p>
+<p>Useful functions here include dim(), colnames(), head(), summary(), str(), class(), and many others. You will develop a set of favourites and defaults.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>parfumo_data_clean <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 13
+  Number Name         Brand Release_Year Concentration Rating_Value Rating_Count
+  &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;        &lt;dbl&gt;
+1 455    Tabac Écarl… Le R…           NA &lt;NA&gt;                    NA           NA
+2 0071   Tidal Pool   CB I…         2004 &lt;NA&gt;                    NA           NA
+3 0154   Pumpkin Pie  CB I…         1998 &lt;NA&gt;                    NA           NA
+4 0162   Wet Stone    CB I…         2006 &lt;NA&gt;                    NA           NA
+5 0171   Chocolate B… CB I…           NA &lt;NA&gt;                    NA           NA
+6 0191   My Birthday… CB I…         1975 &lt;NA&gt;                    NA           NA
+# ℹ 6 more variables: Main_Accords &lt;chr&gt;, Top_Notes &lt;chr&gt;, Middle_Notes &lt;chr&gt;,
+#   Base_Notes &lt;chr&gt;, Perfumers &lt;chr&gt;, URL &lt;chr&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>parfumo_data_clean <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Number              Name              Brand            Release_Year  
+ Length:59325       Length:59325       Length:59325       Min.   :1709   
+ Class :character   Class :character   Class :character   1st Qu.:2005   
+ Mode  :character   Mode  :character   Mode  :character   Median :2013   
+                                                          Mean   :2006   
+                                                          3rd Qu.:2018   
+                                                          Max.   :2024   
+                                                          NA's   :20316  
+ Concentration       Rating_Value     Rating_Count     Main_Accords      
+ Length:59325       Min.   : 0.000   Min.   :   2.00   Length:59325      
+ Class :character   1st Qu.: 6.900   1st Qu.:   6.00   Class :character  
+ Mode  :character   Median : 7.400   Median :  19.00   Mode  :character  
+                    Mean   : 7.347   Mean   :  60.66                     
+                    3rd Qu.: 7.900   3rd Qu.:  62.00                     
+                    Max.   :10.000   Max.   :2732.00                     
+                    NA's   :29279    NA's   :29279                       
+  Top_Notes         Middle_Notes        Base_Notes         Perfumers        
+ Length:59325       Length:59325       Length:59325       Length:59325      
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+     URL           
+ Length:59325      
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
+                   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>parfumo_data_clean <span class="sc">|&gt;</span> <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Number"        "Name"          "Brand"         "Release_Year" 
+ [5] "Concentration" "Rating_Value"  "Rating_Count"  "Main_Accords" 
+ [9] "Top_Notes"     "Middle_Notes"  "Base_Notes"    "Perfumers"    
+[13] "URL"          </code></pre>
+</div>
+</div>
+<p><strong>Exercise:</strong> Note down your initial conclusions and impressions.</p>
+<ul>
+<li><p>What are five things you notice about the data?</p></li>
+<li><p>What is one question you have about the data? (<em>note:</em> looking for a small, simple question about the dataset, not a hypothesis to test)</p></li>
+<li><p>What is something that jumps out at you, which you might like to investigate, visualize, or learn about?</p></li>
+</ul>
+<section id="brand-rating" class="level3">
+<h3 class="anchored" data-anchor-id="brand-rating">Brand Rating</h3>
+<p>Looking at the data I was interested in Brand, Rating_Value, and Rating_Count. My aim is to generate a visualization which will show which brands consistently have high ratings for their different products, with the intention that a person with little to no knowledge about perfume (like myself) can get an idea of reliable brands.</p>
+<p><strong>Exercise:</strong> Mentally visualize what this figure might look like. What are the key components we will need to convey?</p>
+<section id="assessing-the-means" class="level4">
+<h4 class="anchored" data-anchor-id="assessing-the-means">Assessing the means</h4>
+<p>A useful place to start will be to look at the average (and here I’ll be using mean) rating value for a brand. To do this we will use the dplyr verbs (functions) to group rows based on which Brand they are from, generate a single summary value (a mean of the Rating_Value) for each Brand, arrange the means from highest to lowest, and then use the head() function to view the output.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>parfumo_data_clean <span class="sc">|&gt;</span> <span class="co"># Remember that |&gt; is the 'pipe', which passes data to the next function.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Brand) <span class="sc">|&gt;</span> <span class="co"># All rows which share the same Brand are now grouped.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_Rating =</span> <span class="fu">mean</span>(Rating_Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> <span class="co"># Calculate Brand means</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_Rating)) <span class="sc">|&gt;</span> <span class="co"># Arrange Brands from highest to lowest</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  Brand            avg_Rating
+  &lt;chr&gt;                 &lt;dbl&gt;
+1 Natura                10   
+2 Sarahs Creations      10   
+3 mesOud                 9.47
+4 Bourjois               9.4 
+5 Jehanne Rigaud         9.3 
+6 Max Joacim             9.3 </code></pre>
+</div>
+</div>
+<p><strong>Exercise:</strong> Discuss these results.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Interpreting these results
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Natura and Sarahs Creations share the top score of 10. No need for further analysis, we can all go home and talk about our favourite new perfume brands which are obviously very reliable!</p>
+<p>Since we use base 10, many surveys and tests tend to be out of 10. To see two brands with what I assume are perfect scores makes me very suspicious, especially given it’s a mean - this would require every single person to have rated every single one of their perfumes as a 10. Either they truly are perfect, or, more likely, this is due to a very small number of ratings on a single type of perfume.</p>
+</div>
+</div>
+</div>
+<p>If you are confident in these results, I recommend you re-run summary() and look at the data. Does it change your opinion?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>parfumo_data_clean <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Number              Name              Brand            Release_Year  
+ Length:59325       Length:59325       Length:59325       Min.   :1709   
+ Class :character   Class :character   Class :character   1st Qu.:2005   
+ Mode  :character   Mode  :character   Mode  :character   Median :2013   
+                                                          Mean   :2006   
+                                                          3rd Qu.:2018   
+                                                          Max.   :2024   
+                                                          NA's   :20316  
+ Concentration       Rating_Value     Rating_Count     Main_Accords      
+ Length:59325       Min.   : 0.000   Min.   :   2.00   Length:59325      
+ Class :character   1st Qu.: 6.900   1st Qu.:   6.00   Class :character  
+ Mode  :character   Median : 7.400   Median :  19.00   Mode  :character  
+                    Mean   : 7.347   Mean   :  60.66                     
+                    3rd Qu.: 7.900   3rd Qu.:  62.00                     
+                    Max.   :10.000   Max.   :2732.00                     
+                    NA's   :29279    NA's   :29279                       
+  Top_Notes         Middle_Notes        Base_Notes         Perfumers        
+ Length:59325       Length:59325       Length:59325       Length:59325      
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+     URL           
+ Length:59325      
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
+                   </code></pre>
+</div>
+</div>
+<p>The summary() function is very useful here. Looking at the column for Rating_Value, I can see that the mean and median values are around 7.3-7.4, and the range is 0 - 10. At this time I’m also looking at the Rating_Count variable, and seeing that the range there is 2 - 2,732. That tells me that some perfumes were only rated twice. I’m very suspicious that the brands Natura and Sarahs Creations have only a single perfume which was rated only two or three times, which allows them to get perfect scores. Similarly, any other brand with a score that seems too good to be true could be the result of this low-sampling bias.</p>
+<p><strong>Exercise:</strong> Is this true? What type of visualization would help us to test this? In the space below, create a quick plot to ask whether there is a low-sampling bias present.</p>
+<p>If you’d like a reminder, here’s a ggplot template from earlier (though, geom_boxplot() might not be what you are after…):</p>
+<p>ggplot(data = penData, mapping = aes(x = species, y = bill_length_mm)) + geom_boxplot()</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>I am assuming there is a negative relationship between avg_Rating and Rating_count (fewer ratings allow for a higher avg score). A scatter plot, made with geom_point(), with Rating_Count and Rating_Value on the x and y, is a quick and easy way to visualize a relationship like this.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> parfumo_data_clean, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Rating_Count, <span class="at">y =</span> Rating_Value)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 29279 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_start_to_finish_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Warning: 29279 rows removed. Missing values or values outside the scale range - in this case we know the range of values is 0 - 10, and from the summary() function know that both the Rating variables have 29,279 missing rows. During our initial look at summary(), noted approx 30,000 missing rows, leaving approx 30,000 rows of data. If our initial data set didn’t have missing values, this warning would be concerning.</p>
+<p>Warnings can be suppressed, but since we won’t be keeping them in the final plot it’s not critical and I prefer to leave them showing while working through exploratory analysis plots.</p>
+</div>
+</div>
+</div>
+<p>It seems there is a relationship between Rating_Value and Rating_Count - one we can probably conceptualize quite well! Scents with fewer ratings exhibit the highest and lowest values, while scents with more ratings are gravitating towards a point just below 7.5. The mean and median Rating_Value is 7.35 and 7.40 respectively. It makes sense that as the number of ratings increases, the average rating converges on a middle-ground. I think this is reasonable grounds to filter our data based on a Rating_Count threshold.</p>
+<p>I need to set a filter threshold, and I’ll use the median value of Rating_Count (19). Rows (perfumes) will only be kept if they have been rated 19 times or more.</p>
+</section>
+<section id="an-aside" class="level4">
+<h4 class="anchored" data-anchor-id="an-aside">An aside</h4>
+<p>I’ll also take a guess that there will be relationship between Rating_Count and Release_Year. I imagine that newer perfumes will have more ratings due to the internet, marketing, and population. This is important because if we are filtering based on a Rating_Count threshold, we need to be aware this is reducing the likelihood of older Brands appearing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> parfumo_data_clean, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Release_Year, <span class="at">y =</span> Rating_Count)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 34977 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_start_to_finish_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="decisions" class="level4">
+<h4 class="anchored" data-anchor-id="decisions">Decisions</h4>
+<p>I have decided to filter perfumes/rows based on a criteria of having been rated 19 or more times (based on the median rating_Count of 19). Perfumes rated fewer than 19 times will be excluded from the analysis.</p>
+<p><strong>Exercise:</strong> Discuss with others - do you agree with the decision to filter like this? Can you propose an alternative method? Is our threshold of 19 reasonable?</p>
+</section>
+</section>
+</section>
+<section id="transformations" class="level2">
+<h2 class="anchored" data-anchor-id="transformations">Transformations</h2>
+<p>Transforming data is a term that includes grouping data (as we did above, for Brands), arranging (sorting), moving or renaming columns, <em>etc.,</em>. It also applies to filtering, which we are about to perform. I think there is a distinction between sorting rows or renaming columns and filtering, which is the removal of data from further analysis, so I’m giving it a separate subsection.</p>
+<p>Removing data, setting thresholds, removing outliers, defining groups, choosing methods - all of these decisions can have significant impacts on your final results. We must keep this in mind and always be ready to question our decisions. In bioinformatics it is usually plausible to repeat analyses with different decisions, and if we find that our decisions are having a big impact on our results, we need to be mindful of this.</p>
+<section id="filtering-for-low-rating-counts" class="level3">
+<h3 class="anchored" data-anchor-id="filtering-for-low-rating-counts">Filtering for low rating counts</h3>
+<p>The summary() function reveals that the median number of Rating_Counts is 19, so I’m choosing to keep only rows which have 19 or more ratings. You may decide to change this number or keep it as is.</p>
+<p>The code below will use filter() to discard all rows which <em>do not</em> meet the threshold (equal to or greater than 19), and will then repeat the steps we did earlier - grouping perfume by Brand, calculating the average rating for those brands, and returning the highest scores.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>parfumo_data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Rating_Count <span class="sc">&gt;=</span> <span class="dv">19</span> ) <span class="sc">|&gt;</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Brand) <span class="sc">|&gt;</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_Rating =</span> <span class="fu">mean</span>(Rating_Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_Rating)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  Brand                      avg_Rating
+  &lt;chr&gt;                           &lt;dbl&gt;
+1 Miyaz Perfume                    8.8 
+2 City Rhythm                      8.7 
+3 Kuschel J / クシェルヨット       8.7 
+4 Snif                             8.7 
+5 Sultan Pasha Attars              8.61
+6 Alafasy                          8.6 </code></pre>
+</div>
+</div>
+<p>The new average ratings are much more plausible. They are also higher than the mean and median (from the summary() function), which is a good <em>sanity check</em>. If my highest scoring brands were lower than the mean or median, I would know I have made a critical error. This might seem obvious, but it’s important to constantly perform these mental checks.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sanity Checks
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Sanity checks are a term used in bioinformatics and data science. What are they? Why are they important?</p>
+<p>Compare what we are doing today with a task like cooking a dinner. When cooking we have a constant stream of information from our five senses - we would smell that dairy products had gone too far past their use by date or if something was burning, we can hear the pot boiling over on the stove, feel that the carrot is too woody. In contrast, we have almost no feedback about our data! What’s more, our data is often too large and complex for us to interpret easily - I can’t eyeball a thousand data points and be confident they are normally distributed, for example (well, I could be <em>confident</em>, but that wouldn’t mean I’m <em>correct</em>).</p>
+<p>Sanity checks are a way to engage with your data and make sure your results make logical sense. Examples include, but are in no way limited to: confirming data types (dates in date columns) and plausible ranges (human age should be between 0 - 120), checking distributions (especially if a statistical method assumes normality, but also for the presence of outliers), validate relationships (longer genes should probably have more mutations than shorter genes, larger genomes should have larger filesizes), data volume (rows and columns should remain the same between steps - unless you are filtering, treatment vs control groups should have equal numbers).</p>
+<p>Sanity checks are an entire arm of bioinformatics and data science, much the same way good visualization is. It’s a skill that takes time and effort to build.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="transformations-cont" class="level3">
+<h3 class="anchored" data-anchor-id="transformations-cont">Transformations cont</h3>
+<p>We’ve taken the step of removing perfumes that had too few ratings to be accurate. Since we are investigating <em>Brands</em>, rather than individual perfumes, it’s logical to ask whether any Brands are scoring highly because they have only one or two perfumes that perform well (a “one-hit-wonder” brand).</p>
+<p>To test this hypothesis, we can take advantage of the fact that the summarize() function can simultaneously calculate multiple summaries. We will re-run the code from above, but this time include an additional line so that we can see both the average rating <em>and</em> the number of perfumes contributing to the rating.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>parfumo_data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Rating_Count <span class="sc">&gt;=</span> <span class="dv">19</span> ) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Brand) <span class="sc">|&gt;</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_Rating =</span> <span class="fu">mean</span>(Rating_Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">number_Perfumes =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> <span class="co"># The "n()" counts the number of rows in the group. </span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_Rating)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   Brand                       avg_Rating number_Perfumes
+   &lt;chr&gt;                            &lt;dbl&gt;           &lt;int&gt;
+ 1 Miyaz Perfume                     8.8                2
+ 2 City Rhythm                       8.7                1
+ 3 Kuschel J / クシェルヨット        8.7                1
+ 4 Snif                              8.7                1
+ 5 Sultan Pasha Attars               8.61               7
+ 6 Alafasy                           8.6                1
+ 7 Nilafar du Nil                    8.6                2
+ 8 Mind Games                        8.58               6
+ 9 MAD Parfumeur                     8.57               3
+10 Arabian Oud / العربية للعود       8.55               2</code></pre>
+</div>
+</div>
+<p>I can see an issue here - some of these brands have only one or two perfumes. Conceivably, it would be difficult for brands with e.g., 100 perfumes to consistently receive such high ratings, and they will therefore not show up in this list. This is essentially the same issue dealt with above - having fewer ratings, or fewer products, means an average score can be skewed.</p>
+<p>To deal with this, I’ve added an arbitrary filtering threshold for a brand to have 20 or more perfumes in order to be considered.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>parfumo_data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Rating_Count <span class="sc">&gt;=</span> <span class="dv">19</span> ) <span class="sc">|&gt;</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Brand) <span class="sc">|&gt;</span> </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_Rating =</span> <span class="fu">round</span>(<span class="fu">mean</span>(Rating_Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">number_Perfumes =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(number_Perfumes <span class="sc">&gt;=</span> <span class="dv">20</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_Rating)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   Brand                avg_Rating number_Perfumes
+   &lt;chr&gt;                     &lt;dbl&gt;           &lt;int&gt;
+ 1 Ensar Oud / Oriscent        8.4              93
+ 2 Nabeel                      8.3              22
+ 3 Aaron Terence Hughes        8.1              61
+ 4 Annette Neuffer             8.1              20
+ 5 Chanel                      8.1              83
+ 6 Clive Christian             8.1              45
+ 7 Roja Parfums                8.1             118
+ 8 Widian / AJ Arabia          8.1              21
+ 9 Areej Le Doré               8                24
+10 Amouage                     7.9              92</code></pre>
+</div>
+</div>
+<p><strong>Exercise:</strong> Discuss the legitimacy of this filtering threshold of 20. How does this compare to our previous filtering? What would you do differently?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A ‘practical’ threshold
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>It might feel like 20 is an arbitrary number for a threshold (and it is). However, I think this is a fine approach, because we are thinking about the <em>practical</em> or <em>translational</em> nature of our question - 20 perfumes is a) not an unreasonable number for a mean and is b) plenty to choose from if a person was in a store - and that’s the goal of this viz.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="brand-rating-data" class="level3">
+<h3 class="anchored" data-anchor-id="brand-rating-data">Brand Rating Data</h3>
+<p>An important thing to remember is that the analyses above didn’t actually modify the data - they were <strong>only</strong> performing the filtering, calculating the summaries, and printing the result to the screen. No data was modified (permanently).</p>
+<p>Here we will generate a new object to store the data after applying our filtering steps.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>keep_brands <span class="ot">&lt;-</span> parfumo_data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Rating_Count <span class="sc">&gt;=</span> <span class="dv">19</span> ) <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Brand) <span class="sc">|&gt;</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_Rating =</span> <span class="fu">round</span>(<span class="fu">mean</span>(Rating_Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>),</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">number_Perfumes =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(number_Perfumes <span class="sc">&gt;=</span> <span class="dv">20</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_Rating)) <span class="sc">|&gt;</span> </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">10</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>perfume_brand_data <span class="ot">&lt;-</span> parfumo_data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Brand <span class="sc">%in%</span> keep_brands<span class="sc">$</span>Brand)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>keep_brands <span class="sc">|&gt;</span> <span class="fu">rm</span>()</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>perfume_brand_data <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Number              Name              Brand            Release_Year 
+ Length:1635        Length:1635        Length:1635        Min.   :1892  
+ Class :character   Class :character   Class :character   1st Qu.:2012  
+ Mode  :character   Mode  :character   Mode  :character   Median :2018  
+                                                          Mean   :2013  
+                                                          3rd Qu.:2022  
+                                                          Max.   :2024  
+                                                          NA's   :708   
+ Concentration       Rating_Value     Rating_Count     Main_Accords      
+ Length:1635        Min.   : 4.300   Min.   :   2.00   Length:1635       
+ Class :character   1st Qu.: 7.800   1st Qu.:   7.00   Class :character  
+ Mode  :character   Median : 8.200   Median :  22.00   Mode  :character  
+                    Mean   : 8.185   Mean   :  78.54                     
+                    3rd Qu.: 8.600   3rd Qu.:  88.25                     
+                    Max.   :10.000   Max.   :1149.00                     
+                    NA's   :563      NA's   :563                         
+  Top_Notes         Middle_Notes        Base_Notes         Perfumers        
+ Length:1635        Length:1635        Length:1635        Length:1635       
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+     URL           
+ Length:1635       
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
+                   </code></pre>
+</div>
+</div>
+<p>And now we will create a second object which includes our data in an alternative format:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>brandRatingData <span class="ot">&lt;-</span> parfumo_data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Rating_Count <span class="sc">&gt;=</span> <span class="dv">19</span> ) <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Brand) <span class="sc">|&gt;</span> </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_Rating =</span> <span class="fu">mean</span>(Rating_Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">number_Perfumes =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(number_Perfumes <span class="sc">&gt;=</span> <span class="dv">20</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_Rating)) <span class="sc">|&gt;</span> </span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Before you run this next line of code - what data do you expect to see?</p>
+<p>Reading through the code above describe, as accurately as you can, what is and is not included in the brandRatingData object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>brandRatingData <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  Brand                avg_Rating number_Perfumes
+  &lt;chr&gt;                     &lt;dbl&gt;           &lt;int&gt;
+1 Ensar Oud / Oriscent       8.38              93
+2 Nabeel                     8.27              22
+3 Clive Christian            8.14              45
+4 Roja Parfums               8.14             118
+5 Chanel                     8.11              83
+6 Annette Neuffer            8.10              20</code></pre>
+</div>
+</div>
+<p>Is anything different between what you expected and/or described and what the object looks like?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Variables in tidyverse
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>If you are new to the tidyverse, you have expected to see more columns, but group_by() and summarize() are determining what columns are generated and saved in the new object. The two filter() calls and the arrange() call control which rows are kept and the order we see them in.</p>
+</div>
+</div>
+</div>
+<p>With the brandRatingData object stored, we can now proceed to visualization.</p>
+</section>
+</section>
+<section id="visualization-i" class="level2">
+<h2 class="anchored" data-anchor-id="visualization-i">Visualization I</h2>
+<p>In this example we will create a visualization of the top 20 perfume brands based on the average rating. The <em>aim</em> is to provide a novice with information about perfume brands so that they could pick a perfume with some confidence (<em>e.g.,</em> if doing online shopping).</p>
+<p>It is critically important to identify exactly what you are aiming to represent with your visualization. Biological data is often complex and, at least when publishing, space is often at a premium and figures tend to be information dense. You must consider the tension between including more information and readability.</p>
+<p>In this workshop we are also aiming to create a figure that is visually appealing. We want to use elements of design such as line and colour theory <em>etc.,</em> to capture and hold attention, whether this is during a live presentation or in a static format such as a journal.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>brandRatingData <span class="sc">|&gt;</span> <span class="fu">print</span>(<span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 3
+   Brand                          avg_Rating number_Perfumes
+   &lt;chr&gt;                               &lt;dbl&gt;           &lt;int&gt;
+ 1 Ensar Oud / Oriscent                 8.38              93
+ 2 Nabeel                               8.27              22
+ 3 Clive Christian                      8.14              45
+ 4 Roja Parfums                         8.14             118
+ 5 Chanel                               8.11              83
+ 6 Annette Neuffer                      8.10              20
+ 7 Widian / AJ Arabia                   8.09              21
+ 8 Aaron Terence Hughes                 8.09              61
+ 9 Areej Le Doré                        8                 24
+10 Teone Reinthal Natural Perfume       7.92              25
+11 Stéphane Humbert Lucas               7.86              27
+12 Amouage                              7.86              92
+13 Jean Patou                           7.85              28
+14 Coty                                 7.84              25
+15 Swiss Arabian                        7.84              40
+16 Houbigant                            7.83              26
+17 Guerlain                             7.80             296
+18 Ormonde Jayne                        7.78              60
+19 Ex Nihilo                            7.77              40
+20 Afnan Perfumes                       7.77              29</code></pre>
+</div>
+</div>
+<section id="building-a-visualization---sketch-i" class="level3">
+<h3 class="anchored" data-anchor-id="building-a-visualization---sketch-i">Building a visualization - sketch I</h3>
+<p>To start a visualization I will ‘sketch’ a figure to determine different ways to display the data. A boxplot is a great place to start since I know we are showing average ratings (even though we have so far calculated based on the mean and a boxplot uses medians).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> perfume_brand_data,</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Rating_Value, <span class="at">y =</span> Brand)) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 563 rows containing non-finite outside the scale range
+(`stat_boxplot()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_start_to_finish_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Exercise:</strong> Why is this a poor visualization, and what can be done to improve it?</p>
+<div class="callout-Solution" data-collapse="TRUE">
+<p>Lack of title, axis labels are ugly with underscore, no colour.</p>
+<p>Unsorted data is mentally tiring.</p>
+<p>One-dimensional: does not show anything other than the median and summary.</p>
+<p><strong>How could this be improved?</strong></p>
+<p>Additional arguments in ggplot control title, set text size, <em>etc.,</em>.</p>
+<p>Sort data and include other data to provide the reader with additional, useful information.</p>
+<p>Select a clear, visually appealing colour scheme. Make sure colours are accessible, will work on other devices, text will be clear whether online or printed.</p>
+</div>
+<p>Fundamentally, I don’t think the boxplot works. While it does show the median and summary values, I don’t see a way to clearly show information like the number of perfumes (and, since that was a filtering criteria, I think it’s worth showing) or to make it visually interesting.</p>
+</section>
+<section id="building-a-visualization---sketch-ii" class="level3">
+<h3 class="anchored" data-anchor-id="building-a-visualization---sketch-ii">Building a visualization - sketch II</h3>
+<p><em>Note:</em> In reality you might sketch out a handful of different plots to find one that suits. Here we will jump ahead to something I think works.</p>
+<p>First, we will switch to using brandRatingData, where we have calculated the Brand average rating, and we will show the average with a geom_point function. You will see that while we lose some information switching from a boxplot to a geom_point() plot, this will allow us to include other information which may be more informative.</p>
+<p>brandRatingData is already formated to have Brands arranged by avg_Rating, but in case that wasn’t true, the code includes reorder() to sort by avg_Rating.</p>
+<p>The labs() function is used to add a title, and clearer x and y axis labels.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(brandRatingData, </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> avg_Rating, <span class="at">y =</span> <span class="fu">reorder</span>(Brand, avg_Rating))) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> number_Perfumes, <span class="at">color =</span> avg_Rating)) <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Brand rating"</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Brand"</span>,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Mean perfume rating by brand"</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_start_to_finish_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>By mapping average rating and the number of perfumes to colour and size (within the geom_point() function), we make the figure more visually interesting and more informative. For example, we can see that Ensar Oud/Oriscent has plenty of perfumes to choose from, while Nabeel has fewer. The plot overall looks ‘cleaner’ and less cluttered, yet actually includes more information.</p>
+<p>This is the basis for a good visualization.</p>
+</section>
+<section id="refining-geom_point" class="level3">
+<h3 class="anchored" data-anchor-id="refining-geom_point">Refining geom_point()</h3>
+<p>Here we will bring in a handful of new arguments and functions. Remember that the main goal for you is <em>not</em> to memorise all of this information - this is a template for you to have available. Let’s look at some of the arguments below, and discuss the impact:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(brandRatingData, </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> avg_Rating, <span class="at">y =</span> <span class="fu">reorder</span>(Brand, avg_Rating))) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> number_Perfumes, <span class="at">color =</span> avg_Rating)) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> <span class="st">"lightblue"</span>, <span class="at">high =</span> <span class="st">"darkblue"</span>, <span class="at">name =</span> <span class="st">"Brand rating"</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="at">name =</span> <span class="st">"Number of perfumes"</span>) <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Brand rating"</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Brand"</span>,</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Mean perfume rating by brand"</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_start_to_finish_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>scale_color_gradient() is a function to set colours through a given gradient. Useful if you have an overall brand or theme colour (e.g., University of Otago tends to use blue and gold, so I’ve chosen blue).</p></li>
+<li><p>scale_size() provides control over the size of the geom_point data points. We can set the upper/lower limits, and the ‘granularity’ (<em>i.e.,</em> a difference between a large and a small value by having a greater range). Larger point sizes here (compared to our first plot) make the figure look less empty. Having points that overlap (Guerlain) may not be appropriate in all settings, but visually it makes the plot less ‘rigid’ and is more interesting. Note this function also sets the name to “Number of perfumes”.</p></li>
+<li><p>By controlling both size and colour, the new plot focuses our attention, starting at the darker top right and letting our eyes move down and to the left (which is loosely our order of preference for brands). You can switch dark and light blue and re-build the plot, notice how much it impacts where our attention is drawn!</p></li>
+<li><p>theme_light() sets the background space of the plot to white rather than a darker gray. Test this by changing it to theme_dark(). There are a set of available pre-made themes, and we can also control our own themes.</p></li>
+<li><p>theme() is used to control almost everything else within the plot. Here we are setting three different sizes: the <em>plot title</em>, the axis <em>names</em>, and the axis <em>text</em>. Title and names are further differentiated by setting typeface to bold. This highlights <em>an important feature of design:</em> we naturally look for patterns and similarities, therefore we can use a point of difference to make something <strong>stand out</strong>.</p></li>
+<li><p>guides() is being used here to remove colour from the legend (color = “none”). Use size = “none” to remove the size legend. We have done this because while colour is being used to add visual interest, it isn’t really providing us with novel information (it is repeating the same information we get from looking at where the point sits on the x axis).</p></li>
+</ul>
+<p>Using this information as a guide, you could make many fine scale tweaks to your plot, changing it to suit your specific data and situation.</p>
+</section>
+<section id="refining-our-use-of-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="refining-our-use-of-the-data">Refining our use of the data</h3>
+<p>Looking at this plot, what can I do to enhance the visuals to be cleaner, more dynamic, more eye-catching, more aesthetic? Is there any other data I can include to improve the plot?</p>
+<p>Currently, colour is not being fully utilised - it is mapped to the Brand average rating, which is already shown via the x axis. Thinking back to earlier themes on number of ratings and number of perfumes per brand, we could use colour to represent some of our data around the rating_Count variable.</p>
+<p>To do this, we will re-build the brandRatingData object with an additional variable calculated by the summarize() function, calling it avg_rating_count and then map it to colour.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new summarize output: the average rating count.</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>brandRatingData <span class="ot">&lt;-</span> parfumo_data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Rating_Count <span class="sc">&gt;=</span> <span class="dv">19</span> ) <span class="sc">|&gt;</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Brand) <span class="sc">|&gt;</span> </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_Rating =</span> <span class="fu">mean</span>(Rating_Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">number_Perfumes =</span> <span class="fu">n</span>(),</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_rating_count =</span> <span class="fu">mean</span>(Rating_Count)) <span class="sc">|&gt;</span> </span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(number_Perfumes <span class="sc">&gt;=</span> <span class="dv">20</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_Rating)) <span class="sc">|&gt;</span> </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Before we map avg_rating_count to colour we will consider <em>accessibility</em>. A colour palette, or visualization in general, is accessible if it is something that everyone can see. The most regularly discussed examples of accessibility include text size, a colour palette that can be seen by colour-blind individuals, and more recently whether the image is gentle or overwhelming.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For an example of ‘gentle vs overwhelming’, go to Tools, Global Options, Appearance, and in the Editor theme box, check “Gob”. I personally would not enjoy spending time looking at my RStudio console if the editor was stuck in “Gob”, and I prefer the much more gentle Idle Fingers theme.</p>
+</div>
+</div>
+<p>The viridis R package is one example of a package that claims* to have colour-blind friendly colour palettes (* I’m not colour-blind and cannot confirm). In addition to mapping avg_rating_count to colour and using the scale_color_viridis() function with the “magma” argument, I’ve also tweaked some of the arguments in theme() to make the overall text package look cleaner and softer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: viridisLite</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtext)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(brandRatingData, </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> avg_Rating, <span class="at">y =</span> <span class="fu">reorder</span>(Brand, avg_Rating))) <span class="sc">+</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> number_Perfumes, <span class="at">color =</span> avg_rating_count)) <span class="sc">+</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">option =</span> <span class="st">"magma"</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">name =</span> <span class="st">"Mean number of ratings"</span>) <span class="sc">+</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="at">name =</span> <span class="st">"Number of perfumes"</span>) <span class="sc">+</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Brand rating"</span>,</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Brand"</span>,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Top 20 Perfume Brands Ranked by Mean Rating"</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"gray40"</span>),</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">color =</span> <span class="st">"gray50"</span>),</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"gray50"</span>),</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">color =</span> <span class="st">"gray50"</span>), </span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"gray40"</span>)</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_start_to_finish_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This version of the visualization is:</p>
+<ol type="a">
+<li><p>more visually interesting, with eye catching colours.</p></li>
+<li><p>simultaneously softer and more gentle, more accessible.</p></li>
+<li><p>displays more data: importantly, we can now see that Ensar Oud/Oriscent has a low average number of ratings. With this in mind, I’d be more inclined to look at Roja Parfums or Chanel over Ensar Oud.</p></li>
+</ol>
+</section>
+</section>
+<section id="visualization-ii" class="level2">
+<h2 class="anchored" data-anchor-id="visualization-ii">Visualization II</h2>
+<p>Adding skills from Cedric’s Evolution of a boxplot (mean line, text, arrows).</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Recap: here’s the initial plot. Does it display the data? Yes.</p>
+<p>Here’s the finished product, does it convey the data? Heck yes it does!</p>
+<p>The goal isn’t <em>just</em> to show the data. It’s to excite the audience, to capture and retain attention in an <strong>extremely</strong> noisy world. This is a visualization I’m proud of.</p>
+</section>
+<section id="final-exercise" class="level2">
+<h2 class="anchored" data-anchor-id="final-exercise">Final exercise</h2>
+<p>Use the information we have discussed, and the</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Made with ❤️ and Quarto</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
