@@ -30,4 +30,4 @@ Visualizing your own data.
 
 ## Why are we doing this? 
 
-Because some plots look like this: https://docs.google.com/presentation/d/1PyuGRbqPpjMoswuTMbgOqHfe6Uc-wji7uEJkxyxI9Jw/edit#slide=id.g813ba93ce8_0_21 (Credit to Dr. Joseph Guhlin for this presentation).
+Because some plots look like [this](https://docs.google.com/presentation/d/1PyuGRbqPpjMoswuTMbgOqHfe6Uc-wji7uEJkxyxI9Jw/edit#slide=id.p) (Credit to Dr. Joseph Guhlin for this presentation).

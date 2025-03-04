@@ -6,43 +6,20 @@ website:
   title: "Home"
   open-graph: true # https://quarto.org/docs/websites/website-tools.html#open-graph
   page-footer: "Made with ❤️ and Quarto"
-  navbar:
-    title: Visualization Day
-    right: 
-      - text: Home
-        href: index.qmd
-    left:
-      - text: Visualization with ggplot2
-        href: viz_1_ggplot.qmd  
-      - text: Transforming data for visualization
-        href: viz_2_exploratoryAnalysis.qmd
-      - text: Exemplar visualizations
-        href: viz_3_exemplarVisualizations.qmd
-      - text: Improving existing plots
-        href: viz_4_building_better.qmd    
-      - text: Visualization start to finish
-        href: viz_start_to_finish.qmd  
+  sidebar:
+    style: "docked"
+    contents:
+          - viz_1_ggplot.qmd
+          - viz_2_exploratoryAnalysis.qmd
+          - viz_3_exemplarVisualizations.qmd
+          - viz_4_building_better.qmd
     tools: 
       - icon: github
         href: https://github.com/tylermcinnes/visualization_day  
 
-## May choose to add a sidebar if each section requires multiple pages. If not, skip this and 
-## rely on toc: true within the header yaml on each section page.
-#  sidebar:
-#    - title: "Visualization with ggplot2"
-#      style: "docked"
-#      background: light
-#      contents:
-#        - viz_1_ggplot.qmd
-#        - ggplot_ep1.qmd
-#        - ggplot_ep2.qmd
 
 format:
   html:
-## the following html format rules are copied into styles.scss  
-#    backgroundcolor: "#ebd9c8"
-#    fontcolor: "#003f5a"
-#    linkcolor: "#de6600"
     mainfont: "sarif"
     monofont: "monospace"
     fontsize: 18px

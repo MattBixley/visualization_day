@@ -45,7 +45,7 @@ parfumo_data_clean <- readr::read_csv('https://raw.githubusercontent.com/rfordat
 
 ## Exploratory analysis
 
-The first step in exploratory analysis is to understand our data. I liken this to the equivalent of picking up a wrapped present, feeling the weight, how solid it is, maybe giving it a little bit of a shake, and trying to figure out what's inside.
+The first step in exploratory analysis is to understand our data. This is the equivalent of picking up a wrapped present, feeling the weight, how solid it is, maybe giving it a little bit of a shake, and trying to figure out what's inside. With our data, we are trying to build a light-weight mental model - what each object is storing, whether the data is numeric, are there missing values, are there biases between groups, is the data normally distributed *etc., etc.,*. 
 
 Useful functions here include dim(), colnames(), head(), summary(), str(), class(), and many others. You will develop a set of favourites and defaults.
 
@@ -62,6 +62,24 @@ parfumo_data_clean |> colnames()
 -   What is one question you have about the data? (*note:* looking for a small, simple question about the dataset, not a hypothesis to test)
 
 -   What is something that jumps out at you, which you might like to investigate, visualize, or learn about?
+
+::: {.callout-tip collapse="true"}
+## Initial observations and impressions
+
+There are many options, but some things that stood out to me: 
+
+- There are NAs! Concentration is almost 80% NA, Rating_Count is almost 50% NA (from the summary() function). 
+
+- There is a mix of numeric and character class data. 
+
+- Rating_Value looks like it's a 0-10 scale, with a mean and median around 7.3 - 7.4. 
+
+- Meanwhile, the mean and median of Rating_Count are quite different: median of 19 and a mean of **60**. 
+
+- The basic structure of the data: perfume name, brand, and then a series of values and then a set of descriptions. 
+
+:::
+
 
 ### Brand Rating
 
@@ -436,13 +454,15 @@ This version of the visualization is:
 
 a) more visually interesting, with eye catching colours.
 
-b) simultaneously softer and more gentle, more accessible. 
+b) simultaneously softer and more gentle, more accessible overall. 
 
 c) displays more data: importantly, we can now see that Ensar Oud/Oriscent has a low average number of ratings. With this in mind, I'd be more inclined to look at Roja Parfums or Chanel over Ensar Oud. 
 
+d) suitable for conveying the basic information (Brand rating) at a glance. Even if a reader didn't take note of the colours and sizes of the points, they would *still* get an idea of brand rating. 
 
 
-## Visualization II
+
+## Visualization III
 
 
 
@@ -458,4 +478,4 @@ The goal isn't *just* to show the data. It's to excite the audience, to capture 
 
 ## Final exercise
 
-Use the information we have discussed, and the 
+Use the information we have discussed, and the lessons from earlier, to trial out some different geoms and visualization styles. See what code you can apply (*e.g.,* changing size/colour) with other geoms. 
