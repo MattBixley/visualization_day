@@ -61,7 +61,7 @@ parfumo_data_clean |> colnames()
 
 -   What is one question you have about the data? (*note:* looking for a small, simple question about the dataset, not a hypothesis to test)
 
--   What is something that jumps out at you, which you might like to investigate, visualize, or learn about?
+-   What is something that jumps out at you, which you might like to investigate, visualize, or learn about? (This could be a hypothesis to test)
 
 ::: {.callout-tip collapse="true"}
 ## Initial observations and impressions
@@ -78,6 +78,8 @@ There are many options, but some things that stood out to me:
 
 - The basic structure of the data: perfume name, brand, and then a series of values and then a set of descriptions. 
 
+**Questions and assumptions**: I'm assuming that Rating_Value is an average, with Rating_Count describing how many individual Ratings contributed to the overall value, but that isn't explained. It could be a mean or median (or mode!)
+
 :::
 
 
@@ -87,14 +89,21 @@ Looking at the data I was interested in Brand, Rating_Value, and Rating_Count. M
 
 **Exercise:** Mentally visualize what this figure might look like. What are the key components we will need to convey?
 
+::: {.callout-tip collapse="true"}
+## Mental visualization
+
+Need to convey the average rating for a brand, as well as the variance. Do not need to visualize all brands, only those with consistently high ratings. Boxplots (and violin plots, jitter plots *etc.,*) are a good way to show the distribution of scores. 
+
+:::
+
 #### Assessing the means
 
 A useful place to start will be to look at the average (and here I'll be using mean) rating value for a brand. To do this we will use the dplyr verbs (functions) to group rows based on which Brand they are from, generate a single summary value (a mean of the Rating_Value) for each Brand, arrange the means from highest to lowest, and then use the head() function to view the output.
 
 ```{r}
-parfumo_data_clean |> # Remember that |> is the 'pipe', which passes data to the next function.
+parfumo_data_clean |> # Remember that |> is the 'pipe', which passes data\ to the next function.
   group_by(Brand) |> # All rows which share the same Brand are now grouped.
-  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE)) |> # Calculate Brand means
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE)) |> # Calculate Brand\ means
   arrange(desc(avg_Rating)) |> # Arrange Brands from highest to lowest
   head()
 ```
@@ -104,9 +113,11 @@ parfumo_data_clean |> # Remember that |> is the 'pipe', which passes data to the
 ::: {.callout-tip collapse="true"}
 ## Interpreting these results
 
-Natura and Sarahs Creations share the top score of 10. No need for further analysis, we can all go home and talk about our favourite new perfume brands which are obviously very reliable!
+Natura and Sarahs Creations share the top score of 10. No need for further analysis, we can all go home and talk about our favourite new perfume brands which are obviously very reliable! 
 
-Since we use base 10, many surveys and tests tend to be out of 10. To see two brands with what I assume are perfect scores makes me very suspicious, especially given it's a mean - this would require every single person to have rated every single one of their perfumes as a 10. Either they truly are perfect, or, more likely, this is due to a very small number of ratings on a single type of perfume.
+...Or maybe not.
+
+Since we use base 10, many surveys and tests tend to be scored out of 10. To see two brands with what look like perfect scores makes me very suspicious, especially given it's a mean - this would require every single person to have rated every single one of their perfumes as a 10. Either they truly are perfect or, more likely, this is due to a very small number of ratings on a single type of perfume.
 :::
 
 If you are confident in these results, I recommend you re-run summary() and look at the data. Does it change your opinion?
@@ -117,11 +128,12 @@ parfumo_data_clean |> summary()
 
 The summary() function is very useful here. Looking at the column for Rating_Value, I can see that the mean and median values are around 7.3-7.4, and the range is 0 - 10. At this time I'm also looking at the Rating_Count variable, and seeing that the range there is 2 - 2,732. That tells me that some perfumes were only rated twice. I'm very suspicious that the brands Natura and Sarahs Creations have only a single perfume which was rated only two or three times, which allows them to get perfect scores. Similarly, any other brand with a score that seems too good to be true could be the result of this low-sampling bias.
 
-**Exercise:** Is this true? What type of visualization would help us to test this? In the space below, create a quick plot to ask whether there is a low-sampling bias present.
+**Exercise:** Is my hypothesis (very high scores are the result of low sampling bias) true? What type of visualization would help us to test this? In the space below, create a quick plot to ask whether there is a low-sampling bias present.
 
 If you'd like a reminder, here's a ggplot template from earlier (though, geom_boxplot() might not be what you are after...): 
 
-ggplot(data = penData, mapping = aes(x = species, y = bill_length_mm)) + 
+ggplot(data = penData, 
+        mapping = aes(x = species, y = bill_length_mm)) + 
 geom_boxplot()
 
 ```{r}
@@ -138,21 +150,22 @@ ggplot(data = parfumo_data_clean, mapping = aes(x = Rating_Count, y = Rating_Val
   geom_point()
 ```
 
-Warning: 29279 rows removed. Missing values or values outside the scale range - in this case we know the range of values is 0 - 10, and from the summary() function know that both the Rating variables have 29,279 missing rows. During our initial look at summary(), noted approx 30,000 missing rows, leaving approx 30,000 rows of data. If our initial data set didn't have missing values, this warning would be concerning.
+**Warning: 29279 rows removed. Missing values or values outside the scale range** - what is this? This warning appears when we attempt to plot values that are outside of the range of the X or Y axis. However, this warning also appears when there is missing data. In this case we know the range of values is 0 - 10, and from the summary() function know that both the Rating variables have 29,279 missing rows. During our initial look at summary(), we noted approx 30,000 missing rows (NAs), leaving approx 30,000 rows of data. If our initial data set didn't have missing values, this warning would be concerning.
 
 Warnings can be suppressed, but since we won't be keeping them in the final plot it's not critical and I prefer to leave them showing while working through exploratory analysis plots.
 :::
 
-It seems there is a relationship between Rating_Value and Rating_Count - one we can probably conceptualize quite well! Scents with fewer ratings exhibit the highest and lowest values, while scents with more ratings are gravitating towards a point just below 7.5. The mean and median Rating_Value is 7.35 and 7.40 respectively. It makes sense that as the number of ratings increases, the average rating converges on a middle-ground. I think this is reasonable grounds to filter our data based on a Rating_Count threshold.
+It seems there is a relationship between Rating_Value and Rating_Count - one we can probably conceptualize quite well! Scents with fewer ratings exhibit the highest and lowest values. Why is this? Presumably all perfumes receive some very high and very low scores based on personal preference. If a perfume has only a small number of ratings, the rating_value is skewed towards those extreme scores. Perfumes with more ratings are gravitating towards a point just below 7.5. This matches with mean and median Rating_Value of 7.35 and 7.40, respectively, which we noted from the summary() function at the start of this episode. It makes sense that as the number of ratings increases, the average rating converges on a middle-ground. 
 
-I need to set a filter threshold, and I'll use the median value of Rating_Count (19). Rows (perfumes) will only be kept if they have been rated 19 times or more. 
+Importantly, I think this is reasonable grounds to filter our data based on a Rating_Count threshold, since perfumes with a low Rating_Count can be skewed. I need to define a filter threshold, and I'll use the median value of Rating_Count (19): rows (perfumes) will only be kept if they have been rated 19 times or more. 
 
 #### An aside
 
 I'll also take a guess that there will be relationship between Rating_Count and Release_Year. I imagine that newer perfumes will have more ratings due to the internet, marketing, and population. This is important because if we are filtering based on a Rating_Count threshold, we need to be aware this is reducing the likelihood of older Brands appearing.
 
 ```{r}
-ggplot(data = parfumo_data_clean, mapping = aes(x = Release_Year, y = Rating_Count)) +
+ggplot(data = parfumo_data_clean, 
+        mapping = aes(x = Release_Year, y = Rating_Count)) +
   geom_point()
 ```
 
@@ -176,10 +189,10 @@ The code below will use filter() to discard all rows which *do not* meet the thr
 
 ```{r}
 parfumo_data_clean |> 
-  filter(Rating_Count >= 19 ) |> 
-  group_by(Brand) |> 
-  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE)) |> 
-  arrange(desc(avg_Rating)) |> 
+  filter(Rating_Count >= 19 ) |> # keep rows where Rating_Count is\ greater than or equal to 19.
+  group_by(Brand) |> # Group perfumes by brand
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE)) |> # Calculate a\ new variable, which is the mean of Rating_Value, label\ it "avg_Rating"
+  arrange(desc(avg_Rating)) |> # Sort the new avg_Rating variable in descending order
   head()
 ```
 
@@ -208,12 +221,12 @@ parfumo_data_clean |>
   filter(Rating_Count >= 19 ) |> 
   group_by(Brand) |> 
   summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE),
-            number_Perfumes = n()) |> # The "n()" counts the number of rows in the group. 
+            number_Perfumes = n()) |> # The "n()" counts the number of rows in\ the group. 
   arrange(desc(avg_Rating)) |> 
   head(n = 10)
 ```
 
-I can see an issue here - some of these brands have only one or two perfumes. Conceivably, it would be difficult for brands with e.g., 100 perfumes to consistently receive such high ratings, and they will therefore not show up in this list. This is essentially the same issue dealt with above - having fewer ratings, or fewer products, means an average score can be skewed.
+I can see an issue here - some of these brands have only one or two perfumes. Conceivably, it would be difficult for brands with *e.g.,* 100 perfumes to consistently receive such high ratings, and they will therefore not show up in this list. This is essentially the same issue dealt with above - having fewer ratings, or fewer products, means an average score can be skewed.
 
 To deal with this, I've added an arbitrary filtering threshold for a brand to have 20 or more perfumes in order to be considered.
 
@@ -222,7 +235,7 @@ parfumo_data_clean |>
   filter(Rating_Count >= 19 ) |> 
   group_by(Brand) |> 
   summarize(avg_Rating = round(mean(Rating_Value, na.rm = TRUE), 1),
-            number_Perfumes = n()) |> 
+            number_Perfumes = n()) |> # summarize() can create multiple columns simultaneously\ here creating both avg_Rating and number_Perfumes
   filter(number_Perfumes >= 20) |> 
   arrange(desc(avg_Rating)) |> 
   head(n = 10)
@@ -252,13 +265,47 @@ keep_brands <- parfumo_data_clean |>
   arrange(desc(avg_Rating)) |> 
   head(n = 10)
 
+# Below, filter is checking whether the element in the Brand column is in keep_brands. 
 perfume_brand_data <- parfumo_data_clean |> 
   filter(Brand %in% keep_brands$Brand)
 
 keep_brands |> rm()
 
-perfume_brand_data |> summary()
 ```
+
+**Exercise:** Take five minutes to look at this code and predict the output - do you understand what we have done here? Manipulating objects like this is a *critical skill*. Take one more look at the code and make sure you understand each line of code and what the output is. Use head(), summary() or any other functions to check the output. Note any observations.
+
+::: {.callout-tip collapse="true"}
+## Observations
+
+The above lines of code are: 
+- Creating a new object, "keep_brands".
+
+- Filtering the parfumo object to keep only those perfumes with a Rating_Count of 19 or greater.
+
+- Grouping perfumes by brand. 
+
+- The summarize() function is creating two new variables: avg_Rating, which is the overall average rating for a **Brand** and number_Perfumes, which is the number of perfumes that were rated for this brand. 
+
+- Another filter(), this time keeping only those brands with 20 or more perfumes (which have a Rating_Count of 19 or more).
+
+- Arrange (sort) the brands by their overall score (from highest to lowest), and keep only the top 10 brands. 
+
+keep_brands is therefore the 10 perfume brands we are interested in: after filtering, they have the highest average rating. Because of how summarize() works, keep_brands only has the new variables we created - avg_Rating and number_Perfumes (plus the Brand names).
+
+Next, use the Brand variable in keep_brands to pull out all the data from parfumo_data_clean. Here, filter() is being used just like above, but instead of filtering on a "greater than" threshold, we are filtering on whether or not the parfumo_data_clean Brand element is found in the keep_brand object. 
+
+**This has introduced a critical error**. It has kept only the brands we want, but we have *not* specified that we only want those perfumes with a Rating_Count of 19 or more (we have filtered for *all* perfumes produced by the brands we selected).
+
+*It is very easy to make a mistake like this*
+
+Which is why we must always be thinking of sanity checks. The summary() function shows us that the min value in Rating_Count is 2, which is how I realised that somewhere, I'd lost my filtering threshold. 
+
+perfume_brand_data |> summary()
+
+:::
+
+
 
 And now we will create a second object which includes our data in an alternative format:
 
@@ -293,7 +340,7 @@ With the brandRatingData object stored, we can now proceed to visualization.
 
 ## Visualization I
 
-In this example we will create a visualization of the top 20 perfume brands based on the average rating. The *aim* is to provide a novice with information about perfume brands so that they could pick a perfume with some confidence (*e.g.,* if doing online shopping).
+In this example we will create a visualization of the top 20 perfume brands based on the average rating. The **aim** is to provide a novice with information about perfume brands so that they could pick a perfume with some confidence (*e.g.,* if doing online shopping).
 
 It is critically important to identify exactly what you are aiming to represent with your visualization. Biological data is often complex and, at least when publishing, space is often at a premium and figures tend to be information dense. You must consider the tension between including more information and readability.
 
