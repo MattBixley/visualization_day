@@ -11,6 +11,8 @@ output: html_document
 
 Together, we are going to go from start to finish and create a visualization. Start to finish means we will need to explore the data, make decisions involving modifications and transformations, and finally, visualize the data in a meaningful way.
 
+*Note:* Just the other day I saw a post on LinkedIn, someone had done a screencast recording of them going through a tidytuesday visualization (in Python!). The poster warns us: "I have to admit, this screencast is 80% me orienting to this week's data". The comments section immediately responds that "80% orienting to the data is real life!"
+
 ### Aims
 
 To demonstrate the full process of exploratory analysis, data transformation, and visualization.

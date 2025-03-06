@@ -11,6 +11,7 @@ Load the palmerpenguins package for an example dataset, ggplot2 for the plotting
 
 ```{r}
 library(palmerpenguins)
+# palmerpenguins has loaded a hidden object into your R environment, called penguins, which has data we will use for plotting.
 library(ggplot2)
 library(dplyr)
 ```
@@ -25,7 +26,7 @@ penData |> head()
 
 ## The ggplot format
 
-Many modern R workshops include a section on the Grammer of Graphics, or the ggplot2 function, and there is no shortage of detailed workshops and tutorials available if you want a more thorough grounding of the basics. 
+Many modern R workshops include a section on the Grammer of Graphics, or the ggplot2 function, and there is no shortage of detailed workshops and tutorials available if you want more detailed explanations of the basics. 
 
 ggplot2 is a way to create visualisations within the tidyverse. Once you recognise the template it will become quick and easy to create a variety of plots with different data types with minimal extra work.
 
@@ -43,6 +44,11 @@ ggplot(data = penData,
        mapping = aes(x = species,
                      y = bill_length_mm)) +
   geom_boxplot()
+
+# Here we have specified that the data will come from the penData object
+# Data from the species variable will be on the x axis
+# Data from the bill_length_mm variable will be on the y axis
+# The type of plot is a boxplot  
 ```
 
 Some things to note about the format:
@@ -57,7 +63,13 @@ Some things to note about the format:
 
 ## Extending the ggplot format
 
-We can extend the plot by mapping additional data to variables (e.g., such as species or sex, to variables such as colour and shape), by supplying additional arguments to the geom function (e.g., changing the size, colour or opacity of dots), and add new functions that control features such as the title or axes labels. 
+We can extend the plot in three easy ways: 
+
+1. Mapping additional data to variables (*e.g.,* species or sex to variables such as colour and shape)
+
+2. Supplying additional arguments to the geom function (*e.g.,* changing the size, colour or opacity of dots)
+
+3. Add new functions that control features such as the title or axes labels. 
 
 In all cases, these new arguments and functions follow the template as outlined above. We will continue to use indentations and new lines to keep our code organised and tidy. 
 

@@ -72,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9b0702da315a6eaba9d4a0a893efed04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-fa75274f7cfb3cacdfb923545d18433d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -102,6 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Visualization with ggplot2 – Home">
 <meta property="og:description" content="">
 <meta property="og:image" content="viz_1_ggplot_files/figure-html/unnamed-chunk-3-1.png">
@@ -169,6 +170,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Building Better Plots</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viz_start_to_finish.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Start to Finish Visualizing your Data</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -217,8 +224,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Load the palmerpenguins package for an example dataset, ggplot2 for the plotting functions, and dplyr for the pipe (|&gt;).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># palmerpenguins has loaded a hidden object into your R environment, called penguins, which has data we will use for plotting.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'dplyr'</code></pre>
@@ -255,7 +263,7 @@ Attaching package: 'dplyr'</code></pre>
 </section>
 <section id="the-ggplot-format" class="level2">
 <h2 class="anchored" data-anchor-id="the-ggplot-format">The ggplot format</h2>
-<p>Many modern R workshops include a section on the Grammer of Graphics, or the ggplot2 function, and there is no shortage of detailed workshops and tutorials available if you want a more thorough grounding of the basics.</p>
+<p>Many modern R workshops include a section on the Grammer of Graphics, or the ggplot2 function, and there is no shortage of detailed workshops and tutorials available if you want more detailed explanations of the basics.</p>
 <p>ggplot2 is a way to create visualisations within the tidyverse. Once you recognise the template it will become quick and easy to create a variety of plots with different data types with minimal extra work.</p>
 <p>The format for the ggplot2 template is as follows:</p>
 <ul>
@@ -276,6 +284,10 @@ Attaching package: 'dplyr'</code></pre>
 </figure>
 </div>
 </div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here we have specified that the data will come from the penData object</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Data from the species variable will be on the x axis</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Data from the bill_length_mm variable will be on the y axis</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The type of plot is a boxplot  </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Some things to note about the format:</p>
 <ul>
@@ -287,27 +299,32 @@ Attaching package: 'dplyr'</code></pre>
 </section>
 <section id="extending-the-ggplot-format" class="level2">
 <h2 class="anchored" data-anchor-id="extending-the-ggplot-format">Extending the ggplot format</h2>
-<p>We can extend the plot by mapping additional data to variables (e.g., such as species or sex, to variables such as colour and shape), by supplying additional arguments to the geom function (e.g., changing the size, colour or opacity of dots), and add new functions that control features such as the title or axes labels.</p>
+<p>We can extend the plot in three easy ways:</p>
+<ol type="1">
+<li><p>Mapping additional data to variables (<em>e.g.,</em> species or sex to variables such as colour and shape)</p></li>
+<li><p>Supplying additional arguments to the geom function (<em>e.g.,</em> changing the size, colour or opacity of dots)</p></li>
+<li><p>Add new functions that control features such as the title or axes labels.</p></li>
+</ol>
 <p>In all cases, these new arguments and functions follow the template as outlined above. We will continue to use indentations and new lines to keep our code organised and tidy.</p>
 <p>This example creates a more complex plot, but these new arguments and functions follow the template as outlined above. We continue to use indentations and new lines to keep our code organised and tidy.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the viridis library, which supplies a colour scheme that is sensitive to colour-blindness.</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the viridis library, which supplies a colour scheme that is sensitive to colour-blindness.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: viridisLite</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New arguments map species to the colour variable, so that each point is coloured by species.</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sex is mapped to shape. Note that shape can only take discrete variables.</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penData,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> flipper_length_mm,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">colour =</span> species,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">shape =</span> sex)) <span class="sc">+</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_viridis</span>(<span class="at">discrete =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Bill depth (mm)"</span>,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Flipper length (mm)"</span>) <span class="sc">+</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Bill depth vs flipper length"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New arguments map species to the colour variable, so that each point is coloured by species.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sex is mapped to shape. Note that shape can only take discrete variables.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penData,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> flipper_length_mm,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">colour =</span> species,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">shape =</span> sex)) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_viridis</span>(<span class="at">discrete =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Bill depth (mm)"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Flipper length (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Bill depth vs flipper length"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

@@ -72,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9b0702da315a6eaba9d4a0a893efed04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-fa75274f7cfb3cacdfb923545d18433d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -102,6 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Building Better Plots – Home">
 <meta property="og:description" content="">
 <meta property="og:image" content="viz_4_building_better_files/figure-html/unnamed-chunk-3-1.png">
@@ -169,6 +170,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Building Better Plots</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viz_start_to_finish.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Start to Finish Visualizing your Data</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -211,6 +218,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p><em>Note to self</em>: The purpose of this episode is to:</p>
+<ul>
+<li><p><strong>a)</strong> solidify the template of ggplot2 in the mind of the users, so that they can remember and confidently create a basic plot and</p></li>
+<li><p><strong>b)</strong> introduce new geoms, familiarise ourselves with the use of arguments for different visual looks</p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -225,7 +237,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"~/Library/CloudStorage/OneDrive-UniversityofOtago/Documents/Training Coordinator 2022/GitHub/visualization_day/data/eDNA_group_counts.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"https://raw.githubusercontent.com/tylermcinnes/visualization_day/refs/heads/main/data/eDNA_group_counts.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This section follows the outline produced by the very skilled data visualizer Cédric Scherer, modified to work with some example data and updated with my own thoughts and opinions. Cédric’s original tutorial is available here:</p>
 <p>https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/</p>

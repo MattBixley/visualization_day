@@ -3,13 +3,19 @@ title: Building Better Plots
 toc: true
 ---
 
+*Note to self*: The purpose of this episode is to:
+
+- **a)** solidify the template of ggplot2 in the mind of the users, so that they can remember and confidently create a basic plot and 
+
+- **b)** introduce new geoms, familiarise ourselves with the use of arguments for different visual looks 
+
 
 
 ```{r}
 library(tidyverse)
 
-top_group_counts <- read.csv("~/Library/CloudStorage/OneDrive-UniversityofOtago/Documents/Training Coordinator 2022/GitHub/visualization_day/data/eDNA_group_counts.csv")
 
+top_group_counts <- read.delim("https://raw.githubusercontent.com/tylermcinnes/visualization_day/refs/heads/main/data/eDNA_group_counts.tsv")
 
 ```
 
