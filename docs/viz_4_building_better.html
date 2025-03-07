@@ -186,7 +186,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#sort-the-data" id="toc-sort-the-data" class="nav-link active" data-scroll-target="#sort-the-data">Sort the data</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link active" data-scroll-target="#the-data">The data</a>
+  <ul class="collapse">
+  <li><a href="#familiarise-yourself-with-the-data" id="toc-familiarise-yourself-with-the-data" class="nav-link" data-scroll-target="#familiarise-yourself-with-the-data">Familiarise yourself with the data</a></li>
+  </ul></li>
+  <li><a href="#initial-visualization" id="toc-initial-visualization" class="nav-link" data-scroll-target="#initial-visualization">Initial visualization</a>
+  <ul class="collapse">
+  <li><a href="#boxplot-101" id="toc-boxplot-101" class="nav-link" data-scroll-target="#boxplot-101">Boxplot 101</a></li>
+  <li><a href="#sort-the-data" id="toc-sort-the-data" class="nav-link" data-scroll-target="#sort-the-data">Sort the data</a></li>
+  </ul></li>
   <li><a href="#better-visualization" id="toc-better-visualization" class="nav-link" data-scroll-target="#better-visualization">Better visualization</a>
   <ul class="collapse">
   <li><a href="#theme" id="toc-theme" class="nav-link" data-scroll-target="#theme">Theme</a></li>
@@ -220,9 +228,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p><em>Note to self</em>: The purpose of this episode is to:</p>
 <ul>
-<li><p><strong>a)</strong> solidify the template of ggplot2 in the mind of the users, so that they can remember and confidently create a basic plot and</p></li>
-<li><p><strong>b)</strong> introduce new geoms, familiarise ourselves with the use of arguments for different visual looks</p></li>
+<li><p>solidify the template of ggplot2 in the mind of the users, so that they can remember and confidently create a basic plot and</p></li>
+<li><p>introduce new geoms, familiarise ourselves with the use of arguments for different visual looks</p></li>
 </ul>
+<p>This episode follows the outline produced by the very skilled data visualizer Cédric Scherer, modified to work with some example data and updated with my own thoughts and opinions. Cédric’s <a href="https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/">original tutorial</a> is well working looking at, as they are a real expert in the field of visualization.</p>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">The data</h2>
+<p>The example dataset we are using for this session comes from <a href="https://www.wilderlab.co.nz/">Wilderlab</a>, a company based in Aotearoa who provide eDNA monitoring and testing services (primarily from water samples). When a client orders DNA testing through Wilderlab they have the option of making their results public as a way to “provide a useful resource for scientists, conservationists, educators, and anyone else with an interest in Aotearoa’s biodiversity, water quality and biosecurity.”. We will access a small subset of the data which I have accessed and curated for the workshop. It is currently stored on github as a .tsv file.</p>
+<p>eDNA sequences are assigned a taxonomy, and when multiple sequences map to the same taxonomic unit (in our case to the level of the same genus), those additional sequences contribute to the variable called Count. I selected the 10 Groups (a classification level, <em>e.g.,</em> Birds, Fish, Diatoms, Plants) with the highest number of sequences (that is, the groups with the most species diversity), randomly selected 500 of these sequences for each group, and saved the data to a file. We can now look at Count (the abundance) of these sequences and see if this varies across Groups.</p>
+<p><strong>Exercise</strong>: Based on what you know about eDNA, predict and rank the 10 groups based on the average level of eDNA abundance. The 10 groups are:</p>
+<p>Birds, Ciliates, Diatoms, Fish, Insects, Mammals, Molluscs, Other, Plants, Worms</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A contrived example
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>For the sake of honesty, if the above explanation of how I created our data subset sounds arbitrary - it is. Originally I wanted an example look at the relationship between Group diversity (number of species) and Count (abundance). I hypothesised that a Group like mammals would have low diversity but high counts, while a Group like Insects would have high diversity but lower counts (based on what I know about animal diversity and how I think body size will impact eDNA abundance). Notably, some Groups had <em>a lot</em> of diversity, and as I built the workshop and some of the figures I realised that having too many sequences made the data points difficult to differentiate. Eventually I trimmed the original data set so that each group had 500 randomly selected sequences. This made visualization easier, but forced me to re-work the example.</p>
+</div>
+</div>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -239,11 +270,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"https://raw.githubusercontent.com/tylermcinnes/visualization_day/refs/heads/main/data/eDNA_group_counts.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This section follows the outline produced by the very skilled data visualizer Cédric Scherer, modified to work with some example data and updated with my own thoughts and opinions. Cédric’s original tutorial is available here:</p>
-<p>https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/</p>
+<section id="familiarise-yourself-with-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="familiarise-yourself-with-the-data">Familiarise yourself with the data</h3>
+<p>Here we will use some functions to check features of our data</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify that all groups have 500 observations</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Group) <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">observations =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(observations)) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Group) <span class="sc">|&gt;</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">observations =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(observations)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
   Group    observations
@@ -255,12 +291,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5 Insects           500
 6 Mammals           500</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 Name                                   CommonName TaxID Count
+1  Anas platyrhynchos                                 Mallard duck  8839   273
+2      Pavo cristatus Indian peafowl; common peafowl; blue peafowl  9049    33
+3 Carduelis carduelis                                    Goldfinch 37600     6
+4 Porphyrio melanotus                                       Pukeko 72013  1361
+5 Carduelis carduelis                                    Goldfinch 37600    20
+6           Zosterops                                    White eye 36298    13
+     Rank Group   Phylum Class         Order       Family     Genus
+1 species Birds Chordata  Aves  Anseriformes     Anatidae      Anas
+2 species Birds Chordata  Aves   Galliformes  Phasianidae      Pavo
+3 species Birds Chordata  Aves Passeriformes Fringillidae Carduelis
+4 species Birds Chordata  Aves    Gruiformes     Rallidae Porphyrio
+5 species Birds Chordata  Aves Passeriformes Fringillidae Carduelis
+6   genus Birds Chordata  Aves Passeriformes Zosteropidae Zosterops</code></pre>
 </div>
-<p>Initial plot of the data:</p>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="sc">|&gt;</span> <span class="fu">tail</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                Name CommonName  TaxID Count    Rank Group
+4995                            Nais Sludgeworm  74730   101   genus Worms
+4996                            Dero       Worm  66487    72   genus Worms
+4997 Cernosvitoviella aggtelekiensis       Worm 913639    13 species Worms
+4998              Octolasion lacteum       Worm 334871    36 species Worms
+4999          Lumbriculus variegatus  Blackworm  61662  3848 species Worms
+5000        Limnodrilus hoffmeisteri    Redworm  76587    19 species Worms
+       Phylum      Class            Order        Family            Genus
+4995 Annelida Clitellata       Tubificida      Naididae             Nais
+4996 Annelida Clitellata       Tubificida      Naididae             Dero
+4997 Annelida Clitellata     Enchytraeida Enchytraeidae Cernosvitoviella
+4998 Annelida Clitellata Crassiclitellata   Lumbricidae       Octolasion
+4999 Annelida Clitellata     Lumbriculida Lumbriculidae      Lumbriculus
+5000 Annelida Clitellata       Tubificida      Naididae      Limnodrilus</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="sc">|&gt;</span> <span class="fu">class</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "data.frame"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="initial-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="initial-visualization">Initial visualization</h2>
+<p>In this example we are looking at the variance in Count across the 10 groups. A very reasonable starting point for this type of visualization is the boxplot. We will use a basic boxplot to get a ‘sketch’ of what our visualization will look like, then we will test other geoms (plot types) and look at colours, titles, labels <em>etc.,</em>.</p>
+<section id="boxplot-101" class="level3">
+<h3 class="anchored" data-anchor-id="boxplot-101">Boxplot 101</h3>
+<p>A basic boxplot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> top_group_counts,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Group, <span class="at">y =</span> Count)) <span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> top_group_counts,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Group, <span class="at">y =</span> Count)) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -269,24 +350,66 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Taking the log of Count data makes this clearer:</p>
+<p>This figure shows us the Count variable is highly skewed (the majority of values are small, with some values many fold higher).</p>
+<p><strong>Exercise:</strong> use the summary() function and look at the outcome for the Count variable. Note the min, mean, median and maximum value. More advanced R users could use the filter() and nrow() functions to ask how many rows have a Count value that is 10 times greater than the Count median (or ask this question using whatever functions you are familiar with).</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> top_group_counts,</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Group, <span class="at">y =</span> <span class="fu">log</span>(Count))) <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Name            CommonName            TaxID              Count        
+ Length:5000        Length:5000        Min.   :    2706   Min.   :    5.0  
+ Class :character   Class :character   1st Qu.:    9940   1st Qu.:   17.0  
+ Mode  :character   Mode  :character   Median :   76587   Median :   51.0  
+                                       Mean   :  401972   Mean   :  421.9  
+                                       3rd Qu.:  238745   3rd Qu.:  197.2  
+                                       Max.   :10000288   Max.   :59445.0  
+     Rank              Group              Phylum             Class          
+ Length:5000        Length:5000        Length:5000        Length:5000       
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+    Order              Family             Genus          
+ Length:5000        Length:5000        Length:5000       
+ Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character  
+                                                         
+                                                         
+                                                         </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note the outputs, specifically that for Count. </span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Min = 5.0, Median = 51.0, Mean = 421.9, Max = 59445</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="do">### This is a sign the data is skewed.</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># How many rows have a Count value that is more than 10 times greater than the median? </span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>top_group_counts <span class="sc">|&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Count <span class="sc">&gt;=</span> <span class="fu">median</span>(top_group_counts<span class="sc">$</span>Count)<span class="sc">*</span><span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 681</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This shows 681 elements are more than 10* higher than the median - very skewed.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
-<p>It’s often worth representing boxplots on a horizontal, rather than vertical, distribution. Let’s switch our axes assignments:</p>
+</div>
+<p>We can address the issue of skewed data by taking the log of Count before we plot it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> top_group_counts,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(Count), <span class="at">y =</span> Group)) <span class="sc">+</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> top_group_counts,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Group, <span class="at">y =</span> <span class="fu">log</span>(Count))) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -295,24 +418,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Generally we will find that sometimes switching the layout like this can provide us with clearer visualization, sometimes due to labels, sometimes for aesthetics.</p>
-<section id="sort-the-data" class="level3">
-<h3 class="anchored" data-anchor-id="sort-the-data">Sort the data</h3>
-<p>Sorted data will be easier to interpret, with a lower cognitive load. Note: we should <strong>only</strong> sort data if there is <em>no inherent structure</em> - I don’t believe Mammals are inherently ‘higher’ than Fish, so I can sort these groups. Sometimes we will have internal structure, either some kind of hierarchy or grouping (e.g., case vs control) and it is not appropriate to apply sorting.</p>
-<p>This is where we need to bring in some of our data transformation skills. This is <em>not</em> the focus of today’s workshop, so we won’t go into this, but we are using a function, fct_reorder(), to re-order the Group variable based on data from the Count variable, where Count is ordered based on median. Easy enough to interpret from the code, I actually didn’t know how to do this myself and used chatGPT to guide me through the process.</p>
+<p><strong>Design tip:</strong> It can often be worth representing boxplots on a horizontal, rather than vertical, distribution. Let’s switch our axes assignments:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>top_group_counts_sorted <span class="ot">&lt;-</span> top_group_counts <span class="sc">|&gt;</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Group =</span> <span class="fu">fct_reorder</span>(Group, Count, <span class="at">.fun =</span> median))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Now plot the sorted data:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> top_group_counts_sorted,</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(Count), <span class="at">y =</span> Group)) <span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> top_group_counts,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(Count), <span class="at">y =</span> Group)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Generally we will find that sometimes switching the layout like this can provide us with clearer visualization, sometimes due to labels, sometimes for aesthetics. In this case, I think the group labels read much more clearly when stacked vertically on top of one another with the new layout. I encourage you to think about small changes like this when creating your visualizations.</p>
+</section>
+<section id="sort-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="sort-the-data">Sort the data</h3>
+<p>Sorted data will be easier to interpret, with a lower cognitive load. Note: we should <strong>only</strong> sort data if there is <em>no inherent structure</em> - I don’t believe Mammals are inherently ‘higher’ than Fish, so I can sort these groups based on another feature. Sometimes we will have internal structure, either some kind of hierarchy or grouping (e.g., case vs control) and it is not appropriate to apply sorting.</p>
+<p>This is where we need to bring in some of our data transformation skills. This is <em>not</em> the focus of this episode, so we won’t go into this, but we are using a function, fct_reorder(), to re-order the Group variable based on data from the Count variable, where Count is ordered based on median. The mutate() function can be used to create a new variable, or in this case rearrange an existing variable.</p>
+<p>(Disclaimer, building this workshop I knew what I wanted to do and used chatGPT to guide me through the process.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>top_group_counts_sorted <span class="ot">&lt;-</span> top_group_counts <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Group =</span> <span class="fu">fct_reorder</span>(Group, Count, <span class="at">.fun =</span> median))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now plot the sorted data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> top_group_counts_sorted,</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(Count), <span class="at">y =</span> Group)) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -321,6 +459,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="outliers" class="level4">
 <h4 class="anchored" data-anchor-id="outliers">Outliers</h4>
 <p>In boxplots, outliers are identified as values that are more than 1.5 times the interquartile range <strong>above</strong> or <strong>below</strong> the third and first quartile, respectively. In our data these outliers are reasonably numerous. Could be due to inherently variable data, due either to biological or technical reasons, site differences etc., etc.,. Without wanting to make assumptions about the data, we can experiment with visualizations and choose how we want to present this data.</p>
+</section>
 </section>
 </section>
 <section id="better-visualization" class="level2">
@@ -332,35 +471,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A useful tip for working with ggplot is to save a set of basic features, such as the data, mapping, and theme to an object which can then be used for plotting with different geoms later. Notice below we use a slightly different format for writing our ggplot function - we omit “data =” and “mapping =”, since those calls are always required and used.</p>
 <p>For simplicity we will also reduce our total dataset down to just</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(top_group_counts_sorted, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(Count), <span class="at">y =</span> Group, <span class="at">colour =</span> Group)) <span class="sc">+</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"eDNA counts vary across species groups"</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"log(Count)"</span>, </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Group"</span>) <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  ) </span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Note, no plot is created yet. We will now use the groupCounts object in combination with geom functions to create plots.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(top_group_counts_sorted, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log</span>(Count), <span class="at">y =</span> Group, <span class="at">colour =</span> Group)) <span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"eDNA counts vary across species groups"</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"log(Count)"</span>, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Group"</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Note, no plot is created yet. We will now use the groupCounts object in combination with geom functions to create plots.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now trial different geoms to determine which type suits our visualization needs.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -370,7 +498,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -380,7 +509,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -389,13 +518,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>A particularly useful argument with the geom_point() function is alpha, which controls the opacity/transparency of the points. With reduced opacity we can see more clearly when points are placed on top of one another. It is less clear in this example because there are so many data points in a small space, but it’s usefulness will become more apparent shortly.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A particularly useful argument with the geom_point() function is alpha, which controls the opacity/transparency of the points. With reduced opacity we can see more clearly when points are placed on top of one another. It is less clear in this example because there are so many data points in a small space, but it’s usefulness will become more apparent shortly.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -405,21 +544,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="combining-geoms">Combining geoms</h3>
 <p>Geoms can be combined to create more complex plots by layering one set of information over another.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">colour =</span> <span class="st">"gray"</span>, <span class="at">outlier.alpha =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Note that we’ve included a new argument in geom_boxplot(): “outlier.alpha = 0”. The boxplot geom normally adds points that are considered outliers (greater than 1.5 times the interquartile range above or below the 1st or 3rd quartile). Since these points are going to be represented by the geom_point() function, we need to set outlier.alpha to 0 so that they are functionally invisible (and are therefore not printed twice).</p>
-<p>While the above demonstrates the concept of combining geoms, it’s not very functional. The high density of our points on a straight line is creating a strong effect that is over-powering other visualizations. We can change the points from being on a single line to spaced apart with the geom_jitter() function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">colour =</span> <span class="st">"gray"</span>, <span class="at">outlier.alpha =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -428,10 +555,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>Note that we’ve included a new argument in geom_boxplot(): “outlier.alpha = 0”. The boxplot geom normally adds points that are considered outliers (greater than 1.5 times the interquartile range above or below the 1st or 3rd quartile). Since these points are going to be represented by the geom_point() function, we need to set outlier.alpha to 0 so that they are functionally invisible (and are therefore not printed twice).</p>
+<p>While the above demonstrates the concept of combining geoms, it’s not very functional. The high density of our points on a straight line is creating a strong effect that is over-powering other visualizations. We can change the points from being on a single line to spaced apart with the geom_jitter() function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">colour =</span> <span class="st">"gray40"</span>, <span class="at">outlier.alpha =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -439,7 +566,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># gray40 is a darker gray that is not quite black. I had to test multiple colours to find one that was clearly visible but not overwhelming.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">colour =</span> <span class="st">"gray40"</span>, <span class="at">outlier.alpha =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># gray40 is a darker gray that is not quite black. I had to test multiple colours to find one that was clearly visible but not overwhelming.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="even-more-geoms" class="level3">
@@ -448,33 +587,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Let’s look at how each of our Groups compares to the average (and in this case, we will use mean instead of the median we have been using with our box plots).</p>
 <p>First, we will visualize the Group means with the stat_summary function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">colour =</span> <span class="st">"gray40"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Note: here we have selected the size of the stat_summary point as 5, but we could also provide a set of values (e.g., if we had different numbers of observations per group).</p>
-<p>Next, we can add the overall mean for these groups as a vertical line:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the average number of Counts across all samples. </span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>top10_group_avg <span class="ot">&lt;-</span> top_group_counts_sorted <span class="sc">|&gt;</span> </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">t10_avg =</span> <span class="fu">mean</span>(<span class="fu">log</span>(Count))) <span class="sc">|&gt;</span> </span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(t10_avg)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> top10_group_avg), <span class="at">colour =</span> <span class="st">"gray50"</span>, <span class="at">size =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">colour =</span> <span class="st">"gray40"</span>,<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-ℹ Please use `linewidth` instead.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">colour =</span> <span class="st">"gray40"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -483,12 +598,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Geom order matters! Note how the summary points (black) are obscured by the coloured points produced by geom_jitter()? We can switch the order so that the jitter points are drawn first, and the summary points placed on top.</p>
+<p>Note: here we have selected the size of the stat_summary point as 5, but we could also provide a set of values (e.g., if we had different numbers of observations per group).</p>
+<p>Next, we can add the overall mean for these groups as a vertical line:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> top10_group_avg), <span class="at">colour =</span> <span class="st">"gray50"</span>, <span class="at">size =</span> <span class="fl">0.6</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">colour =</span> <span class="st">"gray50"</span>,<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the average number of Counts across all samples. </span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>top10_group_avg <span class="ot">&lt;-</span> top_group_counts_sorted <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">t10_avg =</span> <span class="fu">mean</span>(<span class="fu">log</span>(Count))) <span class="sc">|&gt;</span> </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(t10_avg)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> top10_group_avg), <span class="at">colour =</span> <span class="st">"gray50"</span>, <span class="at">size =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">colour =</span> <span class="st">"gray40"</span>,<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -497,22 +622,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>If we are trying to highlight the difference between a Group mean and the global mean, this can be amplified by adding text to our image.</p>
+<p>Geom order matters! Note how the summary points (black) are obscured by the coloured points produced by geom_jitter()? We can switch the order so that the jitter points are drawn first, and the summary points placed on top.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>groupMeans <span class="ot">&lt;-</span> top_group_counts_sorted <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Group) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">groupMean =</span> <span class="fu">log</span>(<span class="fu">mean</span>(Count))) <span class="sc">|&gt;</span> <span class="fu">pull</span>(groupMean)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> top10_group_avg), <span class="at">colour =</span> <span class="st">"gray50"</span>, <span class="at">size =</span> <span class="fl">0.6</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">colour =</span> <span class="st">"gray60"</span>,<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">7.8</span>, <span class="at">y =</span> <span class="dv">10</span>, <span class="at">size =</span> <span class="fl">2.8</span>, <span class="at">color =</span> <span class="st">"gray20"</span>, <span class="at">lineheight =</span> .<span class="dv">9</span>,</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"Counts for fish are significantly higher</span><span class="sc">\n</span><span class="st">than other groups (7.6)"</span>)</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">5.25</span>, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="fl">2.8</span>, <span class="at">color =</span> <span class="st">"gray20"</span>,</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Total group average (4.2)"</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> top10_group_avg), <span class="at">colour =</span> <span class="st">"gray50"</span>, <span class="at">size =</span> <span class="fl">0.6</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">colour =</span> <span class="st">"gray50"</span>,<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -521,9 +636,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>If we are trying to highlight the difference between a Group mean and the global mean, this can be amplified by adding text to our image.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>groupMeans <span class="ot">&lt;-</span> top_group_counts_sorted <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Group) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">groupMean =</span> <span class="fu">log</span>(<span class="fu">mean</span>(Count))) <span class="sc">|&gt;</span> <span class="fu">pull</span>(groupMean)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>groupCounts <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> top10_group_avg), <span class="at">colour =</span> <span class="st">"gray50"</span>, <span class="at">size =</span> <span class="fl">0.6</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">colour =</span> <span class="st">"gray60"</span>,<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">7.8</span>, <span class="at">y =</span> <span class="dv">10</span>, <span class="at">size =</span> <span class="fl">2.8</span>, <span class="at">color =</span> <span class="st">"gray20"</span>, <span class="at">lineheight =</span> .<span class="dv">9</span>,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"Counts for fish are significantly higher</span><span class="sc">\n</span><span class="st">than other groups (7.6)"</span>)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">5.25</span>, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="fl">2.8</span>, <span class="at">color =</span> <span class="st">"gray20"</span>,</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Total group average (4.2)"</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_4_building_better_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>This isn’t necessarily something you would do in many types of plots, but is useful to draw attention to key points (often, e.g., a single gene of interest in a scatter plot).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"boxplot.png"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"boxplot.png"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

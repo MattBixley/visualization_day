@@ -5,62 +5,115 @@ toc: true
 
 *Note to self*: The purpose of this episode is to:
 
-- **a)** solidify the template of ggplot2 in the mind of the users, so that they can remember and confidently create a basic plot and 
+- solidify the template of ggplot2 in the mind of the users, so that they can remember and confidently create a basic plot and 
 
-- **b)** introduce new geoms, familiarise ourselves with the use of arguments for different visual looks 
+- introduce new geoms, familiarise ourselves with the use of arguments for different visual looks 
+
+This episode follows the outline produced by the very skilled data visualizer Cédric Scherer, modified to work with some example data and updated with my own thoughts and opinions. Cédric's [original tutorial](https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/) is well working looking at, as they are a real expert in the field of visualization.
 
 
+## The data
+
+The example dataset we are using for this session comes from [Wilderlab](https://www.wilderlab.co.nz/), a company based in Aotearoa who provide eDNA monitoring and testing services (primarily from water samples). When a client orders DNA testing through Wilderlab they have the option of making their results public as a way to "provide a useful resource for scientists, conservationists, educators, and anyone else with an interest in Aotearoa's biodiversity, water quality and biosecurity.". We will access a small subset of the data which I have accessed and curated for the workshop. It is currently stored on github as a .tsv file. 
+
+eDNA sequences are assigned a taxonomy, and when multiple sequences map to the same taxonomic unit (in our case to the level of the same genus), those additional sequences contribute to the variable called Count. I selected the 10 Groups (a classification level, *e.g.,* Birds, Fish, Diatoms, Plants) with the highest number of sequences (that is, the groups with the most species diversity), randomly selected 500 of these sequences for each group, and saved the data to a file. We can now look at Count (the abundance) of these sequences and see if this varies across Groups. 
+
+**Exercise**: Based on what you know about eDNA, predict and rank the 10 groups based on the average level of eDNA abundance. The 10 groups are:
+
+Birds, Ciliates, Diatoms, Fish, Insects, Mammals, Molluscs, Other, Plants, Worms
+
+::: {.callout-tip collapse="true"}
+## A contrived example
+
+For the sake of honesty, if the above explanation of how I created our data subset sounds arbitrary - it is. Originally I wanted an example look at the relationship between Group diversity (number of species) and Count (abundance). I hypothesised that a Group like mammals would have low diversity but high counts, while a Group like Insects would have high diversity but lower counts (based on what I know about animal diversity and how I think body size will impact eDNA abundance). Notably, some Groups had *a lot* of diversity, and as I built the workshop and some of the figures I realised that having too many sequences made the data points difficult to differentiate. Eventually I trimmed the original data set so that each group had 500 randomly selected sequences. This made visualization easier, but forced me to re-work the example. 
+:::
 
 ```{r}
 library(tidyverse)
 
-
 top_group_counts <- read.delim("https://raw.githubusercontent.com/tylermcinnes/visualization_day/refs/heads/main/data/eDNA_group_counts.tsv")
-
 ```
 
-This section follows the outline produced by the very skilled data visualizer Cédric Scherer, modified to work with some example data and updated with my own thoughts and opinions. Cédric's original tutorial is available here:
+### Familiarise yourself with the data
 
-https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/ 
-
-
-
+Here we will use some functions to check features of our data
 
 ```{r}
 # Verify that all groups have 500 observations
-top_group_counts |> group_by(Group) |> summarize(observations = n(), .groups = "drop") |> arrange(desc(observations)) |> head()
+top_group_counts |> 
+  group_by(Group) |> 
+  summarize(observations = n(), .groups = "drop") |> 
+  arrange(desc(observations)) |> 
+  head()
+
+top_group_counts |> head()
+
+top_group_counts |> tail()
+
+top_group_counts |> class()
 ```
 
 
-Initial plot of the data:
+## Initial visualization
 
+In this example we are looking at the variance in Count across the 10 groups. A very reasonable starting point for this type of visualization is the boxplot. We will use a basic boxplot to get a 'sketch' of what our visualization will look like, then we will test other geoms (plot types) and look at colours, titles, labels *etc.,*.
+
+### Boxplot 101
+
+A basic boxplot:
 ```{r}
 ggplot(data = top_group_counts,
-mapping = aes(x = Group, y = Count)) +
+  mapping = aes(x = Group, y = Count)) +
 geom_boxplot()
 ```
 
+This figure shows us the Count variable is highly skewed (the majority of values are small, with some values many fold higher). 
 
-Taking the log of Count data makes this clearer:
+**Exercise:** use the summary() function and look at the outcome for the Count variable. Note the min, mean, median and maximum value. More advanced R users could use the filter() and nrow() functions to ask how many rows have a Count value that is 10 times greater than the Count median (or ask this question using whatever functions you are familiar with).   
+
+::: {.callout-tip collapse="true"}
+## Solution
+
+```{r}
+top_group_counts |> summary()
+# Note the outputs, specifically that for Count. 
+## Min = 5.0, Median = 51.0, Mean = 421.9, Max = 59445
+### This is a sign the data is skewed.
+
+# How many rows have a Count value that is more than 10 times greater than the median? 
+top_group_counts |>
+  filter(Count >= median(top_group_counts$Count)*10) |>
+  nrow()
+
+# This shows 681 elements are more than 10* higher than the median - very skewed.
+```
+
+:::
+
+We can address the issue of skewed data by taking the log of Count before we plot it.
+
 ```{r}
 ggplot(data = top_group_counts,
 mapping = aes(x = Group, y = log(Count))) +
 geom_boxplot()
 ```
 
-It's often worth representing boxplots on a horizontal, rather than vertical, distribution. Let's switch our axes assignments:
+**Design tip:** It can often be worth representing boxplots on a horizontal, rather than vertical, distribution. Let's switch our axes assignments:
 ```{r}
 ggplot(data = top_group_counts,
 mapping = aes(x = log(Count), y = Group)) +
 geom_boxplot()
 ```
- Generally we will find that sometimes switching the layout like this can provide us with clearer visualization, sometimes due to labels, sometimes for aesthetics. 
+ 
+ Generally we will find that sometimes switching the layout like this can provide us with clearer visualization, sometimes due to labels, sometimes for aesthetics. In this case, I think the group labels read much more clearly when stacked vertically on top of one another with the new layout. I encourage you to think about small changes like this when creating your visualizations.
 
 ### Sort the data 
 
-Sorted data will be easier to interpret, with a lower cognitive load. Note: we should **only** sort data if there is *no inherent structure* - I don't believe Mammals are inherently 'higher' than Fish, so I can sort these groups. Sometimes we will have internal structure, either some kind of hierarchy or grouping (e.g., case vs control) and it is not appropriate to apply sorting.
+Sorted data will be easier to interpret, with a lower cognitive load. Note: we should **only** sort data if there is *no inherent structure* - I don't believe Mammals are inherently 'higher' than Fish, so I can sort these groups based on another feature. Sometimes we will have internal structure, either some kind of hierarchy or grouping (e.g., case vs control) and it is not appropriate to apply sorting.
 
-This is where we need to bring in some of our data transformation skills. This is *not* the focus of today's workshop, so we won't go into this, but we are using a function, fct_reorder(), to re-order the Group variable based on data from the Count variable, where Count is ordered based on median. Easy enough to interpret from the code, I actually didn't know how to do this myself and used chatGPT to guide me through the process.
+This is where we need to bring in some of our data transformation skills. This is *not* the focus of this episode, so we won't go into this, but we are using a function, fct_reorder(), to re-order the Group variable based on data from the Count variable, where Count is ordered based on median. The mutate() function can be used to create a new variable, or in this case rearrange an existing variable. 
+
+(Disclaimer, building this workshop I knew what I wanted to do and used chatGPT to guide me through the process.)
 ```{r}
 top_group_counts_sorted <- top_group_counts |> 
   mutate(Group = fct_reorder(Group, Count, .fun = median))
