@@ -188,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#the-ggplot-format" id="toc-the-ggplot-format" class="nav-link active" data-scroll-target="#the-ggplot-format">The ggplot format</a></li>
   <li><a href="#extending-the-ggplot-format" id="toc-extending-the-ggplot-format" class="nav-link" data-scroll-target="#extending-the-ggplot-format">Extending the ggplot format</a></li>
-  <li><a href="#showcase" id="toc-showcase" class="nav-link" data-scroll-target="#showcase">Showcase</a>
+  <li><a href="#resources-and-showcase" id="toc-resources-and-showcase" class="nav-link" data-scroll-target="#resources-and-showcase">Resources and Showcase</a>
   <ul class="collapse">
   <li><a href="#galleries-books-workshops" id="toc-galleries-books-workshops" class="nav-link" data-scroll-target="#galleries-books-workshops">Galleries, books, workshops</a></li>
   <li><a href="#from-the-community" id="toc-from-the-community" class="nav-link" data-scroll-target="#from-the-community">From the community</a></li>
@@ -267,9 +267,9 @@ Attaching package: 'dplyr'</code></pre>
 <p>ggplot2 is a way to create visualisations within the tidyverse. Once you recognise the template it will become quick and easy to create a variety of plots with different data types with minimal extra work.</p>
 <p>The format for the ggplot2 template is as follows:</p>
 <ul>
-<li><p>specify the data</p></li>
-<li><p>map variables e.g., map a column the x axis</p></li>
-<li><p>create the plot</p></li>
+<li><p>Specify the data</p></li>
+<li><p>Map variables <em>e.g.,</em> map count data in column a to the x axis</p></li>
+<li><p>Create the plot</p></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The code to create a plot, using the template above:</span></span>
@@ -291,10 +291,10 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>Some things to note about the format:</p>
 <ul>
-<li><p>Indentations are important. We use new lines and tabs to keep the code organised. Generally you’ll want to specify only one thing per line (e.g., data, x axis and y axis get there own lines).</p></li>
+<li><p>Indentations are important. We use new lines and tabs to keep the code organised. Generally you’ll want to specify only one thing per line (<em>e.g.,</em> data, x axis and y axis get there own lines).</p></li>
 <li><p>The ggplot formula is a slight break away from the use of pipes.</p></li>
-<li><p>There are actually two separate functions here: the ggplot() function, which is used to specify the data and map the variables, and the geom_boxplot() function which is used to create the actual plot. Because we want these two functions to work together, at the very end of the ggplot() function, we have added a “+” symbol. RStudio interprets this to mean “Ok, the ggplot function has finished, but I need to read it in the context of the next function”.</p></li>
-<li><p>geom_boxplot() is the function for making boxplots. To make a bar plot we would use geom_bar(), to make a scatter plot we use geom_point() etc.,. Type geom_ in the console and scroll the dropdown menu to see the different geom types - there are plenty!</p></li>
+<li><p>There are actually two separate functions here: the ggplot() function, which is used to specify the data and map the variables, and the geom_boxplot() function which is used to create the actual plot. Because we want these two functions to work together, at the very end of the ggplot() function, we have added a “+” symbol. RStudio interprets this to mean “The ggplot function has finished, but it must be interpreted in the context of the next function”.</p></li>
+<li><p>geom_boxplot() is the function for making boxplots. To make a bar plot we would use geom_bar(), to make a scatter plot we use geom_point() <em>etc.,</em>. Type geom_ in the console and scroll the dropdown menu to see the different geom types - there are plenty!</p></li>
 </ul>
 </section>
 <section id="extending-the-ggplot-format" class="level2">
@@ -308,23 +308,25 @@ Attaching package: 'dplyr'</code></pre>
 <p>In all cases, these new arguments and functions follow the template as outlined above. We will continue to use indentations and new lines to keep our code organised and tidy.</p>
 <p>This example creates a more complex plot, but these new arguments and functions follow the template as outlined above. We continue to use indentations and new lines to keep our code organised and tidy.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the viridis library, which supplies a colour scheme that is sensitive to colour-blindness.</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the viridis library, which supplies a colour scheme that is</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sensitive to colour-blindness.</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: viridisLite</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New arguments map species to the colour variable, so that each point is coloured by species.</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sex is mapped to shape. Note that shape can only take discrete variables.</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penData,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> flipper_length_mm,</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">colour =</span> species,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">shape =</span> sex)) <span class="sc">+</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_viridis</span>(<span class="at">discrete =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Bill depth (mm)"</span>,</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Flipper length (mm)"</span>) <span class="sc">+</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Bill depth vs flipper length"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New arguments map species to the colour variable, so that each point is coloured</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># by species.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Sex is mapped to shape. Note that shape can only take discrete variables.</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penData,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> flipper_length_mm,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">colour =</span> species,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">shape =</span> sex)) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span> <span class="co"># alpha is transparency of the points</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_viridis</span>(<span class="at">discrete =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Bill depth (mm)"</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Flipper length (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Bill depth vs flipper length"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -334,20 +336,20 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 </div>
 </section>
-<section id="showcase" class="level2">
-<h2 class="anchored" data-anchor-id="showcase">Showcase</h2>
+<section id="resources-and-showcase" class="level2">
+<h2 class="anchored" data-anchor-id="resources-and-showcase">Resources and Showcase</h2>
 <p>What exactly can we produce with ggplot2?</p>
 <section id="galleries-books-workshops" class="level3">
 <h3 class="anchored" data-anchor-id="galleries-books-workshops">Galleries, books, workshops</h3>
-<p>https://r-graph-gallery.com/ggplot2-package.html</p>
+<p><a href="https://r-graph-gallery.com/ggplot2-package.html">The r-graph-gallery</a></p>
 <p>The R graph gallery has a section on ggplot and it highlights some of the exciting features: custom fonts, pre-built themes, <em>interactive</em> plots - there’s a lot going on.</p>
 </section>
 <section id="from-the-community" class="level3">
 <h3 class="anchored" data-anchor-id="from-the-community">From the community</h3>
-<p>https://www.cedricscherer.com/top/dataviz/#SciAm</p>
+<p><a href="https://www.cedricscherer.com/top/dataviz/#SciAm">Cédric Scherer’s Data Visualization Gallery</a></p>
 <p>When looking through this gallery, note that while some plots are very complex, they are built from basic elements. Each visualization is carefully designed: colour palettes are interesting but not overwhelming. There is adequate spacing between plot space and titles, axes, and text. Paler text (grey instead of black) makes overall images gentler. Cédric is a master of design as well as code, and all these visualizations demonstrate careful thought and planning.</p>
-<p>https://towardsdatascience.com/explaining-my-favourite-tidytuesday-projects-e44bfe988813</p>
-<p>Isaac Arrayo gives us a breakdown of four plots from #tidytuesday (a community effort where people are invited to create visualizations of a provided dataset). We see four diverse plot types, the rationale for each plot, and how these plots might be applied to a more ‘standard’ dataset (i.e., an in-real-life example).</p>
+<p><a href="https://towardsdatascience.com/explaining-my-favourite-tidytuesday-projects-e44bfe988813">Isaac Arrayo: towards data science</a></p>
+<p>Isaac Arrayo gives us a breakdown of four plots from #tidytuesday (a community effort where people are invited to create visualizations of a provided dataset). We see four diverse plot types, the rationale for each plot, and how these plots might be applied to a more ‘standard’ dataset (<em>i.e.,</em> an in-real-life example).</p>
 
 
 </section>

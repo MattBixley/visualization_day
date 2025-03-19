@@ -142,9 +142,11 @@ Theme is a separate function that controls almost all visual elements of a ggplo
 
 A useful tip for working with ggplot is to save a set of basic features, such as the data, mapping, and theme to an object which can then be used for plotting with different geoms later. Notice below we use a slightly different format for writing our ggplot function - we omit "data = " and "mapping =", since those calls are always required and used.
 
-For simplicity we will also reduce our total dataset down to just 
 ```{r}
-groupCounts <- ggplot(top_group_counts_sorted, aes(x = log(Count), y = Group, colour = Group)) +
+groupCounts <- ggplot(top_group_counts_sorted, 
+                      aes(x = log(Count), 
+                          y = Group, 
+                          colour = Group)) +
   labs(title = "eDNA counts vary across species groups",
        x = "log(Count)", 
        y = "Group") +
@@ -156,7 +158,8 @@ groupCounts <- ggplot(top_group_counts_sorted, aes(x = log(Count), y = Group, co
     panel.grid = element_blank()
   ) 
 
-# Note, no plot is created yet. We will now use the groupCounts object in combination with geom functions to create plots.
+# Note, no plot is created yet. We will now use the groupCounts object in combination
+# with geom functions to create plots.
 ```
 
 We can now trial different geoms to determine which type suits our visualization needs.
@@ -207,7 +210,8 @@ groupCounts + geom_jitter(size = 2, alpha = 0.2, width = 0.2)
 groupCounts + 
   geom_boxplot(colour = "gray40", outlier.alpha = 0) +
   geom_jitter(size = 2, alpha = 0.2, width = 0.2)
-# gray40 is a darker gray that is not quite black. I had to test multiple colours to find one that was clearly visible but not overwhelming.
+# gray40 is a darker gray that is not quite black. I had to test multiple 
+# colours to find one that was clearly visible but not overwhelming.
 ```
 
 ### (Even) more geoms

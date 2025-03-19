@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -71,6 +105,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Visualization for ourselves - Exploratory Analysis – Home">
 <meta property="og:description" content="">
+<meta property="og:image" content="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-2-1.png">
 <meta property="og:site_name" content="Home">
 </head>
 
@@ -146,8 +181,23 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#distribution" id="toc-distribution" class="nav-link active" data-scroll-target="#distribution">Distribution</a>
+  <ul class="collapse">
+  <li><a href="#beeswarm-plots-with-ggbeeswarm" id="toc-beeswarm-plots-with-ggbeeswarm" class="nav-link" data-scroll-target="#beeswarm-plots-with-ggbeeswarm">Beeswarm plots with ggbeeswarm</a></li>
+  <li><a href="#geom_quasirandom-and-dangerous-distributions" id="toc-geom_quasirandom-and-dangerous-distributions" class="nav-link" data-scroll-target="#geom_quasirandom-and-dangerous-distributions">geom_quasirandom and dangerous distributions</a></li>
+  </ul></li>
+  <li><a href="#correlation" id="toc-correlation" class="nav-link" data-scroll-target="#correlation">Correlation</a>
+  <ul class="collapse">
+  <li><a href="#heatmaps-with-geom_tile" id="toc-heatmaps-with-geom_tile" class="nav-link" data-scroll-target="#heatmaps-with-geom_tile">Heatmaps with geom_tile()</a></li>
+  </ul></li>
+  <li><a href="#parts-of-a-whole" id="toc-parts-of-a-whole" class="nav-link" data-scroll-target="#parts-of-a-whole">Parts of a whole</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -172,11 +222,250 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Visualization is most often thought of as something we do for other people, to share some piece of knowledge we have. But equally important is the role visualization can play in us learning something about our data. Visualization can reveal trends or associations that we would otherwise struggle to identify in observations stored in rows and columns.</p>
-<p>In this section we will perform some quick data transformations and create some simple visualizations. The output of this section does not need to be overly attractive, but it does need to be clear and should ‘standalone’ (i.e., should speak for itself, without the need of accompanying notes).</p>
-<p>Exploratory analysis is itself a highly useful skill, but it is also important to get some experience with data transformation - we will only rarely be lucky enough to get data in a format for visualization.</p>
-<p>Note: The aims for this section are to give you the opportunity to practice some of the most important code used in visualizations and to force you to think about visualization: what types of figures work well for certain data, how to display the information you want to convey.</p>
+<p>In this section we will perform some quick data visualizations that we can use for our own observations. The output of this section does not need to be overly attractive, but it does need to be clear and should ‘standalone’ (<em>i.e.,</em> should speak for itself, without the need of accompanying notes).</p>
+<p>The aims for this section are to give you the opportunity to practice some of the most important code used in visualizations and to force you to think about visualization: what types of figures work well for certain data, how to display the information you want to convey.</p>
+<p>We will examine one type of graph to represent four different types of data: distribution, correlation, parts of a whole, and evolution (change over time).</p>
+<section id="distribution" class="level2">
+<h2 class="anchored" data-anchor-id="distribution">Distribution</h2>
+<p>Distribution plots are a good place to start any data analysis, because many statistical tests rely on the assumption of a normal distribution. We may also make our own assumptions about how data is similar or different between different groups. The classic argument for distribution plots is the “<a href="https://en.wikipedia.org/wiki/Datasaurus_dozen#/media/File:EDA_example_-_Always_plot_your_data.jpg">datasaurus dozen</a>” - a set of 13 datasets with identical summary statistics (same mean of x, mean of y, Std Dev <em>etc.,</em>) but when plotted reveal funny patterns (including points in the shape of a dinosaur).</p>
+<p>Distribution matters!</p>
+<section id="beeswarm-plots-with-ggbeeswarm" class="level3">
+<h3 class="anchored" data-anchor-id="beeswarm-plots-with-ggbeeswarm">Beeswarm plots with ggbeeswarm</h3>
+<p>Here we will use a type of plot, called a beeswarm plot, to highlight the power of visualization.</p>
+<p>Beeswarm plots can be made using a standalone package (install.packages(“beeswarm”)) or using a package that extends ggplot2 (install.packages(“ggbeeswarm”)). We will use the later, since it let’s us work within the ggplot format we have looked at already.</p>
+<section id="packages-and-setup" class="level4">
+<h4 class="anchored" data-anchor-id="packages-and-setup">Packages and setup</h4>
+<p>Install the ggbeeswarm package, then load the ggbeeswarm and palmerpenguins packages.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("ggbeeswarm")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggbeeswarm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># We will use tidyverse later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ lubridate 1.9.4     ✔ tibble    3.2.1
+✔ purrr     1.0.4     ✔ tidyr     1.3.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+</section>
+<section id="beeswarm-plots" class="level4">
+<h4 class="anchored" data-anchor-id="beeswarm-plots">Beeswarm plots</h4>
+<p>Like with the geom_boxplot() we looked at in the previous episode, we need to specify where the data comes from and how the data is mapped. Beeswarm plots are simple and we will initially only need to specify the x and y axis data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_beeswarm</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Note:</strong> <em>When running this code, ggplot gives us a warning that rows were removed due to missing values. I’ve added a hidden line of code to suppress these warnings.</em></p>
+<p>With this plain plot we can see what beeswarm is doing - when points on the y axis share a value they are moved horizontally so that overlapping points can be identified. This concept is commonly referred to as “jitter”, and “jitter plots” are a class of chart. Beeswarm plots are an implementation of jitter plots that aim to be compact with as little as possible overlap of points. This gives us the ability to see density through the width of the plot, similar to how a violin plot (geom_violin) works.</p>
+<p>Distribution plots are a good opportunity to introduce two new parameters we can adjust in ggplot: size and alpha.</p>
+<ul>
+<li><p>Size is simply the size of the data point. We can assign a single value for all points, or can assign a continuous variable.</p></li>
+<li><p>Alpha is the level of transparency. When data points are too large (from the size argument), or too numerous, the points can overlap one another (a problem called “overplotting”). This is particularly problematic outside of beeswarm. When we set alpha to something less than 1, the points become somewhat transparent. Therefore, if two points overlap one another, it is clear from the change in colour (as two transparent but overlapping points are darker than a single point).</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> flipper_length_mm, <span class="at">colour =</span> species)) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_beeswarm</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>(I’d argue that increasing the size and decreasing the alpha has <em>decreased</em> the quality of our plot, but it’s just for the purpose of demonstration).</p>
+</section>
+</section>
+<section id="geom_quasirandom-and-dangerous-distributions" class="level3">
+<h3 class="anchored" data-anchor-id="geom_quasirandom-and-dangerous-distributions">geom_quasirandom and dangerous distributions</h3>
+<p>geom_quasirandom() is a function very similar to geom_beeswarm(), but instead of strictly moving points, they are quasi-randomly moved.</p>
+<p>Compare the plot below with the plot above. What is different between them?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dangers of distributions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Personally, I find these two plots give <strong>very</strong> different impressions of the data. In the plot below, the wide shape (particularly for the Chinstrap species) is reminiscent of a normal distribution and it subconciously reminds me of that. Looking at the plot above, I don’t immediately think of a normal distribution. It’s easy to imagine a situation where the wrong choice of plot and a lapse in concentration could give the wrong impression.</p>
+<p>Your choice of visualization can have a strong impact on what people see.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> flipper_length_mm, <span class="at">colour =</span> species)) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="theme-and-labels" class="level4">
+<h4 class="anchored" data-anchor-id="theme-and-labels">Theme and labels</h4>
+<p>We can add two other functions to make this plot much easier to read. First, the theme_minimal() function is a quick way to set a global theme to the plot and make it less cluttered. The second function is labs(), which we use to add a title and x and y axes labels. We will cover themes more later, but adding theme_minimal() to every plot we do today will keep them looking tidy and coherent.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> flipper_length_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Flipper Length Distribution by Species"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Species"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Flipper Length (mm)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="correlation" class="level2">
+<h2 class="anchored" data-anchor-id="correlation">Correlation</h2>
+<section id="heatmaps-with-geom_tile" class="level3">
+<h3 class="anchored" data-anchor-id="heatmaps-with-geom_tile">Heatmaps with geom_tile()</h3>
+<p>Heatmaps can be used to visualize values across two dimensions using colour. In a biological context this could be gene expression values across a range of genes for a set of samples. This is often combined with some type of clustering (<em>e.g.,</em> unsupervised hierarchical clustering with k-means) to identify patterns of gene expression which differ between sample groups.</p>
+<p>Here we will use geom_tile() to create a particular type of heatmap called a “calendar heatmap”, which will display a value on a given day for a selected time period. The example below is captured from github, which display the number of commits (saves) a user made across the year.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/calendar_tile_plot.png" class="img-fluid figure-img"></p>
+<figcaption>Github annual contributions</figcaption>
+</figure>
+</div>
+<p>That’s a lot of commits!</p>
+<section id="calendar-heatmap" class="level4">
+<h4 class="anchored" data-anchor-id="calendar-heatmap">Calendar heatmap</h4>
+<p>We will create a simple calendar heatmap to demonstrate the concept. Remember, the goal here is to expose you to different types of plots and for you to practice using ggplot2.</p>
+</section>
+<section id="generating-example-data" class="level4">
+<h4 class="anchored" data-anchor-id="generating-example-data">Generating example data</h4>
+<p>First, we will generate some example data. Copy and paste this code, because it is not central to our understanding:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0982</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>month_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">date =</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"2024-12-01"</span>), <span class="fu">as.Date</span>(<span class="st">"2024-12-31"</span>), <span class="at">by =</span> <span class="st">"day"</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">count =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="dv">31</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># Random counts per day</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">wday =</span> <span class="fu">wday</span>(date, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">TRUE</span>),  <span class="co"># Day of the week (Sun-Sat)</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">week =</span> (<span class="fu">day</span>(date) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%/%</span> <span class="dv">7</span> <span class="sc">+</span> <span class="dv">1</span>  <span class="co"># Week number (1 to 5)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>month_data <span class="sc">|&gt;</span> <span class="fu">head</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  date       count wday   week
+  &lt;date&gt;     &lt;int&gt; &lt;ord&gt; &lt;dbl&gt;
+1 2024-12-01     2 Sun       1
+2 2024-12-02     3 Mon       1
+3 2024-12-03    18 Tue       1
+4 2024-12-04    19 Wed       1
+5 2024-12-05     8 Thu       1
+6 2024-12-06     2 Fri       1</code></pre>
+</div>
+</div>
+</section>
+<section id="geom_tile" class="level4">
+<h4 class="anchored" data-anchor-id="geom_tile">geom_tile()</h4>
+<p>Now we will create the plot with geom_tile(). Like with the geom_boxplot() we looked at in the previous episode, we need to specify where the data comes from and how the data is mapped. With geom_tile() we will always need to use aes() to specify the x and y, and we will also specify the variable that is used to determine the colour of each tile, which we do with “fill =”. In our example we will map the count variable to fill.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> month_data,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> week, <span class="at">y =</span> wday, <span class="at">fill =</span> count)) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is a good starting point in that we have functionally sketched the data into the plot type. However, we can see that it the layout does not match our expectations for a calendar: it reads the days in reverse (Saturday, Friday, Thursday <em>etc.,</em>), and has the week on the x axis. It is also missing a title, and axes labels, and it doesn’t have particularly high contrast between high and low values.</p>
+<p>To correct these issues we will:</p>
+<ul>
+<li><p>Swap the x and y axis with the aes() function.</p></li>
+<li><p>Use the scale_y_reverse() function to reverse the Y-axis (which will now be weeks) so that the last value (week 5) is placed at the bottom.</p></li>
+<li><p>Add the scale_fill_viridis_c() function to change the colour of the fill. The “scale_[argument]_viridis” set of functions are used to select a colour blind-friendly pallette with high contrast.</p></li>
+<li><p>Use the labs() function to add title, x and y axis labels, and rename the fill (legend) variable.</p></li>
+<li><p>Additionally, we will add colour = “white” as an argument for geom_tile(), which will result in a fine white grid separating our tiles, and add the theme_minimal() function to reduce the visual clutter of the grey background in the plot.</p></li>
+</ul>
+</section>
+<section id="exercise-use-the-code-block-and-tips-above-to-create-an-improved-version-of-the-calendar-heatmap." class="level4">
+<h4 class="anchored" data-anchor-id="exercise-use-the-code-block-and-tips-above-to-create-an-improved-version-of-the-calendar-heatmap.">Exercise: Use the code block and tips above to create an improved version of the calendar heatmap.</h4>
+<p>You do not need to do all of these changes, but try them out if you can! Remember to add a “+” at the end of each line when adding new functions.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> month_data,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> wday, <span class="at">y =</span> week, <span class="at">fill =</span> count)) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"December 2024 Calendar Heatmap"</span>, </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">"Week"</span>, </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">"Day of the Week"</span>, </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="parts-of-a-whole" class="level2">
+<h2 class="anchored" data-anchor-id="parts-of-a-whole">Parts of a whole</h2>
+<p>In this section we will take a break from executing code and look at some examples. This is an opportunity to introduce you to the excellent resource that is the <a href="https://r-graph-gallery.com/#LogoMenu">R-graph-gallery</a>. We will scroll down to the “Parts of a whole” section, and walk through how this resource not only shows you different types of plots you can create, but provides you with code and reproducible examples.</p>
+<p>You can jump straight to our first example, <a href="https://r-graph-gallery.com/waffle.html">the waffle chart, here</a>. The R-graph-gallery gives an overview of the type of chart and highlights some of the key ways to get started. In the case of the waffle chart we can either use a dedicated package or explore how to build a waffle chart with ggplot2 syntax. Finally, there are three examples of high quality waffle charts - click on any of these three charts to get a detailed explanation of the code used to create the chart and an example dataset.</p>
+<p>Back on the <a href="https://r-graph-gallery.com/#LogoMenu">main page</a> we can see that this same level of information exists for other chart types too. Take two minutes to pick one of the Parts of a Whole plots and explore some of the information about this type of chart.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
