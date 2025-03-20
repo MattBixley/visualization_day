@@ -5,6 +5,25 @@ toc: true
 
 We've seen how to make 'quick and dirty' plots for ourselves. Now we will give you a glimpse of just how far you can take your visualizations. For this section we are looking at both code complexity and fundamental elements of design. The aim is to create visualizations that are clear and concise, which are also able to capture and hold attention. 
 
-Here we will provide guidelines on design and visualization while highlighting key examples from the scientific community. All code will be easily accesible for you to use as templates for your future work.
+Here we will provide guidelines on design and visualization while highlighting key examples from the scientific community. The good news is that there is an avid visualization community online - check out the [30 day chart challenge](https://www.linkedin.com/feed/hashtag/?keywords=30daychartchallenge&highlightedUpdateUrns=urn%3Ali%3Aactivity%3A7303019867069136896) or the [datavisualization](https://www.linkedin.com/feed/hashtag/?keywords=datavisualization) hashtag on LinkedIn as a starting point. 
 
-An example
+
+## Correlation
+
+![](images/CedricScherer_USviews_votes_simpsons.jpg)
+
+This image comes from Cédric Scherer, and shows the relationship between the number of US Views and the number of votes on IMDb (a site that hosts voting on tv/movie quality). It looks like US viewers are heavy contributors in the IMDb voting system!
+
+Key things to note about this visualization: 
+
+- Use of a lower alpha value is a functional way to represent density. In addition to the wider scatter plot, there's a clear pattern of higher density which probably contributes heavily to the overall trend line. 
+
+- The colour scheme is eye-catching but not abrasive. In design/art this is called a monocolour (a single colour with white or black to modify the colour) - it's highly cohesive and will generally be considered aesthetically pleasing. Note how the text uses the same colour, and the bolded text is also a colour found on the plot itself. The plot is probably using theme_minimal(). 
+
+- There is a hierarchy of black, with the title in black, the sub-heading in dark grey, the text below the chart in two separate light greys. This draws the eye to the top and guides the eye downwards. The two axis labels break from this, but only slightly, so that they stand out subtly - you can see them but they don't distract you.  
+
+- Text on the plot: this is not too common in scientific journal articles, but is a useful tool for science communication to a wider audience. 
+
+
+
+## 

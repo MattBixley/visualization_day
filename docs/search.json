@@ -151,7 +151,7 @@
     "href": "viz_3_exemplarVisualizations.html",
     "title": "Exemplar visualizations - what far can we take it?",
     "section": "",
-    "text": "We’ve seen how to make ‘quick and dirty’ plots for ourselves. Now we will give you a glimpse of just how far you can take your visualizations. For this section we are looking at both code complexity and fundamental elements of design. The aim is to create visualizations that are clear and concise, which are also able to capture and hold attention.\nHere we will provide guidelines on design and visualization while highlighting key examples from the scientific community. All code will be easily accesible for you to use as templates for your future work.\nAn example",
+    "text": "We’ve seen how to make ‘quick and dirty’ plots for ourselves. Now we will give you a glimpse of just how far you can take your visualizations. For this section we are looking at both code complexity and fundamental elements of design. The aim is to create visualizations that are clear and concise, which are also able to capture and hold attention.\nHere we will provide guidelines on design and visualization while highlighting key examples from the scientific community. The good news is that there is an avid visualization community online - check out the 30 day chart challenge or the datavisualization hashtag on LinkedIn as a starting point.",
     "crumbs": [
       "Exemplar visualizations - what far can we take it?"
     ]
@@ -277,6 +277,36 @@
     "title": "Visualization for ourselves - Exploratory Analysis",
     "section": "Parts of a whole",
     "text": "Parts of a whole\nIn this section we will take a break from executing code and look at some examples. This is an opportunity to introduce you to the excellent resource that is the R-graph-gallery. We will scroll down to the “Parts of a whole” section, and walk through how this resource not only shows you different types of plots you can create, but provides you with code and reproducible examples.\nYou can jump straight to our first example, the waffle chart, here. The R-graph-gallery gives an overview of the type of chart and highlights some of the key ways to get started. In the case of the waffle chart we can either use a dedicated package or explore how to build a waffle chart with ggplot2 syntax. Finally, there are three examples of high quality waffle charts - click on any of these three charts to get a detailed explanation of the code used to create the chart and an example dataset.\nBack on the main page we can see that this same level of information exists for other chart types too. Take two minutes to pick one of the Parts of a Whole plots and explore some of the information about this type of chart.",
+    "crumbs": [
+      "Visualization for ourselves - Exploratory Analysis"
+    ]
+  },
+  {
+    "objectID": "viz_3_exemplarVisualizations.html#correlation",
+    "href": "viz_3_exemplarVisualizations.html#correlation",
+    "title": "Exemplar visualizations - what far can we take it?",
+    "section": "Correlation",
+    "text": "Correlation\n\nThis image comes from Cédric Scherer, and shows the relationship between the number of US Views and the number of votes on IMDb (a site that hosts voting on tv/movie quality). It looks like US viewers are heavy contributors in the IMDb voting system!\nKey things to note about this visualization:\n\nUse of a lower alpha value is a functional way to represent density. In addition to the wider scatter plot, there’s a clear pattern of higher density which probably contributes heavily to the overall trend line.\nThe colour scheme is eye-catching but not abrasive. In design/art this is called a monocolour (a single colour with white or black to modify the colour) - it’s highly cohesive and will generally be considered aesthetically pleasing. Note how the text uses the same colour, and the bolded text is also a colour found on the plot itself. The plot is probably using theme_minimal().\nThere is a hierarchy of black, with the title in black, the sub-heading in dark grey, the text below the chart in two separate light greys. This draws the eye to the top and guides the eye downwards. The two axis labels break from this, but only slightly, so that they stand out subtly - you can see them but they don’t distract you.\nText on the plot: this is not too common in scientific journal articles, but is a useful tool for science communication to a wider audience.",
+    "crumbs": [
+      "Exemplar visualizations - what far can we take it?"
+    ]
+  },
+  {
+    "objectID": "viz_2_exploratoryAnalysis.html#evolution-over-time",
+    "href": "viz_2_exploratoryAnalysis.html#evolution-over-time",
+    "title": "Visualization for ourselves - Exploratory Analysis",
+    "section": "Evolution (over time)",
+    "text": "Evolution (over time)",
+    "crumbs": [
+      "Visualization for ourselves - Exploratory Analysis"
+    ]
+  },
+  {
+    "objectID": "viz_2_exploratoryAnalysis.html#a-useful-resource",
+    "href": "viz_2_exploratoryAnalysis.html#a-useful-resource",
+    "title": "Visualization for ourselves - Exploratory Analysis",
+    "section": "A useful resource",
+    "text": "A useful resource\nI highly recommend !from Data to Viz as a resource for thinking about your data and what type of chart might be appropriate.\nfrom Data to Viz decision tree\nFirst, it shows a decision tree for each of the different data types (numeric, categoric etc.,). Within the data types you can look at plots for different subcategories (single numeric data, two numeric variables etc.,) and there is a “story” article for each subcategory that covers an example and explanations.\n[from Data to Viz plot information]\nYou can also click on a given plot type in the decision tree to open up a panel and view information about the plot type. Each plot also has a !dedicated page that gives a full breakdown of the plot, explaining the required variables and some beautiful examples.",
     "crumbs": [
       "Visualization for ourselves - Exploratory Analysis"
     ]

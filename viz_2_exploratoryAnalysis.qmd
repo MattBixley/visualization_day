@@ -7,7 +7,7 @@ Visualization is most often thought of as something we do for other people, to s
 
 In this section we will perform some quick data visualizations that we can use for our own observations. The output of this section does not need to be overly attractive, but it does need to be clear and should 'standalone' (*i.e.,* should speak for itself, without the need of accompanying notes).
 
-The aims for this section are to give you the opportunity to practice some of the most important code used in visualizations and to force you to think about visualization: what types of figures work well for certain data, how to display the information you want to convey.
+The aims for this section are to give you the opportunity to practice some of the most important code used in visualizations and to force you to think about visualization: what types of figures work well for certain data, how to display the information you want to convey. 
 
 We will examine one type of graph to represent four different types of data: distribution, correlation, parts of a whole, and evolution (change over time). 
 
@@ -182,3 +182,19 @@ You can jump straight to our first example, [the waffle chart, here](https://r-g
 
 Back on the [main page](https://r-graph-gallery.com/#LogoMenu) we can see that this same level of information exists for other chart types too. Take two minutes to pick one of the Parts of a Whole plots and explore some of the information about this type of chart. 
 
+## Evolution (over time)
+
+
+
+
+## A useful resource
+
+I highly recommend [!from Data to Viz](https://www.data-to-viz.com/) as a resource for thinking about your data and what type of chart might be appropriate. 
+
+[from Data to Viz decision tree](images/dataToViz_decisionTree.png)
+
+First, it shows a decision tree for each of the different data types (numeric, categoric *etc.,*). Within the data types you can look at plots for different subcategories (single numeric data, two numeric variables *etc.,*) and there is a "story" article for each subcategory that covers an example and explanations. 
+
+[from Data to Viz plot information]
+
+You can also click on a given plot type in the decision tree to open up a panel and view information about the plot type. Each plot also has a [!dedicated page](https://www.data-to-viz.com/graph/bubble.html) that gives a full breakdown of the plot, explaining the required variables and some *beautiful* examples. 
