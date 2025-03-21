@@ -196,7 +196,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#heatmaps-with-geom_tile" id="toc-heatmaps-with-geom_tile" class="nav-link" data-scroll-target="#heatmaps-with-geom_tile">Heatmaps with geom_tile()</a></li>
   </ul></li>
   <li><a href="#parts-of-a-whole" id="toc-parts-of-a-whole" class="nav-link" data-scroll-target="#parts-of-a-whole">Parts of a whole</a></li>
-  <li><a href="#evolution-over-time" id="toc-evolution-over-time" class="nav-link" data-scroll-target="#evolution-over-time">Evolution (over time)</a></li>
+  <li><a href="#evolution-over-time" id="toc-evolution-over-time" class="nav-link" data-scroll-target="#evolution-over-time">Evolution (over time)</a>
+  <ul class="collapse">
+  <li><a href="#generate-a-dataset" id="toc-generate-a-dataset" class="nav-link" data-scroll-target="#generate-a-dataset">Generate a dataset</a></li>
+  <li><a href="#line-chart-with-geom_line" id="toc-line-chart-with-geom_line" class="nav-link" data-scroll-target="#line-chart-with-geom_line">Line chart with geom_line()</a></li>
+  <li><a href="#visual-interest-with-geom_area" id="toc-visual-interest-with-geom_area" class="nav-link" data-scroll-target="#visual-interest-with-geom_area">Visual interest with geom_area()</a></li>
+  <li><a href="#stacked-area-chart" id="toc-stacked-area-chart" class="nav-link" data-scroll-target="#stacked-area-chart">Stacked area chart</a></li>
+  </ul></li>
   <li><a href="#a-useful-resource" id="toc-a-useful-resource" class="nav-link" data-scroll-target="#a-useful-resource">A useful resource</a></li>
   </ul>
 </nav>
@@ -468,6 +474,123 @@ Solution
 </section>
 <section id="evolution-over-time" class="level2">
 <h2 class="anchored" data-anchor-id="evolution-over-time">Evolution (over time)</h2>
+<p>Here we will look at three variations of the line plot, which is used to show changes in a variable over time.</p>
+<section id="generate-a-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="generate-a-dataset">Generate a dataset</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">02</span>) <span class="co"># Please set this seed for this example</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create stock price data for three different stocks</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>dates <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(<span class="at">from =</span> <span class="fu">as.Date</span>(<span class="st">"2024-01-01"</span>), <span class="at">by =</span> <span class="st">"week"</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>stocks <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">date =</span> <span class="fu">rep</span>(dates, <span class="at">times =</span> <span class="dv">3</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">stock =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Stock A"</span>, <span class="st">"Stock B"</span>, <span class="st">"Stock C"</span>), <span class="at">each =</span> <span class="fu">length</span>(dates)),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">price =</span> <span class="fu">c</span>(</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span> <span class="sc">+</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(<span class="fu">length</span>(dates), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">5</span>)),  <span class="co"># Stock A fluctuates around 100</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="dv">80</span> <span class="sc">+</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(<span class="fu">length</span>(dates), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">4</span>)),   <span class="co"># Stock B fluctuates around 80</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="dv">120</span> <span class="sc">+</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(<span class="fu">length</span>(dates), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">6</span>))   <span class="co"># Stock C fluctuates around 120</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What is set.seed?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>What is set.seed? set.seed() is a function that feeds into any function that will randomly select or generate values. If we all use set.seed with the same number value, we will all get the same results, even though we are about to ‘randomly’ simulate some data. In future you can use any numeric value for set.seed(), so long as you keep it consistent within experiments.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="line-chart-with-geom_line" class="level3">
+<h3 class="anchored" data-anchor-id="line-chart-with-geom_line">Line chart with geom_line()</h3>
+<p>The simplest plot for change over time is geom_line().</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(stocks <span class="sc">%&gt;%</span> <span class="fu">filter</span>(stock <span class="sc">==</span> <span class="st">"Stock C"</span>), <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> price)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Stock C Price Over Time"</span>, <span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"Price"</span>) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="visual-interest-with-geom_area" class="level3">
+<h3 class="anchored" data-anchor-id="visual-interest-with-geom_area">Visual interest with geom_area()</h3>
+<p>The geom_area() function uses the same principal but also includes a filled or shaded area below the line. This is the same data, but due to the shading makes the whole plot look less empty.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(stocks <span class="sc">%&gt;%</span> <span class="fu">filter</span>(stock <span class="sc">==</span> <span class="st">"Stock B"</span>), <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> price)) <span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span>  <span class="co"># Keeps the line for clarity</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Stock B Price Over Time (Area Chart)"</span>, <span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"Price"</span>) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The choice of geom_line() or geom_area() is purely aesthetic.</p>
+</section>
+<section id="stacked-area-chart" class="level3">
+<h3 class="anchored" data-anchor-id="stacked-area-chart">Stacked area chart</h3>
+<p>The stacked area chart can be used to create a strong visual impact, especially if the correct colours are chosen. Here’s an example from Cédric Scherer:</p>
+<p><a href="images/CedricScherer_stackedAreaPlot.jpg">Appearance of the popular X-Men</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(stocks, <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> price, <span class="at">fill =</span> stock)) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span>  <span class="co"># Fill areas with transparency</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Stacked Area Chart of Stock Prices Over Time"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"Price"</span>, <span class="at">fill =</span> <span class="st">"Stock"</span>) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="viz_2_exploratoryAnalysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="on-the-dubious-rise-of-our-stocks" class="level4">
+<h4 class="anchored" data-anchor-id="on-the-dubious-rise-of-our-stocks">On the dubious rise of our stocks…</h4>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+…and the flaw with stacked area charts
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Looking at the stacked area plot you would be forgiven for thinking all three stocks have increased over time. Looking more closely you will notice that Stock A has not increased in value and has actually declined slightly.</p>
+<p>Because stacked area plots can be misleading, they are not recommended as a type of visualization.</p>
+<p>You can check the actual change in value of Stock A by repeating the code for the line or single variable area plot, changing the code to filter(stock == “Stock A”) (and updating the figure title of course).</p>
+<p>An alternative to stacked area plots is the use of facet, which will allow us to visualize multiple stocks at once by creating individual panels.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
 </section>
 <section id="a-useful-resource" class="level2">
 <h2 class="anchored" data-anchor-id="a-useful-resource">A useful resource</h2>
