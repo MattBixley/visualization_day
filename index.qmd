@@ -15,7 +15,7 @@ about: # https://quarto.org/docs/websites/website-about.html
 
 Good visualization is about more than just writing the correct code. Visualization is communication, and good communication requires thinking about how we as the scientist/data analyst/creator convey our message to the reader. This one-day workshop will provide you with a toolbox of skills and code examples to help you create clear, visually interesting visualizations which accurately communicate a message. 
 
-## This workshop has four components
+## This workshop has five sections
 
 The basic code template for ggplot.
 
@@ -23,7 +23,9 @@ Visualization for our selves (exploratory analysis).
 
 Examples of good visualization (with code).
 
-Visualizing your own data.
+Iteratively building a figure.
+
+Visualization from start to finish.
 
 
 

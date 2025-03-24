@@ -272,8 +272,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="anchored" data-anchor-id="beeswarm-plots">Beeswarm plots</h4>
 <p>Like with the geom_boxplot() we looked at in the previous episode, we need to specify where the data comes from and how the data is mapped. Beeswarm plots are simple and we will initially only need to specify the x and y axis data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_beeswarm</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_beeswarm</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -290,8 +292,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Alpha is the level of transparency. When data points are too large (from the size argument), or too numerous, the points can overlap one another (a problem called “overplotting”). This is particularly problematic outside of beeswarm. When we set alpha to something less than 1, the points become somewhat transparent. Therefore, if two points overlap one another, it is clear from the change in colour (as two transparent but overlapping points are darker than a single point).</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> flipper_length_mm, <span class="at">colour =</span> species)) <span class="sc">+</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_beeswarm</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> flipper_length_mm,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">colour =</span> species)) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_beeswarm</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -325,8 +330,11 @@ Dangers of distributions
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> flipper_length_mm, <span class="at">colour =</span> species)) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> flipper_length_mm,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">colour =</span> species)) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -339,12 +347,15 @@ Dangers of distributions
 <h4 class="anchored" data-anchor-id="theme-and-labels">Theme and labels</h4>
 <p>We can add two other functions to make this plot much easier to read. First, the theme_minimal() function is a quick way to set a global theme to the plot and make it less cluttered. The second function is labs(), which we use to add a title and x and y axes labels. We will cover themes more later, but adding theme_minimal() to every plot we do today will keep them looking tidy and coherent.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> flipper_length_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Flipper Length Distribution by Species"</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Species"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Flipper Length (mm)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> flipper_length_mm,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Flipper Length Distribution by Species"</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Species"</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Flipper Length (mm)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -469,7 +480,7 @@ Solution
 <section id="parts-of-a-whole" class="level2">
 <h2 class="anchored" data-anchor-id="parts-of-a-whole">Parts of a whole</h2>
 <p>In this section we will take a break from executing code and look at some examples. This is an opportunity to introduce you to the excellent resource that is the <a href="https://r-graph-gallery.com/#LogoMenu">R-graph-gallery</a>. We will scroll down to the “Parts of a whole” section, and walk through how this resource not only shows you different types of plots you can create, but provides you with code and reproducible examples.</p>
-<p>You can jump straight to our first example, <a href="https://r-graph-gallery.com/waffle.html">the waffle chart, here</a>. The R-graph-gallery gives an overview of the type of chart and highlights some of the key ways to get started. In the case of the waffle chart we can either use a dedicated package or explore how to build a waffle chart with ggplot2 syntax. Finally, there are three examples of high quality waffle charts - click on any of these three charts to get a detailed explanation of the code used to create the chart and an example dataset.</p>
+<p>You can jump straight to our first example, <a href="https://r-graph-gallery.com/waffle.html">the waffle chart, here</a>. The R-graph-gallery gives an overview of the type of chart and highlights some of the key ways to get started. In the case of the waffle chart we can either use a dedicated package or explore how to build a waffle chart with ggplot2 syntax. Finally, there are three examples of high quality waffle charts - click on any of these three charts to get a detailed explanation of the code used to create the chart and an example dataset. This <a href="https://r-graph-gallery.com/web-waffle-for-time-evolution.html">example by Muhammad Azhar</a> is my favourite, and they have all the code required to help you build your own version.</p>
 <p>Back on the <a href="https://r-graph-gallery.com/#LogoMenu">main page</a> we can see that this same level of information exists for other chart types too. Take two minutes to pick one of the Parts of a Whole plots and explore some of the information about this type of chart.</p>
 </section>
 <section id="evolution-over-time" class="level2">
@@ -582,7 +593,7 @@ What is set.seed?
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Looking at the stacked area plot you would be forgiven for thinking all three stocks have increased over time. Looking more closely you will notice that Stock A has not increased in value and has actually declined slightly.</p>
+<p>Looking at the stacked area plot you would be forgiven for thinking all three stocks have increased over time. Looking more closely you will notice that Stock A has not increased in value and is almost exactly where it started.</p>
 <p>Because stacked area plots can be misleading, they are not recommended as a type of visualization.</p>
 <p>You can check the actual change in value of Stock A by repeating the code for the line or single variable area plot, changing the code to filter(stock == “Stock A”) (and updating the figure title of course).</p>
 <p>An alternative to stacked area plots is the use of facet, which will allow us to visualize multiple stocks at once by creating individual panels.</p>
@@ -594,11 +605,21 @@ What is set.seed?
 </section>
 <section id="a-useful-resource" class="level2">
 <h2 class="anchored" data-anchor-id="a-useful-resource">A useful resource</h2>
-<p>I highly recommend <a href="https://www.data-to-viz.com/">!from Data to Viz</a> as a resource for thinking about your data and what type of chart might be appropriate.</p>
-<p><a href="images/dataToViz_decisionTree.png">from Data to Viz decision tree</a></p>
+<p>I highly recommend <a href="https://www.data-to-viz.com/">from Data to Viz</a> as a resource for thinking about your data and what type of chart might be appropriate.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/dataToViz_decisionTree.png" class="img-fluid figure-img"></p>
+<figcaption>from Data to Viz decision tree</figcaption>
+</figure>
+</div>
 <p>First, it shows a decision tree for each of the different data types (numeric, categoric <em>etc.,</em>). Within the data types you can look at plots for different subcategories (single numeric data, two numeric variables <em>etc.,</em>) and there is a “story” article for each subcategory that covers an example and explanations.</p>
-<p>[from Data to Viz plot information]</p>
-<p>You can also click on a given plot type in the decision tree to open up a panel and view information about the plot type. Each plot also has a <a href="https://www.data-to-viz.com/graph/bubble.html">!dedicated page</a> that gives a full breakdown of the plot, explaining the required variables and some <em>beautiful</em> examples.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/dataToViz_plotInfo.png" class="img-fluid figure-img"></p>
+<figcaption>from Data to Viz plot information</figcaption>
+</figure>
+</div>
+<p>You can also click on a given plot type in the decision tree to open up a panel and view information about the plot type. Each plot also has a <a href="https://www.data-to-viz.com/graph/bubble.html">dedicated page</a> that gives a full breakdown of the plot, explaining the required variables and some <em>beautiful</em> examples.</p>
 
 
 </section>

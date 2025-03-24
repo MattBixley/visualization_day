@@ -132,12 +132,6 @@ The summary() function is very useful here. Looking at the column for Rating_Val
 
 **Exercise:** Is my hypothesis (very high scores are the result of low sampling bias) true? What type of visualization would help us to test this? In the space below, create a quick plot to ask whether there is a low-sampling bias present.
 
-If you'd like a reminder, here's a ggplot template from earlier (though, geom_boxplot() might not be what you are after...): 
-
-ggplot(data = penData, 
-        mapping = aes(x = species, y = bill_length_mm)) + 
-geom_boxplot()
-
 ```{r}
 
 ```
@@ -148,7 +142,9 @@ geom_boxplot()
 I am assuming there is a negative relationship between avg_Rating and Rating_count (fewer ratings allow for a higher avg score). A scatter plot, made with geom_point(), with Rating_Count and Rating_Value on the x and y, is a quick and easy way to visualize a relationship like this.
 
 ```{r}
-ggplot(data = parfumo_data_clean, mapping = aes(x = Rating_Count, y = Rating_Value)) +
+ggplot(data = parfumo_data_clean, 
+      mapping = aes(x = Rating_Count, 
+                    y = Rating_Value)) +
   geom_point()
 ```
 
@@ -358,7 +354,8 @@ To start a visualization I will 'sketch' a figure to determine different ways to
 
 ```{r}
 ggplot(data = perfume_brand_data,
-       mapping = aes(x = Rating_Value, y = Brand)) +
+       mapping = aes(x = Rating_Value, 
+                      y = Brand)) +
   geom_boxplot()
 ```
 
@@ -382,6 +379,8 @@ Select a clear, visually appealing colour scheme. Make sure colours are accessib
 :::
 
 Fundamentally, I don't think the boxplot works. While it does show the median and summary values, I don't see a way to clearly show information like the number of perfumes (and, since that was a filtering criteria, I think it's worth showing) or to make it visually interesting.
+
+#### Exercise: Test out some other geoms and see if you can identify something that you like
 
 ### Building a visualization - sketch II
 
@@ -477,6 +476,8 @@ The viridis R package is one example of a package that claims* to have colour-bl
 
 ```{r}
 library(viridis)
+
+# install.packages("ggtext")
 library(ggtext)
 
 ggplot(brandRatingData, 

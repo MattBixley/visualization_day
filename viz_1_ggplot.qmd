@@ -10,13 +10,14 @@ In this section we will cover the basic format of ggplot functions. We will note
 Load the palmerpenguins package for an example dataset, ggplot2 for the plotting functions, and dplyr for the pipe (|>).
 
 ```{r}
+# install.packages("palmerpenguins")
 library(palmerpenguins)
-# palmerpenguins has loaded a hidden object into your R environment, called penguins, which has data we will use for plotting.
 library(ggplot2)
 library(dplyr)
 ```
+The palmerpenguins package has loaded a hidden object into your R environment, called penguins, which has data we will use for plotting.
 
-The penguins object from the palmerpenguins dataset includes NAs. For simplicity we will remove these now, and call our new object penData.
+The penguins object from the palmerpenguins dataset includes NAs. For simplicity we will remove these NAs, and call our new object penData.
 
 ```{r}
 penData <- penguins |> na.omit()
@@ -78,6 +79,8 @@ This example creates a more complex plot, but these new arguments and functions 
 ```{r}
 # Load the viridis library, which supplies a colour scheme that is
 # sensitive to colour-blindness.
+
+# install.packages("viridis")
 library(viridis)
 
 # New arguments map species to the colour variable, so that each point is coloured

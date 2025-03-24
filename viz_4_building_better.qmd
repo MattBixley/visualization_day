@@ -3,18 +3,20 @@ title: Building Better Plots
 toc: true
 ---
 
-*Note to self*: The purpose of this episode is to:
+The purpose of this episode is to:
 
-- solidify the template of ggplot2 in the mind of the users, so that they can remember and confidently create a basic plot and 
+- solidify the template of ggplot2 in your so that you can remember and confidently create a basic plot 
+
+and 
 
 - introduce new geoms, familiarise ourselves with the use of arguments for different visual looks 
 
-This episode follows the outline produced by the very skilled data visualizer Cédric Scherer, modified to work with some example data and updated with my own thoughts and opinions. Cédric's [original tutorial](https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/) is well working looking at, as they are a real expert in the field of visualization.
+This episode follows the outline produced by the very skilled data visualizer Cédric Scherer, modified to work with some example data and updated with my own thoughts and opinions. Cédric's [original tutorial](https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot/) is well worth looking at, as they are a real expert in the field of visualization.
 
 
 ## The data
 
-The example dataset we are using for this session comes from [Wilderlab](https://www.wilderlab.co.nz/), a company based in Aotearoa who provide eDNA monitoring and testing services (primarily from water samples). When a client orders DNA testing through Wilderlab they have the option of making their results public as a way to "provide a useful resource for scientists, conservationists, educators, and anyone else with an interest in Aotearoa's biodiversity, water quality and biosecurity.". We will access a small subset of the data which I have accessed and curated for the workshop. It is currently stored on github as a .tsv file. 
+The example dataset we are using for this session comes from [Wilderlab](https://www.wilderlab.co.nz/), a company based in Aotearoa who provide eDNA monitoring and testing services (primarily from water samples). When a client orders DNA testing through Wilderlab they have the option of making their results public as a way to "provide a useful resource for scientists, conservationists, educators, and anyone else with an interest in Aotearoa's biodiversity, water quality and biosecurity". We will access a small subset of the data which I have accessed and curated for the workshop. It is currently stored on github as a .tsv file. 
 
 eDNA sequences are assigned a taxonomy, and when multiple sequences map to the same taxonomic unit (in our case to the level of the same genus), those additional sequences contribute to the variable called Count. I selected the 10 Groups (a classification level, *e.g.,* Birds, Fish, Diatoms, Plants) with the highest number of sequences (that is, the groups with the most species diversity), randomly selected 500 of these sequences for each group, and saved the data to a file. We can now look at Count (the abundance) of these sequences and see if this varies across Groups. 
 
@@ -39,6 +41,12 @@ top_group_counts <- read.delim("https://raw.githubusercontent.com/tylermcinnes/v
 Here we will use some functions to check features of our data
 
 ```{r}
+top_group_counts |> head()
+
+top_group_counts |> tail()
+
+top_group_counts |> class()
+
 # Verify that all groups have 500 observations
 top_group_counts |> 
   group_by(Group) |> 
@@ -46,11 +54,6 @@ top_group_counts |>
   arrange(desc(observations)) |> 
   head()
 
-top_group_counts |> head()
-
-top_group_counts |> tail()
-
-top_group_counts |> class()
 ```
 
 
@@ -150,6 +153,7 @@ groupCounts <- ggplot(top_group_counts_sorted,
   labs(title = "eDNA counts vary across species groups",
        x = "log(Count)", 
        y = "Group") +
+  theme_minimal() +     
   theme(
     legend.position = "none",
     plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
@@ -176,17 +180,21 @@ groupCounts +
 ```
 
 ```{r}
-groupCounts + geom_line()
+groupCounts + 
+  geom_line()
 ```
 
 ```{r}
-groupCounts + geom_point()
+groupCounts + 
+  geom_point()
 ```
 
 A particularly useful argument with the geom_point() function is alpha, which controls the opacity/transparency of the points. With reduced opacity we can see more clearly when points are placed on top of one another. It is less clear in this example because there are so many data points in a small space, but it's usefulness will become more apparent shortly.
 
 ```{r}
-groupCounts + geom_point(size = 3, alpha = 0.2)
+groupCounts + 
+  geom_point(size = 3, 
+              alpha = 0.2)
 ```
 
 ### Combining geoms
@@ -203,13 +211,19 @@ Note that we've included a new argument in geom_boxplot(): "outlier.alpha = 0". 
 While the above demonstrates the concept of combining geoms, it's not very functional. The high density of our points on a straight line is creating a strong effect that is over-powering other visualizations. We can change the points from being on a single line to spaced apart with the geom_jitter() function.
 
 ```{r}
-groupCounts + geom_jitter(size = 2, alpha = 0.2, width = 0.2)
+groupCounts + 
+  geom_jitter(size = 2, 
+              alpha = 0.2, 
+              width = 0.2)
 ```
 
 ```{r}
 groupCounts + 
-  geom_boxplot(colour = "gray40", outlier.alpha = 0) +
-  geom_jitter(size = 2, alpha = 0.2, width = 0.2)
+  geom_boxplot(colour = "gray40", 
+                outlier.alpha = 0) +
+  geom_jitter(size = 2, 
+              alpha = 0.2, 
+              width = 0.2)
 # gray40 is a darker gray that is not quite black. I had to test multiple 
 # colours to find one that was clearly visible but not overwhelming.
 ```
@@ -224,8 +238,13 @@ First, we will visualize the Group means with the stat_summary function.
 
 ```{r}
 groupCounts +
-  geom_jitter(size = 2, alpha = 0.2, width = 0.2) +
-  stat_summary(fun = mean, geom = "point", size = 5, colour = "gray40")
+  geom_jitter(size = 2, 
+              alpha = 0.2, 
+              width = 0.2) +
+  stat_summary(fun = mean, 
+                geom = "point", 
+                size = 5, 
+                colour = "gray40")
 ```
 Note: here we have selected the size of the stat_summary point as 5, but we could also provide a set of values (e.g., if we had different numbers of observations per group). 
 
@@ -238,18 +257,34 @@ top10_group_avg <- top_group_counts_sorted |>
   pull(t10_avg)
 
 groupCounts +
-  geom_vline(aes(xintercept = top10_group_avg), colour = "gray50", size = 0.6) +
-  stat_summary(colour = "gray40",fun = mean, geom = "point", size = 5) +
-  geom_jitter(size = 2, alpha = 0.2, width = 0.2)
+  geom_vline(aes(xintercept = top10_group_avg), 
+                  colour = "gray50", 
+                  size = 0.6) +
+  stat_summary(colour = "gray40",
+                fun = mean, 
+                geom = "point", 
+                size = 5) +
+  geom_jitter(size = 2, 
+              alpha = 0.2, 
+              width = 0.2)
 ```
 
 Geom order matters! Note how the summary points (black) are obscured by the coloured points produced by geom_jitter()? We can switch the order so that the jitter points are drawn first, and the summary points placed on top. 
 
 ```{r}
 groupCounts +
-  geom_jitter(size = 2, alpha = 0.2, width = 0.2) +
-  geom_vline(aes(xintercept = top10_group_avg), colour = "gray50", size = 0.6, alpha = 0.8) +
-  stat_summary(colour = "gray50",fun = mean, geom = "point", size = 5, alpha = 0.75)
+  geom_jitter(size = 2, 
+              alpha = 0.2, 
+              width = 0.2) +
+  geom_vline(aes(xintercept = top10_group_avg), 
+                  colour = "gray50", 
+                  size = 0.6, 
+                  alpha = 0.8) +
+  stat_summary(colour = "gray50",
+                fun = mean, 
+                geom = "point", 
+                size = 5, 
+                alpha = 0.75)
 ```
 
 If we are trying to highlight the difference between a Group mean and the global mean, this can be amplified by adding text to our image. 
@@ -258,9 +293,18 @@ If we are trying to highlight the difference between a Group mean and the global
 groupMeans <- top_group_counts_sorted |> group_by(Group) |> summarise(groupMean = log(mean(Count))) |> pull(groupMean)
 
 groupCounts +
-  geom_jitter(size = 2, alpha = 0.2, width = 0.2) +
-  geom_vline(aes(xintercept = top10_group_avg), colour = "gray50", size = 0.6, alpha = 0.8) +
-  stat_summary(colour = "gray60",fun = mean, geom = "point", size = 5, alpha = 0.8) +
+  geom_jitter(size = 2, 
+              alpha = 0.2, 
+              width = 0.2) +
+  geom_vline(aes(xintercept = top10_group_avg), 
+                  colour = "gray50", 
+                  size = 0.6, 
+                  alpha = 0.8) +
+  stat_summary(colour = "gray60",
+                fun = mean, 
+                geom = "point", 
+                size = 5, 
+                alpha = 0.8) +
   annotate(
     "text", x = 7.8, y = 10, size = 2.8, color = "gray20", lineheight = .9,
     label = glue::glue("Counts for fish are significantly higher\nthan other groups (7.6)")

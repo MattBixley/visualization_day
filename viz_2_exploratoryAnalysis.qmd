@@ -41,7 +41,9 @@ Like with the geom_boxplot() we looked at in the previous episode, we need to sp
 
 ```{r}
 #| warning: false
-ggplot(penguins, aes(x = species, y = flipper_length_mm)) +
+ggplot(data = penguins,
+        mapping = aes(x = species,
+                      y = flipper_length_mm)) +
   geom_beeswarm()
 ```
 **Note:** *When running this code, ggplot gives us a warning that rows were removed due to missing values. I've added a hidden line of code to suppress these warnings.*
@@ -56,7 +58,10 @@ Distribution plots are a good opportunity to introduce two new parameters we can
 
 ```{r}
 #| warning: false
-ggplot(penguins, aes(x = species, y = flipper_length_mm, colour = species)) +
+ggplot(data = penguins,
+        mapping = aes(x = species,
+                      y = flipper_length_mm,
+                      colour = species)) +
   geom_beeswarm(size = 2, alpha = 0.7)
 ```
 
@@ -80,7 +85,10 @@ Your choice of visualization can have a strong impact on what people see.
 
 ```{r}
 #| warning: false
-ggplot(penguins, aes(x = species, y = flipper_length_mm, colour = species)) +
+ggplot(data = penguins, 
+        mapping = aes(x = species, 
+                      y = flipper_length_mm,
+                      colour = species)) +
   geom_quasirandom(size = 2, alpha = 0.7)
 ```
 
@@ -89,7 +97,10 @@ We can add two other functions to make this plot much easier to read. First, the
 
 ```{r}
 #| warning: false
-ggplot(penguins, aes(x = species, y = flipper_length_mm, color = species)) +
+ggplot(data = penguins, 
+        mapping = aes(x = species,
+                      y = flipper_length_mm,
+                      color = species)) +
   geom_quasirandom(size = 2, alpha = 0.7) +
   theme_minimal() +
   labs(title = "Flipper Length Distribution by Species",
@@ -178,7 +189,7 @@ ggplot(data = month_data,
 
 In this section we will take a break from executing code and look at some examples. This is an opportunity to introduce you to the excellent resource that is the [R-graph-gallery](https://r-graph-gallery.com/#LogoMenu). We will scroll down to the "Parts of a whole" section, and walk through how this resource not only shows you different types of plots you can create, but provides you with code and reproducible examples.
 
-You can jump straight to our first example, [the waffle chart, here](https://r-graph-gallery.com/waffle.html). The R-graph-gallery gives an overview of the type of chart and highlights some of the key ways to get started. In the case of the waffle chart we can either use a dedicated package or explore how to build a waffle chart with ggplot2 syntax. Finally, there are three examples of high quality waffle charts - click on any of these three charts to get a detailed explanation of the code used to create the chart and an example dataset. 
+You can jump straight to our first example, [the waffle chart, here](https://r-graph-gallery.com/waffle.html). The R-graph-gallery gives an overview of the type of chart and highlights some of the key ways to get started. In the case of the waffle chart we can either use a dedicated package or explore how to build a waffle chart with ggplot2 syntax. Finally, there are three examples of high quality waffle charts - click on any of these three charts to get a detailed explanation of the code used to create the chart and an example dataset. This [example by Muhammad Azhar](https://r-graph-gallery.com/web-waffle-for-time-evolution.html) is my favourite, and they have all the code required to help you build your own version.
 
 Back on the [main page](https://r-graph-gallery.com/#LogoMenu) we can see that this same level of information exists for other chart types too. Take two minutes to pick one of the Parts of a Whole plots and explore some of the information about this type of chart. 
 
@@ -256,7 +267,7 @@ ggplot(stocks, aes(x = date, y = price, fill = stock)) +
 ::: {.callout-tip collapse="true"}
 ## ...and the flaw with stacked area charts
 
-Looking at the stacked area plot you would be forgiven for thinking all three stocks have increased over time. Looking more closely you will notice that Stock A has not increased in value and has actually declined slightly. 
+Looking at the stacked area plot you would be forgiven for thinking all three stocks have increased over time. Looking more closely you will notice that Stock A has not increased in value and is almost exactly where it started. 
 
 Because stacked area plots can be misleading, they are not recommended as a type of visualization.
 
@@ -269,12 +280,12 @@ An alternative to stacked area plots is the use of facet, which will allow us to
 
 ## A useful resource
 
-I highly recommend [!from Data to Viz](https://www.data-to-viz.com/) as a resource for thinking about your data and what type of chart might be appropriate. 
+I highly recommend [from Data to Viz](https://www.data-to-viz.com/) as a resource for thinking about your data and what type of chart might be appropriate. 
 
-[from Data to Viz decision tree](images/dataToViz_decisionTree.png)
+![from Data to Viz decision tree](images/dataToViz_decisionTree.png)
 
 First, it shows a decision tree for each of the different data types (numeric, categoric *etc.,*). Within the data types you can look at plots for different subcategories (single numeric data, two numeric variables *etc.,*) and there is a "story" article for each subcategory that covers an example and explanations. 
 
-[from Data to Viz plot information]
+![from Data to Viz plot information](images/dataToViz_plotInfo.png)
 
-You can also click on a given plot type in the decision tree to open up a panel and view information about the plot type. Each plot also has a [!dedicated page](https://www.data-to-viz.com/graph/bubble.html) that gives a full breakdown of the plot, explaining the required variables and some *beautiful* examples. 
+You can also click on a given plot type in the decision tree to open up a panel and view information about the plot type. Each plot also has a [dedicated page](https://www.data-to-viz.com/graph/bubble.html) that gives a full breakdown of the plot, explaining the required variables and some *beautiful* examples. 
