@@ -72,7 +72,7 @@ ggplot(data = penguins,
 
 geom_quasirandom() is a function very similar to geom_beeswarm(), but instead of strictly moving points, they are quasi-randomly moved. 
 
-Compare the plot below with the plot above. What is different between them? 
+#### Exercise: Compare the plot below with the plot above. What is different between them? 
 
 ::: {.callout-tip collapse="true"}
 ## Dangers of distributions
@@ -278,14 +278,10 @@ An alternative to stacked area plots is the use of facet, which will allow us to
 :::
 
 
-## A useful resource
+## Summary
 
-I highly recommend [from Data to Viz](https://www.data-to-viz.com/) as a resource for thinking about your data and what type of chart might be appropriate. 
+The two key messages from this episode are:
 
-![from Data to Viz decision tree](images/dataToViz_decisionTree.png)
+- There are lots of different chart types available to you, and they mostly follow the same template with slight variations in the geom_() function and the arguments supplied.
 
-First, it shows a decision tree for each of the different data types (numeric, categoric *etc.,*). Within the data types you can look at plots for different subcategories (single numeric data, two numeric variables *etc.,*) and there is a "story" article for each subcategory that covers an example and explanations. 
-
-![from Data to Viz plot information](images/dataToViz_plotInfo.png)
-
-You can also click on a given plot type in the decision tree to open up a panel and view information about the plot type. Each plot also has a [dedicated page](https://www.data-to-viz.com/graph/bubble.html) that gives a full breakdown of the plot, explaining the required variables and some *beautiful* examples. 
+- How you visualize your data can have an impact on what other people see. The human brain is amazing, but even on our best days we make assumptions, or can be distracted, and reach the wrong conclusion. Strive to make your data as clear and transparent as possible. 

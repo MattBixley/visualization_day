@@ -318,12 +318,17 @@ groupCounts +
 This isn't necessarily something you would do in many types of plots, but is useful to draw attention to key points (often, e.g., a single gene of interest in a scatter plot). 
 
 
+### Saving a plot
 
+We can run the code below to save a plot with a given set of dimensions. The default is inches, but we can set this to cm or pixels.
 
 ```{r}
-
 ggsave("boxplot.png", height = 10, width = 8)
-
 
 ```
 
+## Summary
+
+By saving some of the ggplot2 code into an object, we can quickly and easily iterate on a plot, letting us sketch out different plot types and styles. The theme function let's us save a set of traits that we can use across all of our visualizations, giving us a cohesive look across a single document.
+
+Geom functions can be combined in different ways to build up a complex chart, while still sticking to our basic template. 

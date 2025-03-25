@@ -7,6 +7,8 @@ output: html_document
 
 *Note self:* this section should be preceeded by an introduction and explanation to tidytuesday (in the exemplar episode), so that readers have context about where this data came from, why we are using it. This section then actively demonstrates the importance of the community effort of tidytuesday (and contributes to their 2024 aim of being involved in 10+ courses (they achieved 30+)).
 
+
+
 ## Overview
 
 Together, we are going to go from start to finish and create a visualization. Start to finish means we will need to explore the data, make decisions involving modifications and transformations, and finally, visualize the data in a meaningful way.
@@ -512,20 +514,15 @@ d) suitable for conveying the basic information (Brand rating) at a glance. Even
 
 
 
-## Visualization III
-
-
-
-Adding skills from Cedric's Evolution of a boxplot (mean line, text, arrows).
-
-## Conclusion
-
-Recap: here's the initial plot. Does it display the data? Yes.
-
-Here's the finished product, does it convey the data? Heck yes it does!
-
-The goal isn't *just* to show the data. It's to excite the audience, to capture and retain attention in an **extremely** noisy world. This is a visualization I'm proud of.
-
 ## Final exercise
 
 Use the information we have discussed, and the lessons from earlier, to trial out some different geoms and visualization styles. See what code you can apply (*e.g.,* changing size/colour) with other geoms. 
+
+
+## Summary
+
+Before we can visualize our data we may have to transform it in some way or another. We may have to make difficult choices around thresholds of significance or what data to include or remove. 
+
+Careful choice of geoms and mapping allow us to show data on more than just two or three axes. 
+
+The goal isn't *just* to show the data. It's to excite the audience, to capture and retain attention in an **extremely** noisy world. 

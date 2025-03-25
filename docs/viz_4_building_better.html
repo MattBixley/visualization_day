@@ -200,7 +200,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#theme" id="toc-theme" class="nav-link" data-scroll-target="#theme">Theme</a></li>
   <li><a href="#combining-geoms" id="toc-combining-geoms" class="nav-link" data-scroll-target="#combining-geoms">Combining geoms</a></li>
   <li><a href="#even-more-geoms" id="toc-even-more-geoms" class="nav-link" data-scroll-target="#even-more-geoms">(Even) more geoms</a></li>
+  <li><a href="#saving-a-plot" id="toc-saving-a-plot" class="nav-link" data-scroll-target="#saving-a-plot">Saving a plot</a></li>
   </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
 </nav>
     </div>
@@ -709,12 +711,21 @@ Solution
 </div>
 </div>
 <p>This isn’t necessarily something you would do in many types of plots, but is useful to draw attention to key points (often, e.g., a single gene of interest in a scatter plot).</p>
+</section>
+<section id="saving-a-plot" class="level3">
+<h3 class="anchored" data-anchor-id="saving-a-plot">Saving a plot</h3>
+<p>We can run the code below to save a plot with a given set of dimensions. The default is inches, but we can set this to cm or pixels.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"boxplot.png"</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">width =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-
-
 </section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>By saving some of the ggplot2 code into an object, we can quickly and easily iterate on a plot, letting us sketch out different plot types and styles. The theme function let’s us save a set of traits that we can use across all of our visualizations, giving us a cohesive look across a single document.</p>
+<p>Geom functions can be combined in different ways to build up a complex chart, while still sticking to our basic template.</p>
+
+
 </section>
 
 </main> <!-- /main -->

@@ -203,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#visual-interest-with-geom_area" id="toc-visual-interest-with-geom_area" class="nav-link" data-scroll-target="#visual-interest-with-geom_area">Visual interest with geom_area()</a></li>
   <li><a href="#stacked-area-chart" id="toc-stacked-area-chart" class="nav-link" data-scroll-target="#stacked-area-chart">Stacked area chart</a></li>
   </ul></li>
-  <li><a href="#a-useful-resource" id="toc-a-useful-resource" class="nav-link" data-scroll-target="#a-useful-resource">A useful resource</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
 </nav>
     </div>
@@ -311,7 +311,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="geom_quasirandom-and-dangerous-distributions" class="level3">
 <h3 class="anchored" data-anchor-id="geom_quasirandom-and-dangerous-distributions">geom_quasirandom and dangerous distributions</h3>
 <p>geom_quasirandom() is a function very similar to geom_beeswarm(), but instead of strictly moving points, they are quasi-randomly moved.</p>
-<p>Compare the plot below with the plot above. What is different between them?</p>
+<section id="exercise-compare-the-plot-below-with-the-plot-above.-what-is-different-between-them" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-compare-the-plot-below-with-the-plot-above.-what-is-different-between-them">Exercise: Compare the plot below with the plot above. What is different between them?</h4>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -343,6 +344,7 @@ Dangers of distributions
 </div>
 </div>
 </div>
+</section>
 <section id="theme-and-labels" class="level4">
 <h4 class="anchored" data-anchor-id="theme-and-labels">Theme and labels</h4>
 <p>We can add two other functions to make this plot much easier to read. First, the theme_minimal() function is a quick way to set a global theme to the plot and make it less cluttered. The second function is labs(), which we use to add a title and x and y axes labels. We will cover themes more later, but adding theme_minimal() to every plot we do today will keep them looking tidy and coherent.</p>
@@ -603,23 +605,13 @@ What is set.seed?
 </section>
 </section>
 </section>
-<section id="a-useful-resource" class="level2">
-<h2 class="anchored" data-anchor-id="a-useful-resource">A useful resource</h2>
-<p>I highly recommend <a href="https://www.data-to-viz.com/">from Data to Viz</a> as a resource for thinking about your data and what type of chart might be appropriate.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/dataToViz_decisionTree.png" class="img-fluid figure-img"></p>
-<figcaption>from Data to Viz decision tree</figcaption>
-</figure>
-</div>
-<p>First, it shows a decision tree for each of the different data types (numeric, categoric <em>etc.,</em>). Within the data types you can look at plots for different subcategories (single numeric data, two numeric variables <em>etc.,</em>) and there is a “story” article for each subcategory that covers an example and explanations.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/dataToViz_plotInfo.png" class="img-fluid figure-img"></p>
-<figcaption>from Data to Viz plot information</figcaption>
-</figure>
-</div>
-<p>You can also click on a given plot type in the decision tree to open up a panel and view information about the plot type. Each plot also has a <a href="https://www.data-to-viz.com/graph/bubble.html">dedicated page</a> that gives a full breakdown of the plot, explaining the required variables and some <em>beautiful</em> examples.</p>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>The two key messages from this episode are:</p>
+<ul>
+<li><p>There are lots of different chart types available to you, and they mostly follow the same template with slight variations in the geom_() function and the arguments supplied.</p></li>
+<li><p>How you visualize your data can have an impact on what other people see. The human brain is amazing, but even on our best days we make assumptions, or can be distracted, and reach the wrong conclusion. Strive to make your data as clear and transparent as possible.</p></li>
+</ul>
 
 
 </section>
