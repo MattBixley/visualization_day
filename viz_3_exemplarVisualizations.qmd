@@ -1,5 +1,5 @@
 ---
-title: Exemplar visualizations - what far can we take it?
+title: Exemplar visualizations - how far can we take it?
 toc: true
 ---
 
