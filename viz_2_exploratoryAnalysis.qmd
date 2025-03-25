@@ -89,7 +89,8 @@ ggplot(data = penguins,
         mapping = aes(x = species, 
                       y = flipper_length_mm,
                       colour = species)) +
-  geom_quasirandom(size = 2, alpha = 0.7)
+  geom_quasirandom(size = 2, 
+                    alpha = 0.7)
 ```
 
 #### Theme and labels
@@ -129,7 +130,9 @@ First, we will generate some example data. Copy and paste this code, because it 
 ```{r}
 set.seed(0982)
 month_data <- tibble(
-  date = seq(as.Date("2024-12-01"), as.Date("2024-12-31"), by = "day"),
+  date = seq(as.Date("2024-12-01"), 
+              as.Date("2024-12-31"), 
+              by = "day"),
   count = sample(1:20, 31, replace = TRUE)  # Random counts per day
 ) |>
   mutate(
@@ -145,7 +148,9 @@ month_data |> head()
 Now we will create the plot with geom_tile(). Like with the geom_boxplot() we looked at in the previous episode, we need to specify where the data comes from and how the data is mapped. With geom_tile() we will always need to use aes() to specify the x and y, and we will also specify the variable that is used to determine the colour of each tile, which we do with "fill = ". In our example we will map the count variable to fill. 
 ```{r}
 ggplot(data = month_data,
-       mapping = aes(x = week, y = wday, fill = count)) +
+       mapping = aes(x = week, 
+                      y = wday, 
+                      fill = count)) +
   geom_tile()
 ```
 
@@ -172,7 +177,9 @@ You do not need to do all of these changes, but try them out if you can! Remembe
 
 ```{r}
 ggplot(data = month_data,
-       mapping = aes(x = wday, y = week, fill = count)) +
+       mapping = aes(x = wday, 
+                      y = week, 
+                      fill = count)) +
   geom_tile(colour = "white") +
   scale_fill_viridis_c() +
   scale_y_reverse() +
@@ -203,7 +210,9 @@ Here we will look at three variations of the line plot, which is used to show ch
 set.seed(02) # Please set this seed for this example
 
 # Create stock price data for three different stocks
-dates <- seq.Date(from = as.Date("2024-01-01"), by = "week", length.out = 200)
+dates <- seq.Date(from = as.Date("2024-01-01"), 
+                  by = "week", 
+                  length.out = 200)
 
 stocks <- tibble(
   date = rep(dates, times = 3),
@@ -228,9 +237,13 @@ In future you can use any numeric value for set.seed(), so long as you keep it c
 The simplest plot for change over time is geom_line(). 
 
 ```{r}
-ggplot(stocks %>% filter(stock == "Stock C"), aes(x = date, y = price)) +
+ggplot(stocks %>% filter(stock == "Stock C"), 
+        aes(x = date, 
+            y = price)) +
   geom_line() +
-  labs(title = "Stock C Price Over Time", x = "Date", y = "Price") +
+  labs(title = "Stock C Price Over Time", 
+        x = "Date", 
+        y = "Price") +
   theme_minimal()
 ```
 
@@ -239,10 +252,15 @@ ggplot(stocks %>% filter(stock == "Stock C"), aes(x = date, y = price)) +
 The geom_area() function uses the same principal but also includes a filled or shaded area below the line. This is the same data, but due to the shading makes the whole plot look less empty.
 
 ```{r}
-ggplot(stocks %>% filter(stock == "Stock B"), aes(x = date, y = price)) +
-  geom_area(fill = "black", alpha = 0.4) +
-  geom_line(color = "black", size = 0.5) +  # Keeps the line for clarity
-  labs(title = "Stock B Price Over Time (Area Chart)", x = "Date", y = "Price") +
+ggplot(stocks %>% filter(stock == "Stock B"), 
+        aes(x = date, y = price)) +
+  geom_area(fill = "black", 
+            alpha = 0.4) +
+  geom_line(color = "black", 
+            size = 0.5) +  # Keeps the line for clarity
+  labs(title = "Stock B Price Over Time (Area Chart)", 
+        x = "Date", 
+        y = "Price") +
   theme_minimal()
 ```
 
@@ -255,10 +273,14 @@ The stacked area chart can be used to create a strong visual impact, especially 
 [Appearance of the popular X-Men](images/CedricScherer_stackedAreaPlot.jpg)
 
 ```{r}
-ggplot(stocks, aes(x = date, y = price, fill = stock)) +
+ggplot(stocks, aes(x = date, 
+                    y = price, 
+                    fill = stock)) +
   geom_area(alpha = 0.6) +  # Fill areas with transparency
   labs(title = "Stacked Area Chart of Stock Prices Over Time",
-       x = "Date", y = "Price", fill = "Stock") +
+       x = "Date", 
+       y = "Price", 
+       fill = "Stock") +
   theme_minimal()
 ```
 

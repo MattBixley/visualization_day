@@ -10,9 +10,9 @@ The aim of this section is to give you a set of resources that you can use to fi
 Here we will provide guidelines on design and visualization while highlighting key examples from the scientific community. The good news is that there is an avid visualization community online - check out the [30 day chart challenge](https://www.linkedin.com/feed/hashtag/?keywords=30daychartchallenge&highlightedUpdateUrns=urn%3Ali%3Aactivity%3A7303019867069136896) or the [datavisualization](https://www.linkedin.com/feed/hashtag/?keywords=datavisualization) hashtag on LinkedIn as a starting point. 
 
 
-### From the community
+## From the community
 
-## Cédric Scherer
+### Cédric Scherer
 
 [Cédric Scherer's Data Visualization Gallery](https://www.cedricscherer.com/top/dataviz/#SciAm)
 
