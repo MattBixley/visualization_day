@@ -1,8 +1,9 @@
 ---
 title: "Start to Finish Visualizing your Data"
 author: "Tyler McInnes"
-date: "2025-01-10"
+date: last-modified
 output: html_document
+toc: true
 ---
 
 If you want to start practicing visualizations, a really great place to start is with tidytuesday. Tidytuesday is a community initiative that publishes a weekly dataset in an easy to access format. Every week, people create a visualization of the data and share it on some form of social media (or just keep it to themselves). In 2024 tidytuesday had the aim of being featured in 10+ training courses. They hit more than 30+!
@@ -39,7 +40,15 @@ You will be provided with a full and complete copy of all this code, to use as a
 For this section we are going to need dplyr, readr, and ggplot. We can load them separately, or we can load the whole tidyverse package.
 
 ```{r}
+#| echo: false
+
 library(tidyverse)
+
+# Alternatively, load the tidyverse packages individually:
+
+# library(dplyr)
+# library(readr)
+# library(ggplot)
 ```
 
 ### Importing the data
@@ -178,11 +187,28 @@ I have decided to filter perfumes/rows based on a criteria of having been rated 
 
 **Exercise:** Discuss with others - do you agree with the decision to filter like this? Can you propose an alternative method? Is our threshold of 19 reasonable?
 
+
+
 ## Transformations
 
 Transforming data is a term that includes grouping data (as we did above, for Brands), arranging (sorting), moving or renaming columns, *etc.,*. It also applies to filtering, which we are about to perform. I think there is a distinction between sorting rows or renaming columns and filtering, which is the removal of data from further analysis, so I'm giving it a separate subsection.
 
 Removing data, setting thresholds, removing outliers, defining groups, choosing methods - all of these decisions can have significant impacts on your final results. We must keep this in mind and always be ready to question our decisions. In bioinformatics it is usually plausible to repeat analyses with different decisions, and if we find that our decisions are having a big impact on our results, we need to be mindful of this.
+
+In the callout box below, we move through a whole series of transformation steps:
+
+- **Filtering for low rating counts:** Perfumes that were rated fewer than 19 times (the median number of ratings) were removed from the data. Having a small number of ratings can skew the rating result (*e.g.,* a single 10/10 is not representative of the perfumes quality). 
+
+- **Calculate the average rating by brand and the number of perfumes per brand:** Perfumes were grouped by brand, and the average (mean) rating for each brand was calculated. Some brands had only a small number of perfumes, which led to skewed averages. 
+
+- **Remove brands with a small number of perfumes:** Brands with fewer than 20 perfumes were removed from the analysis. 
+
+While these steps are an important part of visualization, they are somewhat repetitive and time-consuming and therefore have been compressed and skipped for the sake of this workflow. You can view all of the code and detailed explanations for what steps were taken in the callout box. 
+
+
+::: {.callout-note collapse="true"}
+
+## Transformation steps in detail
 
 ### Filtering for low rating counts
 
@@ -340,6 +366,13 @@ If you are new to the tidyverse, you have expected to see more columns, but grou
 :::
 
 With the brandRatingData object stored, we can now proceed to visualization.
+
+:::
+
+
+We need to import the transformed data objects and familiarise ourselves with them:
+
+
 
 ## Visualization I
 

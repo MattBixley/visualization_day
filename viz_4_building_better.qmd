@@ -1,5 +1,8 @@
 ---
 title: Building Better Plots
+author: "Tyler McInnes"
+date: last-modified
+output: html_document
 toc: true
 ---
 
@@ -133,7 +136,7 @@ This is immediately clearer, with a considerably lower cognitive load. Easily ob
 
 #### Outliers
 
-In boxplots, outliers are identified as values that are more than 1.5 times the interquartile range **above** or **below** the third and first quartile, respectively. In our data these outliers are reasonably numerous. Could be due to inherently variable data, due either to biological or technical reasons, site differences etc., etc.,. Without wanting to make assumptions about the data, we can experiment with visualizations and choose how we want to present this data. 
+In boxplots, outliers are identified as values that are more than 1.5 times the interquartile range **above** or **below** the third and first quartile, respectively. In our data these outliers are reasonably numerous. This could be due to inherently variable data, due either to biological or technical reasons, site differences *etc*.,. Without wanting to make assumptions about the data we can experiment with visualizations and choose how we want to present this data. 
 
 ## Better visualization
 
@@ -168,6 +171,13 @@ groupCounts <- ggplot(top_group_counts_sorted,
 
 We can now trial different geoms to determine which type suits our visualization needs.
 
+#### **Exercise:** use "groupCounts +" and your choice of a geom function to plot the data with the new theme. 
+
+Test multiple different geoms to experience how easily we can test different visualizations. 
+
+::: {.callout-tip collapse="true"}
+## Examples
+
 ```{r}
 groupCounts + 
   geom_boxplot() 
@@ -188,6 +198,12 @@ groupCounts +
 groupCounts + 
   geom_point()
 ```
+
+You will probably agree that some of these geoms are much more suitable than others!
+
+:::
+
+#### Alpha
 
 A particularly useful argument with the geom_point() function is alpha, which controls the opacity/transparency of the points. With reduced opacity we can see more clearly when points are placed on top of one another. It is less clear in this example because there are so many data points in a small space, but it's usefulness will become more apparent shortly.
 
@@ -246,16 +262,27 @@ groupCounts +
                 size = 5, 
                 colour = "gray40")
 ```
-Note: here we have selected the size of the stat_summary point as 5, but we could also provide a set of values (e.g., if we had different numbers of observations per group). 
+
+::: {.callout-tip collapse="true"}
+
+## Making use of values
+
+In the code above we have specified the size of the stat_summary point to be a fixed value (5). In almost all cases within ggplot, you can select dynamic values for arguments *e.g.,* if we had a different number of observations per group, point size could reflect these differences. Making full use of all of these variables leads to very informative plots.
+
+:::
+
 
 
 Next, we can add the overall mean for these groups as a vertical line: 
 ```{r}
-# Calculate the average number of Counts across all samples. 
+#| warning: false
+
+# Calculate the average number of Counts across all samples:
 top10_group_avg <- top_group_counts_sorted |> 
   summarize(t10_avg = mean(log(Count))) |> 
   pull(t10_avg)
 
+# Plot:
 groupCounts +
   geom_vline(aes(xintercept = top10_group_avg), 
                   colour = "gray50", 
@@ -315,7 +342,7 @@ groupCounts +
   )
 ```
 
-This isn't necessarily something you would do in many types of plots, but is useful to draw attention to key points (often, e.g., a single gene of interest in a scatter plot). 
+This isn't necessarily something you would do in many types of plots, but is useful to draw attention to key points (often, *e.g*., a single gene of interest in a scatter plot). 
 
 
 ### Saving a plot
