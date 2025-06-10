@@ -29,7 +29,7 @@ To generate a figure that is clear, conveys a message, and is visually appealing
 
 ### How this will work
 
-I will work through all the code required to create the end product visualization. You can follow along exactly, or you can opt to deviate from my example (e.g., during data transformation step you might choose to keep 25 samples while I keep 20, you might choose to use the median while I use the mean). If you are newer to ggplot2, then I recommend you follow exactly. If you are more confident, then modify the code as you see fit.
+I will work through all the code required to create the end product visualization. You can follow along exactly, or you can opt to deviate from my example (*e.g.,* during data transformation step you might choose to keep 25 samples while I keep 20, you might choose to use the median while I use the mean). If you are newer to ggplot2, then I recommend you follow exactly. If you are more confident, then modify the code as you see fit.
 
 You will be provided with a full and complete copy of all this code, to use as a template for your own work.
 
@@ -195,7 +195,7 @@ Transforming data is a term that includes grouping data (as we did above, for Br
 
 Removing data, setting thresholds, removing outliers, defining groups, choosing methods - all of these decisions can have significant impacts on your final results. We must keep this in mind and always be ready to question our decisions. In bioinformatics it is usually plausible to repeat analyses with different decisions, and if we find that our decisions are having a big impact on our results, we need to be mindful of this.
 
-In the callout box below, we move through a whole series of transformation steps:
+In the callout box below, we move through a whole series of transformation steps. The steps are summarised here, and described in detail in the callout box.
 
 - **Filtering for low rating counts:** Perfumes that were rated fewer than 19 times (the median number of ratings) were removed from the data. Having a small number of ratings can skew the rating result (*e.g.,* a single 10/10 is not representative of the perfumes quality). 
 
@@ -203,8 +203,15 @@ In the callout box below, we move through a whole series of transformation steps
 
 - **Remove brands with a small number of perfumes:** Brands with fewer than 20 perfumes were removed from the analysis. 
 
+- **Store the *perfume_brand_data* object:** A dataframe of 1635 rows, consisting of only perfumes that meet the above two criteria (individually rated more than 19 times, and from a brand with 20 or more perfumes). 
+
+- **Create and store the *brandRatingData* object:** A dataframe of 20 rows and three variables, consisting of the 20 brands with the highest average rating (the mean rating across all perfumes for the brand), as well as the number of perfumes in each brand. 
+
 While these steps are an important part of visualization, they are somewhat repetitive and time-consuming and therefore have been compressed and skipped for the sake of this workflow. You can view all of the code and detailed explanations for what steps were taken in the callout box. 
 
+**Exercise: The above transformations include two user-defined thresholds which determine what data is included in further analyses. Discuss the thresholds used and whether you believe they are reasonable and logical. What approach would you take in this situation?** 
+
+*Note:* the thresholds, and the logic behind them, are described in more detail in the callout box.
 
 ::: {.callout-note collapse="true"}
 
@@ -369,8 +376,26 @@ With the brandRatingData object stored, we can now proceed to visualization.
 
 :::
 
+### Familiarise ourselves with the new objects
 
-We need to import the transformed data objects and familiarise ourselves with them:
+We need to import the transformed data objects and familiarise ourselves with them.
+
+```{r}
+#| eval: false
+
+perfume_brand_data <- read.delim('https://github.com/GenomicsAotearoa/visualization_day/blob/main/data/perfume_brand_data.csv')
+
+brandRatingData <- read.delim('https://github.com/GenomicsAotearoa/visualization_day/blob/main/data/brandRatingData.csv')
+```
+
+```{r}
+perfume_brand_data |> head()
+```
+
+```{r}
+brandRatingData
+```
+
 
 
 
@@ -382,9 +407,6 @@ It is critically important to identify exactly what you are aiming to represent 
 
 In this workshop we are also aiming to create a figure that is visually appealing. We want to use elements of design such as line and colour theory *etc.,* to capture and hold attention, whether this is during a live presentation or in a static format such as a journal.
 
-```{r}
-brandRatingData |> print(n = 20)
-```
 
 ### Building a visualization - sketch I
 
@@ -426,14 +448,25 @@ Fundamentally, I don't think the boxplot works. While it does show the median an
 
 First, we will switch to using brandRatingData, where we have calculated the Brand average rating, and we will show the average with a geom_point function. You will see that while we lose some information switching from a boxplot to a geom_point() plot, this will allow us to include other information which may be more informative.
 
+::: {.callout-tip collapse="true"}
+## The importance of transforming your data
+
+While this workshop is primarily focused on the tools and code you need to visualize your data, the critical step above was calculating a new variable (the average rating value across all perfumes in a brand). While it may be possible to accurately visualize this information from the perfume_brand_data object, it would have been much more challenging. 
+
+:::
+
 brandRatingData is already formated to have Brands arranged by avg_Rating, but in case that wasn't true, the code includes reorder() to sort by avg_Rating.
 
 The labs() function is used to add a title, and clearer x and y axis labels.
 
 ```{r}
 ggplot(brandRatingData, 
-       aes(x = avg_Rating, y = reorder(Brand, avg_Rating))) +
-  geom_point(aes(size = number_Perfumes, color = avg_Rating)) +
+       aes(
+        x = avg_Rating,
+        y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(
+    size = number_Perfumes,
+    color = avg_Rating)) +
   labs(
     x = "Brand rating",
     y = "Brand",
@@ -451,10 +484,19 @@ Here we will bring in a handful of new arguments and functions. Remember that th
 
 ```{r}
 ggplot(brandRatingData, 
-       aes(x = avg_Rating, y = reorder(Brand, avg_Rating))) +
-  geom_point(aes(size = number_Perfumes, color = avg_Rating)) +
-  scale_color_gradient(low = "lightblue", high = "darkblue", name = "Brand rating") +
-  scale_size(range = c(1, 10), name = "Number of perfumes") +
+       aes(
+        x = avg_Rating,
+        y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(
+    size = number_Perfumes,
+    color = avg_Rating)) +
+  scale_color_gradient(
+    low = "lightblue",
+    high = "darkblue",
+    name = "Brand rating") +
+  scale_size(
+    range = c(1, 10),
+    name = "Number of perfumes") +
   labs(
     x = "Brand rating",
     y = "Brand",
@@ -469,7 +511,7 @@ ggplot(brandRatingData,
   guides(color = "none")
 ```
 
--   scale_color_gradient() is a function to set colours through a given gradient. Useful if you have an overall brand or theme colour (e.g., University of Otago tends to use blue and gold, so I've chosen blue).
+-   scale_color_gradient() is a function to set colours through a given gradient. Useful if you have an overall brand or theme colour (*e.g.,* University of Otago tends to use blue and gold, so I've chosen blue).
 
 -   scale_size() provides control over the size of the geom_point data points. We can set the upper/lower limits, and the 'granularity' (*i.e.,* a difference between a large and a small value by having a greater range). Larger point sizes here (compared to our first plot) make the figure look less empty. Having points that overlap (Guerlain) may not be appropriate in all settings, but visually it makes the plot less 'rigid' and is more interesting. Note this function also sets the name to "Number of perfumes".
 
@@ -544,7 +586,7 @@ a) more visually interesting, with eye catching colours.
 
 b) simultaneously softer and more gentle, more accessible overall. 
 
-c) displays more data: importantly, we can now see that Ensar Oud/Oriscent has a low average number of ratings. With this in mind, I'd be more inclined to look at Roja Parfums or Chanel over Ensar Oud. 
+c) displays more data: importantly, we can now see that Ensar Oud/Oriscent has a low average number of ratings. With this in mind, I'd be more inclined to look at Roja Parfums or Chanel over Ensar Oud (and note how our colours help with this - Ensar Oud in the creamy yellow is not as eye catching as the darker Roja or Chanel). 
 
 d) suitable for conveying the basic information (Brand rating) at a glance. Even if a reader didn't take note of the colours and sizes of the points, they would *still* get an idea of brand rating. 
 
