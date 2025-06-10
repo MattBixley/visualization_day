@@ -383,9 +383,9 @@ We need to import the transformed data objects and familiarise ourselves with th
 ```{r}
 #| eval: false
 
-perfume_brand_data <- read.delim('https://github.com/GenomicsAotearoa/visualization_day/blob/main/data/perfume_brand_data.csv')
+perfume_brand_data <- read.csv('https://raw.githubusercontent.com/GenomicsAotearoa/visualization_day/refs/heads/main/data/perfume_brand_data.csv')
 
-brandRatingData <- read.delim('https://github.com/GenomicsAotearoa/visualization_day/blob/main/data/brandRatingData.csv')
+brandRatingData <- read.csv('https://raw.githubusercontent.com/GenomicsAotearoa/visualization_day/refs/heads/main/data/brandRatingData.csv')
 ```
 
 ```{r}
